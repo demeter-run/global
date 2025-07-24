@@ -245,11 +245,6 @@ resource "cloudflare_load_balancer_monitor" "kupo_preview_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
-
-  header {
-    header = "Host"
-    values = ["health.preview-v2.kupo-m1.dmtr.host"]
-  }
 }
 
 resource "cloudflare_load_balancer_pool" "kupo_preprod" {
@@ -293,11 +288,6 @@ resource "cloudflare_load_balancer_monitor" "kupo_preprod_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
-
-  header {
-    header = "Host"
-    values = ["health.preprod-v2.kupo-m1.dmtr.host"]
-  }
 }
 
 resource "cloudflare_load_balancer_pool" "kupo_mainnet" {
@@ -341,11 +331,6 @@ resource "cloudflare_load_balancer_monitor" "kupo_mainnet_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
-
-  header {
-    header = "Host"
-    values = ["health.mainnet-v2.kupo-m1.dmtr.host"]
-  }
 }
 
 # Ogmios
