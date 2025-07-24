@@ -224,7 +224,7 @@ resource "cloudflare_load_balancer" "kupo_preview" {
   name             = "preview-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer" "kupo_preview_splat" {
@@ -232,7 +232,7 @@ resource "cloudflare_load_balancer" "kupo_preview_splat" {
   name             = "*.preview-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_preview_monitor" {
@@ -267,7 +267,7 @@ resource "cloudflare_load_balancer" "kupo_preprod" {
   name             = "preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer" "kupo_preprod_splat" {
@@ -275,7 +275,7 @@ resource "cloudflare_load_balancer" "kupo_preprod_splat" {
   name             = "*.preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_preprod_monitor" {
@@ -310,7 +310,7 @@ resource "cloudflare_load_balancer" "kupo_mainnet" {
   name             = "mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
@@ -318,7 +318,7 @@ resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
   name             = "*.mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_mainnet_monitor" {
@@ -354,7 +354,7 @@ resource "cloudflare_load_balancer" "ogmios_preview" {
   name             = "preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer" "ogmios_preview_splat" {
@@ -362,7 +362,7 @@ resource "cloudflare_load_balancer" "ogmios_preview_splat" {
   name             = "*.preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_preview_monitor" {
@@ -401,7 +401,7 @@ resource "cloudflare_load_balancer" "ogmios_preprod" {
   name             = "preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
@@ -409,7 +409,7 @@ resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
   name             = "*.preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_preprod_monitor" {
@@ -448,7 +448,7 @@ resource "cloudflare_load_balancer" "ogmios_mainnet" {
   name             = "mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
@@ -456,7 +456,7 @@ resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
   name             = "*.mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
-  proxied          = false
+  proxied          = true
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
