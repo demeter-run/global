@@ -3,9 +3,6 @@ provider "cloudflare" {}
 variable "cloudflare_account_id" {}
 variable "cloudflare_zone_id" {}
 variable "cloudflare_zone_name" {}
-variable "cloudflare_tunnel_secrets" {
-  sensitive = true
-}
 
 locals {
   cloudflare_zone_names = [
@@ -37,9 +34,6 @@ locals {
           mainnet = "ogmios.blinklabs.cloud"
         }
       }
-      tunnel = {
-        enabled = true
-      }
     },
     {
       name = "txpipe-m2"
@@ -61,9 +55,6 @@ locals {
           preprod = "opwcgfbffs.txpipe.cloud"
           mainnet = "gywofhowvc.txpipe.cloud"
         }
-      }
-      tunnel = {
-        enabled = false
       }
     },
   ]
@@ -112,52 +103,6 @@ resource "cloudflare_zone_settings_override" "this" {
       include_subdomains = true
     }
   }
-}
-
-# Tunnels
-
-resource "cloudflare_tunnel" "this" {
-  for_each = { for p in local.demeter_providers : p.name => p if p.tunnel.enabled }
-
-  account_id = var.cloudflare_account_id
-  name       = each.value.name
-  secret     = var.cloudflare_tunnel_secrets[each.value.name]
-  config_src = "cloudflare"
-}
-
-resource "cloudflare_tunnel_config" "this" {
-  for_each = { for p in local.demeter_providers : p.name => p if p.tunnel.enabled }
-
-  account_id = var.cloudflare_account_id
-  tunnel_id  = cloudflare_tunnel.this[each.value.name].id
-
-  config {
-    ingress_rule {
-      service  = "http://kong-kong-proxy:80"
-      hostname = "*.${var.cloudflare_zone_name}"
-    }
-
-    ingress_rule {
-      service  = "http://kong-kong-proxy:80"
-      hostname = "${each.value.name}.${var.cloudflare_zone_name}"
-    }
-
-    ingress_rule {
-      service = "http_status:404"
-    }
-  }
-}
-
-resource "cloudflare_record" "tunnels" {
-  for_each = { for p in local.demeter_providers : p.name => p if p.tunnel.enabled }
-
-  depends_on = [cloudflare_zone.this]
-
-  zone_id = var.cloudflare_zone_id
-  name    = each.value.name
-  value   = cloudflare_tunnel.this[each.value.name].cname
-  type    = "CNAME"
-  proxied = true
 }
 
 # Cardano Node
@@ -473,47 +418,5 @@ resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
   header {
     header = "Host"
     values = ["health.mainnet-v6.ogmios-m1.dmtr.host"]
-  }
-}
-
-# Workloads
-
-resource "cloudflare_load_balancer_pool" "workloads" {
-  name = "Workloads"
-
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.workloads_monitor.id
-
-  dynamic "origins" {
-    for_each = { for p in local.demeter_providers : p.name => p if p.tunnel.enabled }
-    content {
-      name    = origins.value.name
-      address = cloudflare_tunnel.this[origins.value.name].cname
-    }
-  }
-}
-
-resource "cloudflare_load_balancer" "workloads" {
-  zone_id          = var.cloudflare_zone_id
-  name             = "*.${var.cloudflare_zone_name}"
-  default_pool_ids = [cloudflare_load_balancer_pool.workloads.id]
-  fallback_pool_id = cloudflare_load_balancer_pool.workloads.id
-  proxied          = true
-}
-
-resource "cloudflare_load_balancer_monitor" "workloads_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for workloads"
-  path           = "/ping_provider_healthcheck"
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-
-  header {
-    header = "Host"
-    values = ["health.dmtr.host"]
   }
 }
