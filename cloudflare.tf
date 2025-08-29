@@ -34,6 +34,14 @@ locals {
           mainnet = "ogmios.blinklabs.cloud"
         }
       }
+      tx_submit_api = {
+        enabled = true
+        networks = {
+          preview = "preview.txsubmitapi.blinklabs.cloud"
+          preprod = "preprod.txsubmitapi.blinklabs.cloud"
+          mainnet = "txsubmitapi.blinklabs.cloud"
+        }
+      }
     },
     {
       name = "txpipe-m2"
@@ -54,6 +62,14 @@ locals {
           preview = "wydstabtnn.txpipe.cloud"
           preprod = "opwcgfbffs.txpipe.cloud"
           mainnet = "gywofhowvc.txpipe.cloud"
+        }
+      }
+      tx_submit_api = {
+        enabled = false
+        networks = {
+          preview = ""
+          preprod = ""
+          mainnet = ""
         }
       }
     },
@@ -128,6 +144,7 @@ resource "cloudflare_load_balancer" "cardano_node_m1" {
   default_pool_ids = [cloudflare_load_balancer_pool.cardano_node_m1.id]
   fallback_pool_id = cloudflare_load_balancer_pool.cardano_node_m1.id
   proxied          = false
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "cardano_node_m1_monitor" {
@@ -170,6 +187,7 @@ resource "cloudflare_load_balancer" "kupo_preview" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "kupo_preview_splat" {
@@ -178,6 +196,7 @@ resource "cloudflare_load_balancer" "kupo_preview_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_preview_monitor" {
@@ -213,6 +232,7 @@ resource "cloudflare_load_balancer" "kupo_preprod" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "kupo_preprod_splat" {
@@ -221,6 +241,7 @@ resource "cloudflare_load_balancer" "kupo_preprod_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_preprod_monitor" {
@@ -256,6 +277,7 @@ resource "cloudflare_load_balancer" "kupo_mainnet" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
@@ -264,6 +286,7 @@ resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_mainnet_monitor" {
@@ -300,6 +323,7 @@ resource "cloudflare_load_balancer" "ogmios_preview" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "ogmios_preview_splat" {
@@ -308,6 +332,7 @@ resource "cloudflare_load_balancer" "ogmios_preview_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_preview_monitor" {
@@ -347,6 +372,7 @@ resource "cloudflare_load_balancer" "ogmios_preprod" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
@@ -355,6 +381,7 @@ resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_preprod_monitor" {
@@ -394,6 +421,7 @@ resource "cloudflare_load_balancer" "ogmios_mainnet" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
@@ -402,6 +430,7 @@ resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
@@ -418,5 +447,154 @@ resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
   header {
     header = "Host"
     values = ["health.mainnet-v6.ogmios-m1.dmtr.host"]
+  }
+}
+
+# Tx-Submit-API
+
+resource "cloudflare_load_balancer_pool" "tx_submit_api_preview" {
+  name       = "TxSubmitAPI-Preview"
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.tx_submit_api_preview_monitor.id
+
+  dynamic "origins" {
+    for_each = { for p in local.demeter_providers : p.name => p if p.tx_submit_api.enabled }
+    content {
+      name    = origins.value.name
+      address = origins.value.tx_submit_api.networks.preview
+    }
+  }
+}
+
+resource "cloudflare_load_balancer" "tx_submit_api_preview" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "preview.submitapi-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_preview.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_preview.id
+  proxied          = true
+  steering_policy  = "off"
+}
+
+resource "cloudflare_load_balancer" "tx_submit_api_preview_splat" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "*.preview.submitapi-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_preview.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_preview.id
+  proxied          = true
+  steering_policy  = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "tx_submit_api_preview_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for TxSubmitAPI Preview"
+  path           = "/healthz"
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+
+  header {
+    header = "Host"
+    values = ["health.preview.submitapi-m1.dmtr.host"]
+  }
+}
+
+resource "cloudflare_load_balancer_pool" "tx_submit_api_preprod" {
+  name       = "TxSubmitAPI-Preprod"
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.tx_submit_api_preprod_monitor.id
+
+  dynamic "origins" {
+    for_each = { for p in local.demeter_providers : p.name => p if p.tx_submit_api.enabled }
+    content {
+      name    = origins.value.name
+      address = origins.value.tx_submit_api.networks.preprod
+    }
+  }
+}
+
+resource "cloudflare_load_balancer" "tx_submit_api_preprod" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "preprod.submitapi-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_preprod.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_preprod.id
+  proxied          = true
+  steering_policy  = "off"
+}
+
+resource "cloudflare_load_balancer" "tx_submit_api_preprod_splat" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "*.preprod.submitapi-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_preprod.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_preprod.id
+  proxied          = true
+  steering_policy  = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "tx_submit_api_preprod_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for TxSubmitAPI Preprod"
+  path           = "/healthz"
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+
+  header {
+    header = "Host"
+    values = ["health.preprod.submitapi-m1.dmtr.host"]
+  }
+}
+
+resource "cloudflare_load_balancer_pool" "tx_submit_api_mainnet" {
+  name       = "TXSubmitAPI-Mainnet"
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.tx_submit_api_mainnet_monitor.id
+
+  dynamic "origins" {
+    for_each = { for p in local.demeter_providers : p.name => p if p.tx_submit_api.enabled }
+    content {
+      name    = origins.value.name
+      address = origins.value.tx_submit_api.networks.mainnet
+    }
+  }
+}
+
+resource "cloudflare_load_balancer" "tx_submit_api_mainnet" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "mainnet.submitapi-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_mainnet.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_mainnet.id
+  proxied          = true
+  steering_policy  = "off"
+}
+
+resource "cloudflare_load_balancer" "tx_submit_api_mainnet_splat" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "*.mainnet.submitapi-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_mainnet.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_mainnet.id
+  proxied          = true
+  steering_policy  = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "tx_submit_api_mainnet_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for TxSubmitAPI Mainnet"
+  path           = "/healthz"
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+
+  header {
+    header = "Host"
+    values = ["health.mainnet.submitapi-m1.dmtr.host"]
   }
 }
