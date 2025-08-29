@@ -34,6 +34,10 @@ locals {
           mainnet = "ogmios.blinklabs.cloud"
         }
       }
+      tx_submit_api = {
+        enabled = true
+        address = "tx-submit-api.blinklabs.cloud"
+      }
     },
     {
       name = "txpipe-m2"
@@ -55,6 +59,10 @@ locals {
           preprod = "opwcgfbffs.txpipe.cloud"
           mainnet = "gywofhowvc.txpipe.cloud"
         }
+      }
+      tx_submit_api = {
+        enabled = false
+        address = "UpdateMe"
       }
     },
   ]
@@ -128,6 +136,7 @@ resource "cloudflare_load_balancer" "cardano_node_m1" {
   default_pool_ids = [cloudflare_load_balancer_pool.cardano_node_m1.id]
   fallback_pool_id = cloudflare_load_balancer_pool.cardano_node_m1.id
   proxied          = false
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "cardano_node_m1_monitor" {
@@ -170,6 +179,7 @@ resource "cloudflare_load_balancer" "kupo_preview" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "kupo_preview_splat" {
@@ -178,6 +188,7 @@ resource "cloudflare_load_balancer" "kupo_preview_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_preview_monitor" {
@@ -213,6 +224,7 @@ resource "cloudflare_load_balancer" "kupo_preprod" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "kupo_preprod_splat" {
@@ -221,6 +233,7 @@ resource "cloudflare_load_balancer" "kupo_preprod_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_preprod_monitor" {
@@ -256,6 +269,7 @@ resource "cloudflare_load_balancer" "kupo_mainnet" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
@@ -264,6 +278,7 @@ resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "kupo_mainnet_monitor" {
@@ -300,6 +315,7 @@ resource "cloudflare_load_balancer" "ogmios_preview" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "ogmios_preview_splat" {
@@ -308,6 +324,7 @@ resource "cloudflare_load_balancer" "ogmios_preview_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_preview_monitor" {
@@ -347,6 +364,7 @@ resource "cloudflare_load_balancer" "ogmios_preprod" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
@@ -355,6 +373,7 @@ resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_preprod_monitor" {
@@ -394,6 +413,7 @@ resource "cloudflare_load_balancer" "ogmios_mainnet" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
@@ -402,6 +422,7 @@ resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
   proxied          = true
+  steering_policy  = "off"
 }
 
 resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
@@ -419,4 +440,29 @@ resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
     header = "Host"
     values = ["health.mainnet-v6.ogmios-m1.dmtr.host"]
   }
+}
+
+# Tx-Submit-API
+resource "cloudflare_load_balancer_pool" "tx_submit_api_m1" {
+  name = "TxSubmitApiM1"
+
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.tx_submit_api_m1_monitor.id
+
+  dynamic "origins" {
+    for_each = { for p in local.demeter_providers : p.name => p if p.tx_submit_api.enabled }
+    content {
+      name    = origins.value.name
+      address = origins.value.tx_submit_api.address != "" ? origins.value.tx_submit_api.address : "${origins.value.name}.${var.cloudflare_zone_name}"
+    }
+  }
+}
+
+resource "cloudflare_load_balancer" "tx_submit_api_m1" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "*.submitapi-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_m1.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_m1.id
+  proxied          = true
+  steering_policy  = "off"
 }
