@@ -447,7 +447,8 @@ resource "cloudflare_load_balancer_pool" "tx_submit_api_m1" {
   name = "TxSubmitApiM1"
 
   account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.tx_submit_api_m1_monitor.id
+  # TODO: add monitor when tx-submit-api supports reliable health checks
+  # monitor    = cloudflare_load_balancer_monitor.tx_submit_api_m1_monitor.id
 
   dynamic "origins" {
     for_each = { for p in local.demeter_providers : p.name => p if p.tx_submit_api.enabled }
