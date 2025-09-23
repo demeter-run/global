@@ -1,8 +1,14 @@
 provider "cloudflare" {}
 
-variable "cloudflare_account_id" {}
-variable "cloudflare_zone_id" {}
-variable "cloudflare_zone_name" {}
+variable "cloudflare_account_id" {
+  default = "ac5ad90cf6f83abc85ee304a2bb2de73"
+}
+variable "cloudflare_zone_id" {
+  default = "a4f238868ab16e77e1ba5210cb7f223d"
+}
+variable "cloudflare_zone_name" {
+  default = "dmtr.host"
+}
 
 locals {
   cloudflare_zone_names = [
