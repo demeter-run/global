@@ -1,0 +1,395 @@
+{
+    "apiVersion": 1,
+    "groups": [
+        {
+            "orgId": 1,
+            "name": "Node",
+            "folder": "Demeter",
+            "interval": "1m",
+            "rules": [
+                {
+                    "uid": "eebak3lzww2dcb",
+                    "title": "Cardano Node Instance is down",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "count(avg_over_time(cardano_node_metrics_blockNum_int{namespace=\"ext-nodes-m1\"}[10m] offset 30m)) by (pod) unless count(avg_over_time(cardano_node_metrics_blockNum_int{namespace=\"ext-nodes-m1\"}[10m])) by (pod)",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "hide": false,
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "count",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "hide": false,
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "OK",
+                    "execErrState": "OK",
+                    "for": "10m",
+                    "annotations": {
+                        "description": "We are not receiving any metrics from a particular Cardano Node instance.",
+                        "summary": "{{ $labels.pod }} in Demeter cluster is down"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                },
+                {
+                    "uid": "debajwp7kglc0d",
+                    "title": "Cardano Node close to out of memory",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 1800,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "sum(container_memory_working_set_bytes{namespace=\"ext-nodes-m1\", container!=\"\", pod=~\"(cardano-)?node-.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=\"ext-nodes-m1\", container!=\"\", pod=~\"(cardano-)?node-.*\"}) by (pod)",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "hide": false,
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "max",
+                                "refId": "B",
+                                "settings": {
+                                    "mode": ""
+                                },
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0.95,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "hide": false,
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "KeepLast",
+                    "for": "5m",
+                    "annotations": {
+                        "description": "Memory usage on Cardano node is over 95% of its limit",
+                        "summary": "{{ $labels.pod }}: {{ humanizePercentage $values.B.Value }} memory used."
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                },
+                {
+                    "uid": "dec9melpow5j4c",
+                    "title": "Node Preprod Stop Syncing",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "rate(cardano_node_metrics_blockNum_int{namespace=\"ext-nodes-m1\", pod=~\"(cardano-)?node-preprod-.*\"}[5m])*60",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "queryType": "expression",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0.1
+                                            ],
+                                            "type": "lt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": [
+                                                "C"
+                                            ]
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "KeepLast",
+                    "for": "1m",
+                    "annotations": {
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nPod: {{ $v.Labels.pod }}\nHeight Increase Rate: {{ humanize $v.Value }}\n{{ end }}\n{{ end }}"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,5 @@
+---
+creation_rules:
+  - path_regex: ^config\.yaml$
+    encrypted_regex: ^(auth)$
+    age: age1klj2c5sj490j2g6ptlf3uh5cwehr4jfdt6c2e638a939sf7pfcdqjm54hq

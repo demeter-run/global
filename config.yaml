@@ -1,0 +1,37 @@
+grafana:
+    cloud:
+        url: https://dmtrglobal.grafana.net
+        auth: ENC[AES256_GCM,data:7Wbq1IRDNeIXPA3X8EwMABCZePLKKMClf0OD7W3TxzqwH27m7B5EyqSVE5/8hw==,iv:Hj7Ppns3XYnU4cxEvNW5MvhcHBmYv800j+BPXGeC3t4=,tag:E/MBlYplPHjPUoH0E0bVeQ==,type:str]
+    folders:
+        - local_directory: grafana/dashboards/demeter
+          grafana_title: Demeter Blink Labs
+          datasource_uids:
+            datasource_uid: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
+    data_sources:
+        gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus:
+            type: prometheus
+            name: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
+            url: http://prometheus-operated.dmtr-system.svc.cluster.local:9090
+            pdc: 46f68690-716c-47ff-91d0-26359c834aae
+    alerts:
+        - local_directory: grafana/alerts/blinklabs
+          grafana_title: Blink Labs
+          folder_uid: fe24y2dswncowc
+        - local_directory: grafana/alerts/demeter
+          grafana_title: Demeter
+          folder_uid: de9p56uby56v4a
+sops:
+    age:
+        - recipient: age1klj2c5sj490j2g6ptlf3uh5cwehr4jfdt6c2e638a939sf7pfcdqjm54hq
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWNHhFVkh6eGc0QTVUNTZk
+            OHgxcllnOHNWODVpUUZMZUlCWng1ZjhZWlhnCmkyZWNxbFlZMEN1YUo0akJWdkdW
+            OXNKR1cvQVhEMVJMRk56WXg3YTB2ZlEKLS0tIFQ1bGRrYXErQ2RwOUJSekQwUzAw
+            UEtmcVpPQlMzWXNaeS93bndHTmdMYWMKr5pcKioeQQJ2QH43yhfRb2T/mTRCDnfg
+            SDF1sbPenrnDJRA8Gi9CphX9bPz3XtkjRTsFYxD/hW1doSTiflkVJw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-09-29T14:24:04Z"
+    mac: ENC[AES256_GCM,data:/D+CbQWHWLmICi5vPzcs4no8GyEeaP3693F2tBOaD331CNC8SnCcAC+ruOyFi/0AHdbpFwYJSOsLjvKDVwnXYvosKaSLqLz4Lh13Kji/pptXEi5vAXKMmwLBiN62F51wn5Ud9+yhGU2e1fyaqkNWqW+7Bzjxz4uNjlGAeLxXU7k=,iv:dQOMdSE43SXatM9nnAl7iKxMPQUQgcjkUWqc68ijAtw=,tag:tWPX0+ajH/gXl+xzEo/zqw==,type:str]
+    encrypted_regex: ^(auth)$
+    version: 3.10.2
