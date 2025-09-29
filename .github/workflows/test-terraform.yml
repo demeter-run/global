@@ -27,6 +27,12 @@ jobs:
         with:
           terraform_version: "1.11.4"
           terraform_wrapper: false
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.6.0
+      - name: Descrypt config.yaml
+        run: sops -d -i config.yaml
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
       - name: Terraform Init
         run: terraform init -input=false
       - name: Terraform Plan

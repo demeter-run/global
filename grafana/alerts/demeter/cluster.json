@@ -1,0 +1,716 @@
+{
+  "apiVersion": 1,
+  "groups": [
+    {
+      "orgId": 1,
+      "name": "Cluster",
+      "folder": "Demeter",
+      "interval": "1m",
+      "rules": [
+        {
+          "uid": "beqqld0r4whdsa",
+          "title": "Pending Pods - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "kube_pod_status_phase{phase=\"Pending\"} \u003e= 1",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "5m",
+          "annotations": {
+            "description": "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has been in Pending state, indicating scheduling issues.",
+            "summary": "{{ $value }} pod(s) stuck in Pending state in demeter gcp cluster"
+          },
+          "labels": {},
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "deqqllh3ij5dsb",
+          "title": "CrashLoopBackOff - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "kube_pod_container_status_waiting_reason{reason=\"CrashLoopBackOff\"} \u003e= 1",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "1m",
+          "annotations": {
+            "description": "Container {{ $labels.container }} in pod {{ $labels.pod }} (namespace: {{ $labels.namespace }}) is in CrashLoopBackOff state, indicating repeated container failures.",
+            "summary": "Container {{ $labels.container }} in pod {{ $labels.pod }} is crash looping"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "ceqqncspo39q8d",
+          "title": "Deployment Replica Mismatch - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "(kube_deployment_spec_replicas{} - kube_deployment_status_replicas_available{}) \u003e= 1",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "15m",
+          "annotations": {
+            "description": "Deployment {{ $labels.deployment }} in namespace {{ $labels.namespace }} has fewer available replicas than desired, indicating potential application issues.",
+            "summary": "Deployment {{ $labels.deployment }} in {{ $labels.namespace }} has {{ $value }} missing replica(s)"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "aeqqnj6ztlmv4e",
+          "title": "ImagePullBackOff - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "kube_pod_container_status_waiting_reason{reason=\"ImagePullBackOff\"} \u003e= 1",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "5m",
+          "annotations": {
+            "description": "Container {{ $labels.container }} in pod {{ $labels.pod }} (namespace: {{ $labels.namespace }}) is experiencing ImagePullBackOff, unable to pull the required image.",
+            "summary": "Pod {{ $labels.pod }} in {{ $labels.namespace }} failing to pull container image"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "eeqqotty9nfnke",
+          "title": "Node Unschedulable - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "kube_node_spec_unschedulable{} \u003e 0",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "2m",
+          "annotations": {
+            "description": "Node {{ $labels.node }} in demeter gcp cluster is marked as unschedulable, preventing new pods from being scheduled on it.",
+            "summary": "Node {{ $labels.node }} is marked as unschedulable"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "deqqp26kcqmf4f",
+          "title": "StatefulSet Replica Mismatch - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "(kube_statefulset_status_replicas{} - kube_statefulset_status_replicas{}) \u003e= 1",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "15m",
+          "annotations": {
+            "description": "StatefulSet {{ $labels.statefulset }} in namespace {{ $labels.namespace }} has been running with fewer ready replicas than desired for over 15 minutes.",
+            "summary": "StatefulSet {{ $labels.statefulset }} in {{ $labels.namespace }} has {{ $value }} missing replica(s)"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "deqqp7qrhrugwe",
+          "title": "DaemonSet Replica Mismatch - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "(kube_daemonset_status_desired_number_scheduled{} - kube_daemonset_status_number_ready{}) \u003e= 1",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "15m",
+          "annotations": {
+            "description": "DaemonSet {{ $labels.daemonset }} in namespace {{ $labels.namespace }} has been running with fewer ready replicas than desired for over 15 minutes.",
+            "summary": "DaemonSet {{ $labels.daemonset }} in {{ $labels.namespace }} has {{ $value }} missing replica(s)"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "ces0nw67pww74f",
+          "title": "Pod Evicted - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "increase(kube_pod_status_phase{phase=\"Failed\"}[5m]) \r\nand on(pod, namespace) \r\nkube_pod_status_reason{reason=\"Evicted\"} \u003e= 1",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "1m",
+          "annotations": {
+            "description": "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} has been evicted from node {{ $labels.node }}. This is a notification for awareness.",
+            "summary": "Pod {{ $labels.pod }} in {{ $labels.namespace }} has been evicted"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        },
+        {
+          "uid": "des0o5qbyc7pce",
+          "title": "Job Failures - gcp-demeter",
+          "condition": "C",
+          "data": [
+            {
+              "refId": "A",
+              "relativeTimeRange": {
+                "from": 600,
+                "to": 0
+              },
+              "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+              "model": {
+                "editorMode": "code",
+                "expr": "increase(kube_job_status_failed{}[5m]) \u003e 0",
+                "instant": true,
+                "intervalMs": 1000,
+                "legendFormat": "__auto",
+                "maxDataPoints": 43200,
+                "range": false,
+                "refId": "A"
+              }
+            },
+            {
+              "refId": "C",
+              "relativeTimeRange": {
+                "from": 0,
+                "to": 0
+              },
+              "datasourceUid": "__expr__",
+              "model": {
+                "conditions": [
+                  {
+                    "evaluator": {
+                      "params": [
+                        0
+                      ],
+                      "type": "gt"
+                    },
+                    "operator": {
+                      "type": "and"
+                    },
+                    "query": {
+                      "params": [
+                        "C"
+                      ]
+                    },
+                    "reducer": {
+                      "params": [],
+                      "type": "last"
+                    },
+                    "type": "query"
+                  }
+                ],
+                "datasource": {
+                  "type": "__expr__",
+                  "uid": "__expr__"
+                },
+                "expression": "A",
+                "intervalMs": 1000,
+                "maxDataPoints": 43200,
+                "refId": "C",
+                "type": "threshold"
+              }
+            }
+          ],
+          "noDataState": "OK",
+          "execErrState": "KeepLast",
+          "for": "1m",
+          "annotations": {
+            "description": "Job {{ $labels.job_name }} in namespace {{ $labels.namespace }} has failed. This is a notification-only alert for awareness.",
+            "summary": "Job {{ $labels.job_name }} in {{ $labels.namespace }} has failed"
+          },
+          "isPaused": false,
+          "notification_settings": {
+            "receiver": "#infra-alerts"
+          }
+        }
+      ]
+    }
+  ]
+}
