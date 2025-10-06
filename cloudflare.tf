@@ -44,6 +44,9 @@ locals {
         enabled = true
         address = "tx-submit-api.blinklabs.cloud"
       }
+      blockfrost = {
+        enabled = false
+      }
     },
     {
       name = "txpipe-m2"
@@ -67,8 +70,12 @@ locals {
         }
       }
       tx_submit_api = {
-        enabled = false
-        address = "UpdateMe"
+        enabled = true
+        address = "submitapi-m1.demeter.run"
+      }
+      blockfrost = {
+        enabled = true
+        address = "blockfrost-m1.demeter.run"
       }
     },
   ]
