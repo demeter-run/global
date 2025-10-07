@@ -1,0 +1,467 @@
+{
+    "apiVersion": 1,
+    "groups": [
+        {
+            "orgId": 1,
+            "name": "Kupo",
+            "folder": "Demeter",
+            "interval": "1m",
+            "rules": [
+                {
+                    "uid": "dec9d7nc7a22oa",
+                    "title": "Kupo Instance Is Down",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "count(avg_over_time(kupo_connection_status[10m] offset 30s)) by (pod) unless count(avg_over_time(kupo_connection_status [10m])) by (pod)",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "count",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "OK",
+                    "execErrState": "KeepLast",
+                    "for": "1m",
+                    "annotations": {
+                        "description": "We are not receiving metrics from a particular Kupo instance.",
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nPod: {{ $v.Labels.pod }}\n{{ end }}\n{{ end }}"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                },
+                {
+                    "uid": "cec9dpa14hfcwc",
+                    "title": "Kupo Sync Delta",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "kupo_most_recent_node_tip{namespace=\"ftr-kupo-v1\"} - kupo_most_recent_checkpoint{namespace=\"ftr-kupo-v1\"}",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                100,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "KeepLast",
+                    "for": "1m",
+                    "annotations": {
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nInstance: {{ $v.Labels.pod }}\nSync delta: {{ humanize $v.Value }} slots\n{{ end }}\n{{ end }}"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                },
+                {
+                    "uid": "dec9dejazwruof",
+                    "title": "Kupo Proxy Failed Requests",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "sum(increase(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", status_code!~\"200|304|401|403|404\"}[1m])) by (status_code, consumer)",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                5,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "B",
+                                "type": "threshold"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "hide": false,
+                                "reducer": "last",
+                                "refId": "C",
+                                "type": "reduce"
+                            }
+                        }
+                    ],
+                    "noDataState": "OK",
+                    "execErrState": "KeepLast",
+                    "for": "1m",
+                    "annotations": {
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"B[0-9]+\" $k) -}}\nConsumer: {{ $v.Labels.consumer }}\nCode: {{ $v.Labels.status_code }}\nCount: {{ humanize $v.Value }}\n{{ end }}\n{{ end }}"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                },
+                {
+                    "uid": "fec9d013vl0cgb",
+                    "title": "Kupo Failed Requests",
+                    "condition": "B",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "sum(increase(kong_http_requests_total{namespace=~\"ftr-kupo-.*\", code!~\"200|304|401|403|404\"}[1m])) by (code, consumer, route)",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                5,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "B",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "OK",
+                    "execErrState": "KeepLast",
+                    "for": "1m",
+                    "annotations": {
+                        "description": "Kupo Failed Requests",
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"B[0-9]+\" $k) -}}\nRoute: {{ $v.Labels.route }}\nConsumer: {{ $v.Labels.consumer }}\nCode: {{ $v.Labels.code }}\nCount: {{ humanize $v.Value }}\n{{ end }}\n{{ end }}"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                }
+            ]
+        }
+    ]
+}
