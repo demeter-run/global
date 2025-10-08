@@ -1,4 +1,4 @@
-name: run-terraform
+name: test-terraform
 
 on:
   workflow_dispatch:
