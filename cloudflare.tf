@@ -155,6 +155,7 @@ resource "cloudflare_load_balancer_monitor" "cardano_node_m1_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 
   header {
     header = "Host"
@@ -207,6 +208,7 @@ resource "cloudflare_load_balancer_monitor" "kupo_preview_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 }
 
 resource "cloudflare_load_balancer_pool" "kupo_preprod" {
@@ -252,6 +254,7 @@ resource "cloudflare_load_balancer_monitor" "kupo_preprod_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 }
 
 resource "cloudflare_load_balancer_pool" "kupo_mainnet" {
@@ -297,6 +300,7 @@ resource "cloudflare_load_balancer_monitor" "kupo_mainnet_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 }
 
 # Ogmios
@@ -343,6 +347,7 @@ resource "cloudflare_load_balancer_monitor" "ogmios_preview_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 
   header {
     header = "Host"
@@ -441,6 +446,7 @@ resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 
   header {
     header = "Host"
