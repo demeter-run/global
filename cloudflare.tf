@@ -133,8 +133,8 @@ resource "cloudflare_certificate_pack" "this" {
     "*.cardano-preprod.cnode-m1.dmtr.host",
     "*.cardano-preview.cnode-m1.dmtr.host",
     "*.vector-mainnet.cnode-m1.dmtr.host",
-    "*.vector-tesnet.cnode-m1.dmtr.host",
-    "*.prime-tesnet.cnode-m1.dmtr.host",
+    "*.vector-testnet.cnode-m1.dmtr.host",
+    "*.prime-testnet.cnode-m1.dmtr.host",
 
     // Ogmios
     "*.ogmios-m1.dmtr.host",
@@ -142,8 +142,8 @@ resource "cloudflare_certificate_pack" "this" {
     "*.cardano-preprod-v6.ogmios-m1.dmtr.host",
     "*.cardano-preview-v6.ogmios-m1.dmtr.host",
     "*.vector-mainnet-v6.ogmios-m1.dmtr.host",
-    "*.vector-tesnet-v6.ogmios-m1.dmtr.host",
-    "*.prime-tesnet-v6.ogmios-m1.dmtr.host",
+    "*.vector-testnet-v6.ogmios-m1.dmtr.host",
+    "*.prime-testnet-v6.ogmios-m1.dmtr.host",
 
     // Kupo
     "*.kupo-m1.dmtr.host",
