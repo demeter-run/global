@@ -48,27 +48,27 @@ locals {
     {
       name = "txpipe-m2"
       cardano_node = {
-        enabled = false
+        enabled = true
       }
       kupo = {
         enabled = true
         networks = {
-          cardano_preview = "udawaqurxu.txpipe.cloud"
-          cardano_preprod = "mqlozdbuau.txpipe.cloud"
-          cardano_mainnet = "nswcfrjdfu.txpipe.cloud"
+          cardano_preview = "preview-v2.kupo-m1.demeter.run"
+          cardano_preprod = "preprod-v2.kupo-m1.demeter.run"
+          cardano_mainnet = "mainnet-v2.kupo-m1.demeter.run"
         }
       }
       ogmios = {
         enabled = true
         networks = {
-          cardano_preview = "wydstabtnn.txpipe.cloud"
-          cardano_preprod = "opwcgfbffs.txpipe.cloud"
-          cardano_mainnet = "gywofhowvc.txpipe.cloud"
+          cardano_preview = "preview-v6.ogmios-m1.demeter.run"
+          cardano_preprod = "preprod-v6.ogmios-m1.demeter.run"
+          cardano_mainnet = "mainnet-v6.ogmios-m1.demeter.run"
         }
       }
       tx_submit_api = {
-        enabled = false
-        address = "UpdateMe"
+        enabled = true
+        address = "submitapi-m1.demeter.run"
       }
     },
   ]
@@ -456,6 +456,7 @@ resource "cloudflare_load_balancer_monitor" "ogmios_preprod_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 
   header {
     header = "Host"
