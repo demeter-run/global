@@ -122,6 +122,8 @@ resource "cloudflare_zone_settings_override" "this" {
 resource "cloudflare_certificate_pack" "this" {
   zone_id               = cloudflare_zone.this[var.cloudflare_zone_name].id
   certificate_authority = "google"
+
+  // At most 50.
   hosts = [
     "*.dmtr.host",
 
@@ -135,78 +137,42 @@ resource "cloudflare_certificate_pack" "this" {
     "*.prime-tesnet.cnode-m1.dmtr.host",
 
     // Ogmios
+    "*.ogmios-m1.dmtr.host",
     "*.cardano-mainnet-v6.ogmios-m1.dmtr.host",
-    "cardano-mainnet-v6.ogmios-m1.dmtr.host",
     "*.cardano-preprod-v6.ogmios-m1.dmtr.host",
-    "cardano-preprod-v6.ogmios-m1.dmtr.host",
     "*.cardano-preview-v6.ogmios-m1.dmtr.host",
-    "cardano-preview-v6.ogmios-m1.dmtr.host",
     "*.vector-mainnet-v6.ogmios-m1.dmtr.host",
-    "vector-mainnet-v6.ogmios-m1.dmtr.host",
     "*.vector-tesnet-v6.ogmios-m1.dmtr.host",
-    "vector-tesnet-v6.ogmios-m1.dmtr.host",
     "*.prime-tesnet-v6.ogmios-m1.dmtr.host",
-    "prime-tesnet-v6.ogmios-m1.dmtr.host",
 
     // Kupo
+    "*.kupo-m1.dmtr.host",
     "*.cardano-mainnet-v2.kupo-m1.dmtr.host",
-    "cardano-mainnet-v2.kupo-m1.dmtr.host",
     "*.cardano-preprod-v2.kupo-m1.dmtr.host",
-    "cardano-preprod-v2.kupo-m1.dmtr.host",
     "*.cardano-preview-v2.kupo-m1.dmtr.host",
-    "cardano-preview-v2.kupo-m1.dmtr.host",
 
     // Blockfrost
     "*.blockfrost-m1.dmtr.host",
     "blockfrost-m1.dmtr.host",
     "*.cardano-mainnet.blockfrost-m1.dmtr.host",
-    "cardano-mainnet.blockfrost-m1.dmtr.host",
     "*.cardano-preprod.blockfrost-m1.dmtr.host",
-    "cardano-preprod.blockfrost-m1.dmtr.host",
     "*.cardano-preview.blockfrost-m1.dmtr.host",
-    "cardano-preview.blockfrost-m1.dmtr.host",
     "*.vector-mainnet.blockfrost-m1.dmtr.host",
-    "vector-mainnet.blockfrost-m1.dmtr.host",
     "*.vector-testnet.blockfrost-m1.dmtr.host",
-    "vector-testnet.blockfrost-m1.dmtr.host",
 
     // DBSync
-    "dbsync-v3.dmtr.host",
-    "cardano-mainnet.dbsync-v3.dmtr.host",
-    "cardano-preprod.dbsync-v3.dmtr.host",
-    "cardano-preview.dbsync-v3.dmtr.host",
-    "vector-mainnet.dbsync-v3.dmtr.host",
-    "vector-testnet.dbsync-v3.dmtr.host",
+    "*.dbsync-v3.dmtr.host",
 
     // U5C
-    "cardano-mainnet.utxorpc-m1.dmtr.host",
-    "cardano-preprod.utxorpc-m1.dmtr.host",
-    "cardano-preview.utxorpc-m1.dmtr.host",
-    "vector-mainnet.utxorpc-m1.dmtr.host",
-    "vector-testnet.utxorpc-m1.dmtr.host",
+    "*.utxorpc-m1.dmtr.host",
 
     // Balius
-    "balius-m1.dmtr.host",
 
     // TRP
-    "*.cardano-mainnet.trp-m1.dmtr.host",
-    "cardano-mainnet.trp-m1.dmtr.host",
-    "*.cardano-preprod.trp-m1.dmtr.host",
-    "cardano-preprod.trp-m1.dmtr.host",
-    "*.cardano-preview.trp-m1.dmtr.host",
-    "cardano-preview.trp-m1.dmtr.host",
-    "*.vector-mainnet.trp-m1.dmtr.host",
-    "vector-mainnet.trp-m1.dmtr.host",
-    "*.vector-testnet.trp-m1.dmtr.host",
-    "vector-testnet.trp-m1.dmtr.host",
+    "*.trp-m1.dmtr.host", 
 
     // Mumak
-    "mumak-m0.dmtr.host",
-    "cardano-mainnet.mumak-m0.dmtr.host",
-    "cardano-preprod.mumak-m0.dmtr.host",
-    "cardano-preview.mumak-m0.dmtr.host",
-    "vector-mainnet.mumak-m0.dmtr.host",
-    "vector-testnet.mumak-m0.dmtr.host",
+    "*.mumak-m0.dmtr.host",
   ]
   type              = "advanced"
   validation_method = "txt"
