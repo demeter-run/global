@@ -68,7 +68,7 @@ locals {
         }
       }
       tx_submit_api = {
-        enabled = true
+        enabled = false
         address = "submitapi-m1.demeter.run"
       }
     },
