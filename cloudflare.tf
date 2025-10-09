@@ -210,7 +210,7 @@ resource "cloudflare_certificate_pack" "this" {
   ]
   type              = "advanced"
   validation_method = "txt"
-  validity_days     = 180
+  validity_days     = 90
 }
 
 # Cardano Node
