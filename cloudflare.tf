@@ -106,7 +106,7 @@ resource "cloudflare_zone_settings_override" "this" {
     opportunistic_encryption = "on"
     #polish                   = "lossless"
     rocket_loader = "on"
-    ssl           = "strict"
+    ssl           = "full"
     tls_1_3       = "on"
     webp          = "on"
     websockets    = "on"
