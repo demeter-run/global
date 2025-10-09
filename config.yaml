@@ -40,7 +40,7 @@ sops:
             UEtmcVpPQlMzWXNaeS93bndHTmdMYWMKr5pcKioeQQJ2QH43yhfRb2T/mTRCDnfg
             SDF1sbPenrnDJRA8Gi9CphX9bPz3XtkjRTsFYxD/hW1doSTiflkVJw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-09-29T14:24:04Z"
-    mac: ENC[AES256_GCM,data:/D+CbQWHWLmICi5vPzcs4no8GyEeaP3693F2tBOaD331CNC8SnCcAC+ruOyFi/0AHdbpFwYJSOsLjvKDVwnXYvosKaSLqLz4Lh13Kji/pptXEi5vAXKMmwLBiN62F51wn5Ud9+yhGU2e1fyaqkNWqW+7Bzjxz4uNjlGAeLxXU7k=,iv:dQOMdSE43SXatM9nnAl7iKxMPQUQgcjkUWqc68ijAtw=,tag:tWPX0+ajH/gXl+xzEo/zqw==,type:str]
+    lastmodified: "2025-10-09T16:36:24Z"
+    mac: ENC[AES256_GCM,data:qt6HTWggIRboeMVKl5GSbdrzxzQvLPXr74RV9NXRCJAu4OSMmHH4+G/AINSys+YaqbTrwYg9k8L7+Oryn824+Df4OKsZfZk8DRSwi0dZBfLdNcQ8Koh+5UtWKYuboYfKPgIBj5CUn59eya9MnUv0ryrFWgS5vRJPf4h/oTTsBk0=,iv:c/SwlhSzxCQNfnAa08wl7j28OS+ECNIbDSZsqoMStRo=,tag:h5EVkA9QUbRQURhvQurqcA==,type:str]
     encrypted_regex: ^(auth)$
-    version: 3.10.2
+    version: 3.11.0
