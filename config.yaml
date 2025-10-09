@@ -7,12 +7,21 @@ grafana:
           grafana_title: Demeter Blink Labs
           datasource_uids:
             datasource_uid: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
+        - local_directory: grafana/dashboards/demeter
+          grafana_title: Demeter TxPipe
+          datasource_uids:
+            datasource_uid: aws_txpipe-demeter_us-west-2_m2-prometheus
     data_sources:
         gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus:
             type: prometheus
             name: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
             url: http://prometheus-operated.dmtr-system.svc.cluster.local:9090
             pdc: 46f68690-716c-47ff-91d0-26359c834aae
+        aws_txpipe-demeter_us-west-2_m2-prometheus:
+            type: prometheus
+            name: aws_txpipe-demeter_us-west-2_m2-prometheus
+            url: http://prometheus-operated.dmtr-system.svc.cluster.local:9090
+            pdc: 46f28c91-2d0f-401b-ac87-5afd0a75f667
     alerts:
         - local_directory: grafana/alerts/blinklabs
           grafana_title: Blink Labs
