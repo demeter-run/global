@@ -49,6 +49,7 @@ locals {
       name = "txpipe-m2"
       cardano_node = {
         enabled = true
+        address = "cnode-m1.demeter.run"
       }
       kupo = {
         enabled = true
