@@ -44,6 +44,9 @@ locals {
         enabled = true
         address = "tx-submit-api.blinklabs.cloud"
       }
+      blockfrost = {
+        enabled = false
+      }
     },
     {
       name = "txpipe-m2"
@@ -67,8 +70,12 @@ locals {
         }
       }
       tx_submit_api = {
-        enabled = false
-        address = "UpdateMe"
+        enabled = true
+        address = "submitapi-m1.demeter.run"
+      }
+      blockfrost = {
+        enabled = true
+        address = "blockfrost-m1.demeter.run"
       }
     },
   ]
@@ -476,6 +483,32 @@ resource "cloudflare_load_balancer" "tx_submit_api_m1" {
   name             = "*.submitapi-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.tx_submit_api_m1.id]
   fallback_pool_id = cloudflare_load_balancer_pool.tx_submit_api_m1.id
+  proxied          = true
+  steering_policy  = "off"
+}
+
+# Blockfrost
+resource "cloudflare_load_balancer_pool" "blockfrost_m1" {
+  name = "BlockfrostM1"
+
+  account_id = var.cloudflare_account_id
+  # TODO: add monitor when blockfrost supports reliable health checks
+  # monitor    = cloudflare_load_balancer_monitor.blockfrost_m1_monitor.id
+
+  dynamic "origins" {
+    for_each = { for p in local.demeter_providers : p.name => p if p.blockfrost.enabled }
+    content {
+      name    = origins.value.name
+      address = origins.value.blockfrost.address != "" ? origins.value.blockfrost.address : "${origins.value.name}.${var.cloudflare_zone_name}"
+    }
+  }
+}
+
+resource "cloudflare_load_balancer" "blockfrost_m1" {
+  zone_id          = var.cloudflare_zone_id
+  name             = "*.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pool_ids = [cloudflare_load_balancer_pool.blockfrost_m1.id]
+  fallback_pool_id = cloudflare_load_balancer_pool.blockfrost_m1.id
   proxied          = true
   steering_policy  = "off"
 }
