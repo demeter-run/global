@@ -27,17 +27,17 @@ locals {
       kupo = {
         enabled = true
         networks = {
-          preview = "preview.kupo.blinklabs.cloud"
-          preprod = "preprod.kupo.blinklabs.cloud"
-          mainnet = "kupo.blinklabs.cloud"
+          cardano_preview = "preview.kupo.blinklabs.cloud"
+          cardano_preprod = "preprod.kupo.blinklabs.cloud"
+          cardano_mainnet = "kupo.blinklabs.cloud"
         }
       }
       ogmios = {
         enabled = true
         networks = {
-          preview = "preview.ogmios.blinklabs.cloud"
-          preprod = "preprod.ogmios.blinklabs.cloud"
-          mainnet = "ogmios.blinklabs.cloud"
+          cardano_preview = "preview.ogmios.blinklabs.cloud"
+          cardano_preprod = "preprod.ogmios.blinklabs.cloud"
+          cardano_mainnet = "ogmios.blinklabs.cloud"
         }
       }
       tx_submit_api = {
@@ -53,17 +53,17 @@ locals {
       kupo = {
         enabled = true
         networks = {
-          preview = "udawaqurxu.txpipe.cloud"
-          preprod = "mqlozdbuau.txpipe.cloud"
-          mainnet = "nswcfrjdfu.txpipe.cloud"
+          cardano_preview = "udawaqurxu.txpipe.cloud"
+          cardano_preprod = "mqlozdbuau.txpipe.cloud"
+          cardano_mainnet = "nswcfrjdfu.txpipe.cloud"
         }
       }
       ogmios = {
         enabled = true
         networks = {
-          preview = "wydstabtnn.txpipe.cloud"
-          preprod = "opwcgfbffs.txpipe.cloud"
-          mainnet = "gywofhowvc.txpipe.cloud"
+          cardano_preview = "wydstabtnn.txpipe.cloud"
+          cardano_preprod = "opwcgfbffs.txpipe.cloud"
+          cardano_mainnet = "gywofhowvc.txpipe.cloud"
         }
       }
       tx_submit_api = {
@@ -119,6 +119,100 @@ resource "cloudflare_zone_settings_override" "this" {
   }
 }
 
+resource "cloudflare_certificate_pack" "this" {
+  zone_id               = cloudflare_zone.this[each.key].id
+  certificate_authority = "google"
+  hosts = [
+    "*.dmtr.host",
+
+    // Cardano node
+    "*.cnode-m1.dmtr.host",
+    "*.cardano-mainnet.cnode-m1.dmtr.host",
+    "*.cardano-preprod.cnode-m1.dmtr.host",
+    "*.cardano-preview.cnode-m1.dmtr.host",
+    "*.vector-mainnet.cnode-m1.dmtr.host",
+    "*.vector-tesnet.cnode-m1.dmtr.host",
+    "*.prime-tesnet.cnode-m1.dmtr.host",
+
+    // Ogmios
+    "*.cardano-mainnet-v6.ogmios-m1.dmtr.host",
+    "cardano-mainnet-v6.ogmios-m1.dmtr.host",
+    "*.cardano-preprod-v6.ogmios-m1.dmtr.host",
+    "cardano-preprod-v6.ogmios-m1.dmtr.host",
+    "*.cardano-preview-v6.ogmios-m1.dmtr.host",
+    "cardano-preview-v6.ogmios-m1.dmtr.host",
+    "*.vector-mainnet-v6.ogmios-m1.dmtr.host",
+    "vector-mainnet-v6.ogmios-m1.dmtr.host",
+    "*.vector-tesnet-v6.ogmios-m1.dmtr.host",
+    "vector-tesnet-v6.ogmios-m1.dmtr.host",
+    "*.prime-tesnet-v6.ogmios-m1.dmtr.host",
+    "prime-tesnet-v6.ogmios-m1.dmtr.host",
+
+    // Kupo
+    "*.cardano-mainnet-v2.kupo-m1.dmtr.host",
+    "cardano-mainnet-v2.kupo-m1.dmtr.host",
+    "*.cardano-preprod-v2.kupo-m1.dmtr.host",
+    "cardano-preprod-v2.kupo-m1.dmtr.host",
+    "*.cardano-preview-v2.kupo-m1.dmtr.host",
+    "cardano-preview-v2.kupo-m1.dmtr.host",
+
+    // Blockfrost
+    "*.blockfrost-m1.dmtr.host",
+    "blockfrost-m1.dmtr.host",
+    "*.cardano-mainnet.blockfrost-m1.dmtr.host",
+    "cardano-mainnet.blockfrost-m1.dmtr.host",
+    "*.cardano-preprod.blockfrost-m1.dmtr.host",
+    "cardano-preprod.blockfrost-m1.dmtr.host",
+    "*.cardano-preview.blockfrost-m1.dmtr.host",
+    "cardano-preview.blockfrost-m1.dmtr.host",
+    "*.vector-mainnet.blockfrost-m1.dmtr.host",
+    "vector-mainnet.blockfrost-m1.dmtr.host",
+    "*.vector-testnet.blockfrost-m1.dmtr.host",
+    "vector-testnet.blockfrost-m1.dmtr.host",
+
+    // DBSync
+    "dbsync-v3.dmtr.host",
+    "cardano-mainnet.dbsync-v3.dmtr.host",
+    "cardano-preprod.dbsync-v3.dmtr.host",
+    "cardano-preview.dbsync-v3.dmtr.host",
+    "vector-mainnet.dbsync-v3.dmtr.host",
+    "vector-testnet.dbsync-v3.dmtr.host",
+
+    // U5C
+    "cardano-mainnet.utxorpc-m1.dmtr.host",
+    "cardano-preprod.utxorpc-m1.dmtr.host",
+    "cardano-preview.utxorpc-m1.dmtr.host",
+    "vector-mainnet.utxorpc-m1.dmtr.host",
+    "vector-testnet.utxorpc-m1.dmtr.host",
+
+    // Balius
+    "balius-m1.dmtr.host",
+
+    // TRP
+    "*.cardano-mainnet.trp-m1.dmtr.host",
+    "cardano-mainnet.trp-m1.dmtr.host",
+    "*.cardano-preprod.trp-m1.dmtr.host",
+    "cardano-preprod.trp-m1.dmtr.host",
+    "*.cardano-preview.trp-m1.dmtr.host",
+    "cardano-preview.trp-m1.dmtr.host",
+    "*.vector-mainnet.trp-m1.dmtr.host",
+    "vector-mainnet.trp-m1.dmtr.host",
+    "*.vector-testnet.trp-m1.dmtr.host",
+    "vector-testnet.trp-m1.dmtr.host",
+
+    // Mumak
+    "mumak-m0.dmtr.host",
+    "cardano-mainnet.mumak-m0.dmtr.host",
+    "cardano-preprod.mumak-m0.dmtr.host",
+    "cardano-preview.mumak-m0.dmtr.host",
+    "vector-mainnet.mumak-m0.dmtr.host",
+    "vector-testnet.mumak-m0.dmtr.host",
+  ]
+  type              = "advanced"
+  validation_method = "txt"
+  validity_days     = 180
+}
+
 # Cardano Node
 
 resource "cloudflare_load_balancer_pool" "cardano_node_m1" {
@@ -164,7 +258,6 @@ resource "cloudflare_load_balancer_monitor" "cardano_node_m1_monitor" {
 }
 
 # Kupo
-
 resource "cloudflare_load_balancer_pool" "kupo_preview" {
   name = "KupoPreview"
 
@@ -175,14 +268,14 @@ resource "cloudflare_load_balancer_pool" "kupo_preview" {
     for_each = { for p in local.demeter_providers : p.name => p if p.kupo.enabled }
     content {
       name    = origins.value.name
-      address = origins.value.kupo.networks.preview != "" ? origins.value.kupo.networks.preview : "${origins.value.name}.${var.cloudflare_zone_name}"
+      address = origins.value.kupo.networks.cardano_preview != "" ? origins.value.kupo.networks.cardano_preview : "${origins.value.name}.${var.cloudflare_zone_name}"
     }
   }
 }
 
 resource "cloudflare_load_balancer" "kupo_preview" {
   zone_id          = var.cloudflare_zone_id
-  name             = "preview-v2.kupo-m1.${var.cloudflare_zone_name}"
+  name             = "cardano-preview-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
   proxied          = true
@@ -191,7 +284,7 @@ resource "cloudflare_load_balancer" "kupo_preview" {
 
 resource "cloudflare_load_balancer" "kupo_preview_splat" {
   zone_id          = var.cloudflare_zone_id
-  name             = "*.preview-v2.kupo-m1.${var.cloudflare_zone_name}"
+  name             = "*.cardano-preview-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preview.id
   proxied          = true
@@ -221,14 +314,14 @@ resource "cloudflare_load_balancer_pool" "kupo_preprod" {
     for_each = { for p in local.demeter_providers : p.name => p if p.kupo.enabled }
     content {
       name    = origins.value.name
-      address = origins.value.kupo.networks.preprod != "" ? origins.value.kupo.networks.preprod : "${origins.value.name}.${var.cloudflare_zone_name}"
+      address = origins.value.kupo.networks.cardano_preprod != "" ? origins.value.kupo.networks.cardano_preprod : "${origins.value.name}.${var.cloudflare_zone_name}"
     }
   }
 }
 
 resource "cloudflare_load_balancer" "kupo_preprod" {
   zone_id          = var.cloudflare_zone_id
-  name             = "preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
+  name             = "cardano-preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
   proxied          = true
@@ -237,7 +330,7 @@ resource "cloudflare_load_balancer" "kupo_preprod" {
 
 resource "cloudflare_load_balancer" "kupo_preprod_splat" {
   zone_id          = var.cloudflare_zone_id
-  name             = "*.preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
+  name             = "*.cardano-preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_preprod.id
   proxied          = true
@@ -267,14 +360,14 @@ resource "cloudflare_load_balancer_pool" "kupo_mainnet" {
     for_each = { for p in local.demeter_providers : p.name => p if p.kupo.enabled }
     content {
       name    = origins.value.name
-      address = origins.value.kupo.networks.mainnet != "" ? origins.value.kupo.networks.mainnet : "${origins.value.name}.${var.cloudflare_zone_name}"
+      address = origins.value.kupo.networks.cardano_mainnet != "" ? origins.value.kupo.networks.cardano_mainnet : "${origins.value.name}.${var.cloudflare_zone_name}"
     }
   }
 }
 
 resource "cloudflare_load_balancer" "kupo_mainnet" {
   zone_id          = var.cloudflare_zone_id
-  name             = "mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
+  name             = "cardano-mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
   proxied          = true
@@ -283,7 +376,7 @@ resource "cloudflare_load_balancer" "kupo_mainnet" {
 
 resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
   zone_id          = var.cloudflare_zone_id
-  name             = "*.mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
+  name             = "*.cardano-mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.kupo_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.kupo_mainnet.id
   proxied          = true
@@ -314,14 +407,14 @@ resource "cloudflare_load_balancer_pool" "ogmios_preview" {
     for_each = { for p in local.demeter_providers : p.name => p if p.ogmios.enabled }
     content {
       name    = origins.value.name
-      address = origins.value.ogmios.networks.preview
+      address = origins.value.ogmios.networks.cardano_preview
     }
   }
 }
 
 resource "cloudflare_load_balancer" "ogmios_preview" {
   zone_id          = var.cloudflare_zone_id
-  name             = "preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
+  name             = "cardano-preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
   proxied          = true
@@ -330,7 +423,7 @@ resource "cloudflare_load_balancer" "ogmios_preview" {
 
 resource "cloudflare_load_balancer" "ogmios_preview_splat" {
   zone_id          = var.cloudflare_zone_id
-  name             = "*.preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
+  name             = "*.cardano-preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preview.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preview.id
   proxied          = true
@@ -364,14 +457,14 @@ resource "cloudflare_load_balancer_pool" "ogmios_preprod" {
     for_each = { for p in local.demeter_providers : p.name => p if p.ogmios.enabled }
     content {
       name    = origins.value.name
-      address = origins.value.ogmios.networks.preprod
+      address = origins.value.ogmios.networks.cardano_preprod
     }
   }
 }
 
 resource "cloudflare_load_balancer" "ogmios_preprod" {
   zone_id          = var.cloudflare_zone_id
-  name             = "preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
+  name             = "cardano-preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
   proxied          = true
@@ -380,7 +473,7 @@ resource "cloudflare_load_balancer" "ogmios_preprod" {
 
 resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
   zone_id          = var.cloudflare_zone_id
-  name             = "*.preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
+  name             = "*.cardano-preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_preprod.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_preprod.id
   proxied          = true
@@ -413,14 +506,14 @@ resource "cloudflare_load_balancer_pool" "ogmios_mainnet" {
     for_each = { for p in local.demeter_providers : p.name => p if p.ogmios.enabled }
     content {
       name    = origins.value.name
-      address = origins.value.ogmios.networks.mainnet
+      address = origins.value.ogmios.networks.cardano_mainnet
     }
   }
 }
 
 resource "cloudflare_load_balancer" "ogmios_mainnet" {
   zone_id          = var.cloudflare_zone_id
-  name             = "mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
+  name             = "cardano-mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
   proxied          = true
@@ -429,7 +522,7 @@ resource "cloudflare_load_balancer" "ogmios_mainnet" {
 
 resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
   zone_id          = var.cloudflare_zone_id
-  name             = "*.mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
+  name             = "*.cardano-mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
   default_pool_ids = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
   fallback_pool_id = cloudflare_load_balancer_pool.ogmios_mainnet.id
   proxied          = true
