@@ -120,7 +120,7 @@ resource "cloudflare_zone_settings_override" "this" {
 }
 
 resource "cloudflare_certificate_pack" "this" {
-  zone_id               = cloudflare_zone.this[each.key].id
+  zone_id               = cloudflare_zone.this[var.cloudflare_zone_name].id
   certificate_authority = "google"
   hosts = [
     "*.dmtr.host",
