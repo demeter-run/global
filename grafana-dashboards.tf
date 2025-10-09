@@ -1,7 +1,7 @@
 module "grafana_dashboard" {
   for_each = {
     for folder in local.env_vars.grafana.folders :
-    folder.local_directory => folder
+    folder.grafana_title => folder
   }
   source          = "./modules/grafana_dashboard"
   local_directory = each.value.local_directory
