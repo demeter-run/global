@@ -198,7 +198,7 @@ resource "cloudflare_load_balancer_pool" "node_cardano_mainnet" {
   monitor    = cloudflare_load_balancer_monitor.node_cardano_mainnet.id
 
   dynamic "origins" {
-    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && p.node.networks.cardano_mainnet != null }
+    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && can(p.node.networks.cardano_mainnet) }
     content {
       name    = origins.value.name
       address = origins.value.node.networks.cardano_mainnet
@@ -240,7 +240,7 @@ resource "cloudflare_load_balancer_pool" "node_cardano_preprod" {
   monitor    = cloudflare_load_balancer_monitor.node_cardano_preprod.id
 
   dynamic "origins" {
-    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && p.node.networks.cardano_preprod != null }
+    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && can(p.node.networks.cardano_preprod) }
     content {
       name    = origins.value.name
       address = origins.value.node.networks.cardano_preprod
@@ -282,7 +282,7 @@ resource "cloudflare_load_balancer_pool" "node_cardano_preview" {
   monitor    = cloudflare_load_balancer_monitor.node_cardano_preview.id
 
   dynamic "origins" {
-    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && p.node.networks.cardano_preview != null }
+    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && can(p.node.networks.cardano_preview) }
     content {
       name    = origins.value.name
       address = origins.value.node.networks.cardano_preview
@@ -324,7 +324,7 @@ resource "cloudflare_load_balancer_pool" "node_vector_testnet" {
   monitor    = cloudflare_load_balancer_monitor.node_vector_testnet.id
 
   dynamic "origins" {
-    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && p.node.networks.vector_testnet != null }
+    for_each = { for p in local.demeter_providers : p.name => p if p.node.enabled && can(p.node.networks.vector_testnet) }
     content {
       name    = origins.value.name
       address = origins.value.node.networks.vector_testnet
@@ -656,7 +656,7 @@ resource "cloudflare_load_balancer_pool" "ogmios_vector_testnet" {
   monitor    = cloudflare_load_balancer_monitor.ogmios_vector_testnet_monitor.id
 
   dynamic "origins" {
-    for_each = { for p in local.demeter_providers : p.name => p if p.ogmios.enabled && p.ogmios.networks.vector_testnet != null }
+    for_each = { for p in local.demeter_providers : p.name => p if p.ogmios.enabled && can(p.ogmios.networks.vector_testnet) }
     content {
       name    = origins.value.name
       address = origins.value.ogmios.networks.vector_testnet
