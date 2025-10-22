@@ -6,8 +6,8 @@ module "grafana_dashboard" {
   source          = "./modules/grafana_dashboard"
   local_directory = each.value.local_directory
   grafana_title   = each.value.grafana_title
-  datasource_uids = {
+  datasource_uids = try(each.value.datasource_uids, null) != null ? {
     # This is a template variable used in Demeter dashboards
     datasource_uid = module.grafana_data_sources.uids[each.value.datasource_uids.datasource_uid]
-  }
+  } : {}
 }

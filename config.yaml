@@ -3,14 +3,16 @@ grafana:
         url: https://dmtrglobal.grafana.net
         auth: ENC[AES256_GCM,data:7Wbq1IRDNeIXPA3X8EwMABCZePLKKMClf0OD7W3TxzqwH27m7B5EyqSVE5/8hw==,iv:Hj7Ppns3XYnU4cxEvNW5MvhcHBmYv800j+BPXGeC3t4=,tag:E/MBlYplPHjPUoH0E0bVeQ==,type:str]
     folders:
-        - local_directory: grafana/dashboards/demeter
+        - local_directory: grafana/dashboards/blinklabs
           grafana_title: Demeter Blink Labs
           datasource_uids:
             datasource_uid: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
-        - local_directory: grafana/dashboards/demeter
+        - local_directory: grafana/dashboards/txpipe
           grafana_title: Demeter TxPipe
           datasource_uids:
             datasource_uid: aws_txpipe-demeter_us-west-2_m2-prometheus
+        - local_directory: grafana/dashboards/shared
+          grafana_title: Demeter Shared
     data_sources:
         gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus:
             type: prometheus
