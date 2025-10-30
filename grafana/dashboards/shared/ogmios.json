@@ -44,7 +44,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -57,7 +57,7 @@
             "steps": [
               {
                 "color": "blue",
-                "value": null
+                "value": 0
               }
             ]
           }
@@ -76,6 +76,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -83,14 +84,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "ogmios_tip_block{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
@@ -105,7 +108,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -113,11 +116,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -126,6 +131,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -133,6 +139,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -148,7 +155,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -174,16 +181,17 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "rate(ogmios_total_messages{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}[$__rate_interval])",
@@ -198,7 +206,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -211,7 +219,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -234,6 +242,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -241,14 +250,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "ogmios_active_connections{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
@@ -263,7 +274,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -276,7 +287,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -299,6 +310,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -306,14 +318,16 @@
           "fields": "",
           "values": false
         },
-        "textMode": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": false,
@@ -330,7 +344,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -338,11 +352,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -351,6 +367,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -358,6 +375,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -373,7 +391,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "red",
@@ -400,15 +418,17 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "ogmios_current_heap_size{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
@@ -423,7 +443,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -431,12 +451,14 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "axisSoftMax": 1,
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -445,6 +467,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -452,6 +475,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -468,7 +492,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "yellow",
@@ -499,15 +523,17 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container=\"main\", pod=~\".*$network-$version.*\"}[4m])*1000) by (pod) / sum(container_spec_cpu_shares{namespace=\"$namespace\", container=\"main\", pod=~\".*$network-$version.*\"}) by (pod)",
@@ -522,7 +548,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -530,12 +556,14 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "axisSoftMax": 1,
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 6,
             "gradientMode": "none",
@@ -544,6 +572,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -551,6 +580,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -568,7 +598,7 @@
             "steps": [
               {
                 "color": "green",
-                "value": null
+                "value": 0
               },
               {
                 "color": "#EAB839",
@@ -599,16 +629,17 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", container!=\"socat\", pod=~\".*$network-$version.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=\"$namespace\", container!=\"socat\", pod=~\".*$network-$version.*\"}) by (pod)",
@@ -623,7 +654,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -631,7 +662,14 @@
             "mode": "thresholds"
           },
           "custom": {
+            "axisPlacement": "auto",
             "fillOpacity": 70,
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
             "lineWidth": 0,
             "spanNulls": false
           },
@@ -641,7 +679,7 @@
             "steps": [
               {
                 "color": "red",
-                "value": null
+                "value": 0
               },
               {
                 "color": "green",
@@ -670,15 +708,17 @@
         "rowHeight": 0.9,
         "showValue": "auto",
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "ogmios_connected{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
@@ -693,7 +733,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "description": "",
       "fieldConfig": {
@@ -702,11 +742,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -715,6 +757,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -722,6 +765,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -736,7 +780,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": 0
               },
               {
                 "color": "red",
@@ -762,15 +807,17 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "ogmios_active_connections{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
@@ -785,7 +832,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -793,12 +840,14 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "axisSoftMax": 1,
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -807,6 +856,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -814,6 +864,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -829,7 +880,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": 0
               },
               {
                 "color": "yellow",
@@ -860,15 +912,17 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container!=\"\", pod=~\".*proxy.*\"}[4m])*1000) by (pod) / sum(container_spec_cpu_shares{namespace=\"$namespace\", container!=\"\", pod=~\".*proxy.*\"}) by (pod)",
@@ -883,7 +937,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -891,12 +945,14 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "axisSoftMax": 1,
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 6,
             "gradientMode": "none",
@@ -905,6 +961,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -912,6 +969,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -928,7 +986,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": 0
               },
               {
                 "color": "#EAB839",
@@ -959,16 +1018,17 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.2.6",
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", container!=\"\", pod=~\".*proxy.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=\"$namespace\", container!=\"\", pod=~\".*proxy.*\"}) by (pod)",
@@ -981,7 +1041,7 @@
       "type": "timeseries"
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -989,282 +1049,304 @@
         "y": 41
       },
       "id": 29,
-      "panels": [],
+      "panels": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 42
+          },
+          "id": 18,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.3.0-18356121373.patch4",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "$datasource"
+              },
+              "editorMode": "code",
+              "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{ exported_instance=~\"ogmios-(cardano-)?$network.*\", job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-blue\"}[5m])) > 0",
+              "legendFormat": "__auto",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Frames Rate (Blue)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 52
+          },
+          "id": 22,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.3.0-18356121373.patch4",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "$datasource"
+              },
+              "editorMode": "code",
+              "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-$network.*\", job=\"ext-ogmios-m1/proxy\"}) > 0",
+              "legendFormat": "__auto",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Proxy Active Connections (Blue)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisBorderShow": false,
+                "axisCenteredZero": false,
+                "axisColorMode": "text",
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "barWidthFactor": 0.6,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "insertNulls": false,
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "showValues": false,
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": 0
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 10,
+            "w": 24,
+            "x": 0,
+            "y": 62
+          },
+          "id": 24,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom",
+              "showLegend": true
+            },
+            "tooltip": {
+              "hideZeros": false,
+              "mode": "single",
+              "sort": "none"
+            }
+          },
+          "pluginVersion": "12.3.0-18356121373.patch4",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "$datasource"
+              },
+              "editorMode": "code",
+              "expr": "sum(rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*$network.*\",job=\"ext-ogmios-m1/proxy\" }[5m]) > 0) by (status_code, consumer)",
+              "legendFormat": "{{status_code}}.{{consumer}}",
+              "range": true,
+              "refId": "A"
+            }
+          ],
+          "title": "Request count by Code (blue)",
+          "type": "timeseries"
+        }
+      ],
       "title": "Proxy Blue",
       "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource_uid}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 42
-      },
-      "id": 18,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource_uid}"
-          },
-          "editorMode": "code",
-          "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{ exported_instance=~\"ogmios-$${network}.*\", job=\"ext-ogmios-m1/proxy\"}[5m])) > 0",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Frames Rate",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource_uid}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 52
-      },
-      "id": 22,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource_uid}"
-          },
-          "editorMode": "code",
-          "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-$${network}.*\", job=\"ext-ogmios-m1/proxy\"}) > 0",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Proxy Active Connections (Blue)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource_uid}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 62
-      },
-      "id": 24,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource_uid}"
-          },
-          "editorMode": "code",
-          "expr": "sum(rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*$network.*\",job=\"ext-ogmios-m1/proxy\" }[5m]) > 0) by (status_code, consumer)",
-          "legendFormat": "{{status_code}}.{{consumer}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Request count by Code (blue)",
-      "type": "timeseries"
     },
     {
       "collapsed": false,
@@ -1272,7 +1354,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 72
+        "y": 42
       },
       "id": 31,
       "panels": [],
@@ -1282,7 +1364,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1290,11 +1372,13 @@
             "mode": "palette-classic"
           },
           "custom": {
+            "axisBorderShow": false,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
+            "barWidthFactor": 0.6,
             "drawStyle": "line",
             "fillOpacity": 0,
             "gradientMode": "none",
@@ -1303,6 +1387,7 @@
               "tooltip": false,
               "viz": false
             },
+            "insertNulls": false,
             "lineInterpolation": "linear",
             "lineWidth": 1,
             "pointSize": 5,
@@ -1310,6 +1395,7 @@
               "type": "linear"
             },
             "showPoints": "auto",
+            "showValues": false,
             "spanNulls": false,
             "stacking": {
               "group": "A",
@@ -1324,7 +1410,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": 0
               },
               {
                 "color": "red",
@@ -1336,192 +1423,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 73
-      },
-      "id": 19,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource_uid}"
-          },
-          "editorMode": "code",
-          "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-$${network}.*\", job=~\"ext-ogmios-m1/proxy.*\"}) > 0",
-          "legendFormat": "__auto",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Proxy Active Connections",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource_uid}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 81
-      },
-      "id": 25,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource_uid}"
-          },
-          "editorMode": "code",
-          "expr": "sum(increase(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*$network.*\",job=\"ext-ogmios-m1/proxy-green\" }[5m]) > 0) by (status_code, consumer)",
-          "legendFormat": "{{status_code}}.{{consumer}}",
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Request count by Code (green)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource_uid}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green"
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 88
+        "y": 43
       },
       "id": 32,
       "options": {
@@ -1532,24 +1437,222 @@
           "showLegend": true
         },
         "tooltip": {
+          "hideZeros": false,
           "mode": "single",
           "sort": "none"
         }
       },
+      "pluginVersion": "12.3.0-18356121373.patch4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{ exported_instance=~\"ogmios-$${network}.*\", job=\"ext-ogmios-m1/proxy-green\"}[5m])) > 0",
+          "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{ exported_instance=~\"ogmios-(cardano-)?$network.*\", job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-green\"}[5m])) > 0",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Frames Rate",
+      "title": "Frames Rate (green)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 53
+      },
+      "id": 19,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18356121373.patch4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network.*\", job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-green\"}) > 0",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Proxy Active Connections (green)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 61
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.3.0-18356121373.patch4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*$network.*\",job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-green\" }[5m]) > 0) by (status_code, consumer)",
+          "legendFormat": "{{status_code}}.{{consumer}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Request count by Code (green)",
       "type": "timeseries"
     }
   ],
@@ -1560,41 +1663,37 @@
   "templating": {
     "list": [
       {
+        "includeAll": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
+      },
+      {
         "current": {
-          "selected": true,
           "text": "ext-ogmios-m1",
           "value": "ext-ogmios-m1"
         },
-        "hide": 0,
         "includeAll": false,
-        "multi": false,
         "name": "namespace",
         "options": [
           {
             "selected": true,
             "text": "ext-ogmios-m1",
             "value": "ext-ogmios-m1"
-          },
-          {
-            "selected": false,
-            "text": "ftr-ogmios-v0",
-            "value": "ftr-ogmios-v0"
           }
         ],
-        "query": "ext-ogmios-m1,ftr-ogmios-v0",
-        "queryValue": "",
-        "skipUrlSync": false,
+        "query": "ext-ogmios-m1",
         "type": "custom"
       },
       {
         "current": {
-          "selected": true,
           "text": "mainnet",
           "value": "mainnet"
         },
-        "hide": 0,
         "includeAll": false,
-        "multi": false,
         "name": "network",
         "options": [
           {
@@ -1614,35 +1713,23 @@
           }
         ],
         "query": "mainnet,preview,preprod",
-        "queryValue": "",
-        "skipUrlSync": false,
         "type": "custom"
       },
       {
         "current": {
-          "selected": true,
           "text": "6",
           "value": "6"
         },
-        "hide": 0,
         "includeAll": false,
-        "multi": false,
         "name": "version",
         "options": [
-          {
-            "selected": false,
-            "text": "5",
-            "value": "5"
-          },
           {
             "selected": true,
             "text": "6",
             "value": "6"
           }
         ],
-        "query": "5,6",
-        "queryValue": "",
-        "skipUrlSync": false,
+        "query": "6",
         "type": "custom"
       }
     ]
@@ -1654,6 +1741,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Cardano Ogmios",
-  "version": 30,
+  "version": 31,
   "weekStart": ""
 }

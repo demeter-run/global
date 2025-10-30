@@ -3,14 +3,16 @@ grafana:
         url: https://dmtrglobal.grafana.net
         auth: ENC[AES256_GCM,data:7Wbq1IRDNeIXPA3X8EwMABCZePLKKMClf0OD7W3TxzqwH27m7B5EyqSVE5/8hw==,iv:Hj7Ppns3XYnU4cxEvNW5MvhcHBmYv800j+BPXGeC3t4=,tag:E/MBlYplPHjPUoH0E0bVeQ==,type:str]
     folders:
-        - local_directory: grafana/dashboards/demeter
+        - local_directory: grafana/dashboards/blinklabs
           grafana_title: Demeter Blink Labs
           datasource_uids:
             datasource_uid: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
-        - local_directory: grafana/dashboards/demeter
+        - local_directory: grafana/dashboards/txpipe
           grafana_title: Demeter TxPipe
           datasource_uids:
             datasource_uid: aws_txpipe-demeter_us-west-2_m2-prometheus
+        - local_directory: grafana/dashboards/shared
+          grafana_title: Demeter Shared
     data_sources:
         gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus:
             type: prometheus
@@ -40,7 +42,7 @@ sops:
             UEtmcVpPQlMzWXNaeS93bndHTmdMYWMKr5pcKioeQQJ2QH43yhfRb2T/mTRCDnfg
             SDF1sbPenrnDJRA8Gi9CphX9bPz3XtkjRTsFYxD/hW1doSTiflkVJw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-09T17:23:53Z"
-    mac: ENC[AES256_GCM,data:vdwfHztAllq0cAJzujes+o80ETmbMn/CsEhN/gkyWfbIFechb+HOtQ1hh34gJFPwX0BOoVNyFnpN3E6cBMX6BkrkkcsQ+b/ysrb+qjuUMVIrJq5UMmMR7L5T1nSvIdBBbPuE6Zc7NCm1NUbEwPxaQBx4LAnhAcisJKH03dPLkcc=,iv:hct1ieU8BhNjT+pHt6x1SorG6DJtmyACk59R/CwjLuI=,tag:VV4vUbhfhcNlhV0eczR+/w==,type:str]
+    lastmodified: "2025-10-23T14:12:09Z"
+    mac: ENC[AES256_GCM,data:H/N90nkvPr2q2xMcxxknjvD/4k0v2rwFDxRKxqoxe9jY2PvnkoWcjoolytI4LEaaEJO8pqM4cv1dv+2V5smVS92GoCRMIFX6Atxm4rZRKov8+hgwP0yCS6So2Y1/UQOOjTM3tCPhIpQI+QrbFjmj0zgyeafUt4adAXR+O19a0/g=,iv:vm2ZW/fuVTMDy0ILrH5vgIlZYws+6Ha2pYDmCUbV2aQ=,tag:vPtm5udDSd98CVUPzXT14g==,type:str]
     encrypted_regex: ^(auth)$
     version: 3.11.0

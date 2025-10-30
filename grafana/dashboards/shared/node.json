@@ -5,7 +5,7 @@
         "builtIn": 1,
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource_uid}"
+          "uid": "$datasource"
         },
         "enable": true,
         "hide": true,
@@ -31,7 +31,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -108,7 +108,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "cardano_node_metrics_slotNum_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}",
@@ -123,7 +123,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -179,7 +179,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "max(cardano_node_metrics_blockNum_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"})-min(cardano_node_metrics_blockNum_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"})",
@@ -195,7 +195,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -241,7 +241,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "cardano_node_metrics_blockNum_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}",
@@ -256,7 +256,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -302,7 +302,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "rate(cardano_node_metrics_blockNum_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}[5m])*60",
@@ -317,7 +317,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -395,7 +395,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "cardano_node_metrics_blockfetchclient_blockdelay_s{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}",
@@ -410,7 +410,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -465,7 +465,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "rate(cardano_node_metrics_forks_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}[1h])*60*60",
@@ -480,7 +480,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -558,7 +558,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "cardano_node_metrics_density_real{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}",
@@ -573,7 +573,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -633,11 +633,11 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "kubelet_volume_stats_available_bytes{persistentvolumeclaim=~\"data-node-$${network}.*\",exported_namespace=\"$namespace\"} / on(persistentvolumeclaim) kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~\"data-node-$${network}.*\",exported_namespace=\"$namespace\"}",
+          "expr": "kubelet_volume_stats_available_bytes{persistentvolumeclaim=~\"data-node-$network.*\",exported_namespace=\"$namespace\"} / on(persistentvolumeclaim) kubelet_volume_stats_capacity_bytes{persistentvolumeclaim=~\"data-node-$network.*\",exported_namespace=\"$namespace\"}",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -653,7 +653,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -712,7 +712,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "kube_pod_container_status_restarts_total{namespace=\"$namespace\",container=\"main\", pod=~\"(cardano-)?node-$network-.*\"}",
@@ -727,7 +727,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -811,7 +811,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "cardano_node_metrics_mempoolBytes_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}",
@@ -826,7 +826,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -905,7 +905,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "cardano_node_metrics_txsInMempool_int{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"}",
@@ -920,7 +920,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1004,7 +1004,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container!=\"\", pod=~\"(cardano-)?node-$network-.*\"}[5m])*10000) by (pod) / sum(container_spec_cpu_shares) by (pod)",
@@ -1019,7 +1019,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1104,7 +1104,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", container!=\"\", pod=~\"(cardano-)?node-$network-.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=\"$namespace\", container!=\"\", pod=~\"(cardano-)?node-$network-.*\"}) by (pod)",
@@ -1119,7 +1119,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1204,7 +1204,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (pod)(cardano_node_metrics_connectionManager_incomingConns{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"})",
@@ -1215,7 +1215,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (pod)(cardano_node_metrics_connectionManager_duplexConns{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"})",
@@ -1227,7 +1227,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (pod)(cardano_node_metrics_connectionManager_outgoingConns{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"})",
@@ -1239,7 +1239,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (pod)(cardano_node_metrics_connectionManager_unidirectionalConns{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"})",
@@ -1251,7 +1251,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (pod)(cardano_node_metrics_connectionManager_prunableConns{namespace=\"$namespace\", pod=~\"(cardano-)?node-$network-.*\"})",
@@ -1267,7 +1267,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1343,7 +1343,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container!=\"\", pod=~\"(cardano-)?node-$network-.*\"}[1m])) by (pod)",
@@ -1358,7 +1358,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1435,7 +1435,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (consumer) (node_proxy_total_connections{consumer=~\".*$network.*\", exported_instance=~\".*$namespace.*\"}) > 0",
@@ -1450,7 +1450,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1527,7 +1527,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (pod) (node_proxy_total_connections{consumer=~\".*$network.*\", exported_instance=~\".*$namespace.*\"}) > 0",
@@ -1542,7 +1542,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1620,7 +1620,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (consumer) (rate(node_proxy_total_packages_bytes{consumer=~\".*$network.*\", exported_instance=~\".*$namespace.*\"}[10m])) > 0 ",
@@ -1635,7 +1635,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${datasource_uid}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1738,7 +1738,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource_uid}"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "sum by (consumer) (increase(node_proxy_total_connections_denied{consumer=~\".*$network.*\", exported_instance=~\".*$namespace.*\"}[10m]))",
@@ -1758,6 +1758,14 @@
   "templating": {
     "list": [
       {
+        "includeAll": false,
+        "name": "datasource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "type": "datasource"
+      },
+      {
         "current": {
           "selected": true,
           "text": "ext-nodes-m1",
@@ -1769,17 +1777,12 @@
         "name": "namespace",
         "options": [
           {
-            "selected": false,
-            "text": "ftr-nodes-v2",
-            "value": "ftr-nodes-v2"
-          },
-          {
             "selected": true,
             "text": "ext-nodes-m1",
             "value": "ext-nodes-m1"
           }
         ],
-        "query": "ftr-nodes-v2,ext-nodes-m1",
+        "query": "ext-nodes-m1",
         "queryValue": "",
         "skipUrlSync": false,
         "type": "custom"
@@ -1840,6 +1843,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Cardano Node",
-  "version": 33,
+  "version": 34,
   "weekStart": ""
 }
