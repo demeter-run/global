@@ -1,7 +1,9 @@
 grafana:
     cloud:
         url: https://dmtrglobal.grafana.net
-        auth: ENC[AES256_GCM,data:7Wbq1IRDNeIXPA3X8EwMABCZePLKKMClf0OD7W3TxzqwH27m7B5EyqSVE5/8hw==,iv:Hj7Ppns3XYnU4cxEvNW5MvhcHBmYv800j+BPXGeC3t4=,tag:E/MBlYplPHjPUoH0E0bVeQ==,type:str]
+        auth: ENC[AES256_GCM,data:zvi8gW0/hkqy0n4O/2qv8kAktRtwlDKPCAnveLYiCexTUb3T7O/ZMHEX77b+GQ==,iv:3lsht3gjPTOb8B8nCPC4tpQLI9Ugedc9ALPTaocGGUs=,tag:tBEwlDAhSin21od7vr1DIQ==,type:str]
+        sm_url: https://synthetic-monitoring-api-sa-east-1.grafana.net
+        sm_access_token: ENC[AES256_GCM,data:Pq+XEkhIgBbZEdwaQOuQ0A7/prj6T1fX5qnbmgFvIIwnuFFw59Kfj/YzuYtN5E88TopiK8i1uvYZF1bXBfsqqKaArZTIXPkbaUZ8WwW20M2AIxEUWrgIKOibq6bAIaeXEaNfPRTRcbLwnjuzqx/eF811H8I=,iv:G4hU1Z6zgtiN/Y47IV9jXUBsHyv2LTucC+RwwEb81/U=,tag:H4PnMx3jiIchE2RMObS81Q==,type:str]
     folders:
         - local_directory: grafana/dashboards/blinklabs
           grafana_title: Demeter Blink Labs
@@ -31,18 +33,40 @@ grafana:
         - local_directory: grafana/alerts/demeter
           grafana_title: Demeter
           folder_uid: de9p56uby56v4a
+    synthetics_checks:
+        - job_name: queryNetworkTip
+          target: blinklabs-ogmios-cardano-preview
+          frequency: 60000
+          timeout: 15000
+          url: wss://preview.ogmios.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:aitikjIp9D+LLX5tUiAAiOqlRrdByezSZfo=,iv:fsIoL8waIjG4iPxQDpcAaeowvyXOKfwwlead7HIrXDU=,tag:YUZax6r0tGnaThX6Xb51EQ==,type:str]
+          script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
+        - job_name: queryNetworkTip
+          target: blinklabs-ogmios-cardano-preprod
+          frequency: 60000
+          timeout: 15000
+          url: wss://preprod.ogmios.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:GBdeESLgBHZ2IgGmpRSqsWRSY8flaKFVN4c=,iv:yysPZa7Ph6N+KRBMedJYyJDE7ZxJhxQGtFFUo/T52Fw=,tag:JdsebJ9hZ6NGXBBy36E3qw==,type:str]
+          script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
+        - job_name: queryNetworkTip
+          target: blinklabs-ogmios-cardano-mainnet
+          frequency: 60000
+          timeout: 15000
+          url: wss://ogmios.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:EbkukHR4/jdsgMcuw5Azd+I2TihN9rpYs0M=,iv:WLgb+M4L+BKRgeh9T5Rv1L0WK0BBrltT6rfpWAnOZNs=,tag:zXX0lAtnO1I6UBaEpiWtEw==,type:str]
+          script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
 sops:
     age:
         - recipient: age1klj2c5sj490j2g6ptlf3uh5cwehr4jfdt6c2e638a939sf7pfcdqjm54hq
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWNHhFVkh6eGc0QTVUNTZk
-            OHgxcllnOHNWODVpUUZMZUlCWng1ZjhZWlhnCmkyZWNxbFlZMEN1YUo0akJWdkdW
-            OXNKR1cvQVhEMVJMRk56WXg3YTB2ZlEKLS0tIFQ1bGRrYXErQ2RwOUJSekQwUzAw
-            UEtmcVpPQlMzWXNaeS93bndHTmdMYWMKr5pcKioeQQJ2QH43yhfRb2T/mTRCDnfg
-            SDF1sbPenrnDJRA8Gi9CphX9bPz3XtkjRTsFYxD/hW1doSTiflkVJw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBLUC81QjdlaUFmbzhSUHlr
+            RUtBUlExTEVLM05waVlIUEVjaUV2cEdwczFnCnhGaytiblFDYW54dzZ4bkQ0MzJh
+            OHFjVm5TSFY4MEZqanlkQ2JiVGZXYzQKLS0tIFI3ZHFHREZvUW8wKzNsSlVTVG96
+            NFpHRGZKZVl4U2x4Q2xQRXJNOHpEbUkKAQCBNGTrZT+diaHzxnj38mFTLUi2A0gl
+            1v5L/F5uGxRjlLgWdbE/fm5Nycn3eEeRXgatTLApQmGnG5eSFckfbA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-23T14:12:09Z"
-    mac: ENC[AES256_GCM,data:H/N90nkvPr2q2xMcxxknjvD/4k0v2rwFDxRKxqoxe9jY2PvnkoWcjoolytI4LEaaEJO8pqM4cv1dv+2V5smVS92GoCRMIFX6Atxm4rZRKov8+hgwP0yCS6So2Y1/UQOOjTM3tCPhIpQI+QrbFjmj0zgyeafUt4adAXR+O19a0/g=,iv:vm2ZW/fuVTMDy0ILrH5vgIlZYws+6Ha2pYDmCUbV2aQ=,tag:vPtm5udDSd98CVUPzXT14g==,type:str]
-    encrypted_regex: ^(auth)$
-    version: 3.11.0
+    lastmodified: "2025-11-01T21:32:40Z"
+    mac: ENC[AES256_GCM,data:2til17PBhfAyahzLbFVcahAdkBh2bnXhiZTbM1P2G8MIcR/b/mhcKfgaA4ZwKsHp55N0AcHaNRNHqWtzGrBp/W8uyqZzHHfFFljW0BLbaY1BcMrfGcbnBO+hqhYOHEH35BmLVWWjua+bggfCkn7p3pJCns9EOjGvJvJpThBZz1I=,iv:IOuoL/g5v5mVFtGJ3HpyFGNQ9r2fvDW8Eau5t/iu0t0=,tag:X4qPCvBiFIra6uthcJd1OA==,type:str]
+    encrypted_regex: ^(auth|sm_access_token|api_key)$
+    version: 3.10.2
