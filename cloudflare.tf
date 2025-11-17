@@ -68,7 +68,7 @@ locals {
         }
       }
       tx_submit_api = {
-        enabled = true
+        enabled = false
         address = "submitapi-m1.demeter.run"
       }
     },
@@ -491,21 +491,4 @@ resource "cloudflare_load_balancer" "tx_submit_api_m1" {
   fallback_pool   = cloudflare_load_balancer_pool.tx_submit_api_m1.id
   proxied         = true
   steering_policy = "off"
-}
-
-# DNS Records
-
-# Multiple CNAMEs: submitapi-m1.dmtr.host -> tx_submit_api.address (for each enabled provider)
-resource "cloudflare_dns_record" "submitapi_m1_cname" {
-  for_each = { for p in local.demeter_providers : p.name => p if p.tx_submit_api.enabled }
-
-  zone_id = var.cloudflare_zone_id
-  name    = "submitapi-m1"
-  type    = "CNAME"
-  content = each.value.tx_submit_api.address
-  ttl     = 60
-  proxied = true
-  lifecycle {
-    ignore_changes = [content] # Only update if the address changes in config
-  }
 }
