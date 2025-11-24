@@ -28,12 +28,16 @@ export default function () {
       console.log('Received:', data)
       const json = JSON.parse(data)
 
-      check(json,
+      const ok = check(json,
         {
           'has result': (r) => r.result !== undefined,
           'result has slot': (r) => r.result?.slot > 0,
+          'method is queryNetwork/tip': (r) => r.method === 'queryNetwork/tip'
         })
-
+      if (!ok) {
+        socket.close()
+        return fail('queryNetwork/tip message check failed')
+      }
       socket.close()
     })
 
@@ -42,8 +46,11 @@ export default function () {
     })
   })
 
-  check(response,
+  const ok = check(response,
     {
       'status is 101': (r) => r && r.status === 101
     })
+  if (!ok) {
+    return fail('WebSocket connection check failed')
+  }
 }
