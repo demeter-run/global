@@ -24,7 +24,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 51,
+  "id": 2601293922639872,
   "links": [],
   "panels": [
     {
@@ -121,7 +121,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19938312174",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -245,7 +245,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19938312174",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -253,7 +253,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/.*green.*$network\"}[1m]) > 0)",
+          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/(kupo-)?proxy-green(-cardano)?-${network}(-podmonitor)?\"}[1m]) > 0)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -343,7 +343,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19938312174",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -441,7 +441,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19938312174",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -539,7 +539,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19938312174",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -650,7 +650,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19938312174",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -727,7 +727,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.4.0-19938312174",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -832,7 +832,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19576184216",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -937,7 +937,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19576184216",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -1019,7 +1019,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.4.0-19576184216",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -1107,7 +1107,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.4.0-19576184216",
+      "pluginVersion": "12.4.0-20781422371.patch1",
       "targets": [
         {
           "datasource": {
@@ -1155,7 +1155,8 @@
         "name": "network",
         "options": [],
         "query": "mainnet,preprod,preview",
-        "type": "custom"
+        "type": "custom",
+        "valuesFormat": "csv"
       },
       {
         "current": {
@@ -1177,6 +1178,7 @@
         },
         "refresh": 1,
         "regex": "/.*pod=\"([^\"]+)/",
+        "regexApplyTo": "value",
         "type": "query"
       }
     ]
@@ -1189,5 +1191,6 @@
   "timezone": "browser",
   "title": "Cardano Kupo",
   "uid": "b0d911a7-d917-41ad-a7f7-bfe4ede0e042",
-  "version": 7
+  "version": 4,
+  "weekStart": ""
 }
