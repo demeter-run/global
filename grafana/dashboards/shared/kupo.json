@@ -24,9 +24,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 46,
+  "id": 51,
   "links": [],
-  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
@@ -35,6 +34,535 @@
         "w": 24,
         "x": 0,
         "y": 0
+      },
+      "id": 24,
+      "panels": [],
+      "title": "Proxies",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 1
+      },
+      "id": 29,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.99, sum by (le) (rate(kupo_proxy_http_request_duration_seconds_bucket{network=~\".*$network\"}[10m])))",
+          "legendFormat": "99",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.90, sum by (le) (rate(kupo_proxy_http_request_duration_seconds_bucket{network=~\".*$network\"}[10m])))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "90",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(kupo_proxy_http_request_duration_seconds_bucket{network=~\".*$network\"}[10m])))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "50",
+          "range": true,
+          "refId": "C"
+        }
+      ],
+      "title": "Latency",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 25,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/.*green.*$network\"}[1m]) > 0)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Request Rate by Consumer (green)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af0jrqwy4uhhce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 26,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af0jrqwy4uhhce"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/.*green.*$network\" }[1m]) > 0) by (status_code)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Request Rate by Code (green)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af0jrqwy4uhhce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 17
+      },
+      "id": 27,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af0jrqwy4uhhce"
+          },
+          "editorMode": "code",
+          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/.*blue.*$network\"}[1m]) > 0)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Request Rate by Consumer (blue)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "af0jrqwy4uhhce"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 17
+      },
+      "id": 28,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.4.0-19938312174",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "af0jrqwy4uhhce"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/.*blue.*$network\" }[1m]) > 0) by (status_code)",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Request Rate by Code (blue)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 25
       },
       "id": 14,
       "panels": [],
@@ -106,7 +634,7 @@
         "h": 8,
         "w": 16,
         "x": 0,
-        "y": 1
+        "y": 26
       },
       "id": 10,
       "options": {
@@ -122,7 +650,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [
         {
           "datasource": {
@@ -142,7 +670,6 @@
           },
           "editorMode": "code",
           "expr": "kupo_most_recent_node_tip{pod=~\".*$pod.*\"}",
-          "hide": false,
           "legendFormat": "{{pod}}.tip",
           "range": true,
           "refId": "B"
@@ -180,7 +707,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 1
+        "y": 26
       },
       "id": 15,
       "options": {
@@ -200,7 +727,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-19938312174",
       "targets": [
         {
           "datasource": {
@@ -289,7 +816,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 34
       },
       "id": 17,
       "options": {
@@ -305,7 +832,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-19576184216",
       "targets": [
         {
           "datasource": {
@@ -314,7 +841,6 @@
           },
           "editorMode": "code",
           "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"ftr-kupo-.*\", container=\"main\", pod=~\"$pod\"}[5m])) by (pod)",
-          "hide": false,
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -395,7 +921,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 34
       },
       "id": 19,
       "options": {
@@ -411,7 +937,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-19576184216",
       "targets": [
         {
           "datasource": {
@@ -466,7 +992,7 @@
         "h": 8,
         "w": 10,
         "x": 0,
-        "y": 17
+        "y": 42
       },
       "id": 23,
       "options": {
@@ -493,7 +1019,7 @@
         "sizing": "auto",
         "valueMode": "color"
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-19576184216",
       "targets": [
         {
           "datasource": {
@@ -504,7 +1030,6 @@
           "exemplar": false,
           "expr": "kubelet_volume_stats_available_bytes{exported_namespace=\"ftr-kupo-v1\"} / on(persistentvolumeclaim) kubelet_volume_stats_capacity_bytes{exported_namespace=\"ftr-kupo-v1\"}",
           "format": "time_series",
-          "hide": false,
           "instant": false,
           "interval": "",
           "key": "Q-afae6dc0-819b-4ec4-b2e1-a3e6105c38fd-0",
@@ -563,7 +1088,7 @@
         "h": 8,
         "w": 14,
         "x": 10,
-        "y": 17
+        "y": 42
       },
       "id": 21,
       "options": {
@@ -582,7 +1107,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-19576184216",
       "targets": [
         {
           "datasource": {
@@ -603,13 +1128,17 @@
       "type": "state-timeline"
     }
   ],
+  "preload": false,
   "refresh": "5s",
-  "schemaVersion": 37,
-  "style": "dark",
+  "schemaVersion": 42,
   "tags": [],
   "templating": {
     "list": [
       {
+        "current": {
+          "text": "aws_txpipe-demeter_us-west-2_m2-prometheus",
+          "value": "af0jrqwy4uhhce"
+        },
         "includeAll": false,
         "name": "datasource",
         "options": [],
@@ -619,39 +1148,17 @@
       },
       {
         "current": {
-          "selected": true,
           "text": "mainnet",
           "value": "mainnet"
         },
-        "hide": 0,
         "includeAll": false,
-        "multi": false,
         "name": "network",
-        "options": [
-          {
-            "selected": true,
-            "text": "mainnet",
-            "value": "mainnet"
-          },
-          {
-            "selected": false,
-            "text": "preprod",
-            "value": "preprod"
-          },
-          {
-            "selected": false,
-            "text": "preview",
-            "value": "preview"
-          }
-        ],
+        "options": [],
         "query": "mainnet,preprod,preview",
-        "queryValue": "",
-        "skipUrlSync": false,
         "type": "custom"
       },
       {
         "current": {
-          "selected": false,
           "text": "All",
           "value": "$__all"
         },
@@ -660,7 +1167,6 @@
           "uid": "$datasource"
         },
         "definition": "query_result(kupo_connection_status{pod=~\".*$network.*\"})",
-        "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "pod",
@@ -671,19 +1177,17 @@
         },
         "refresh": 1,
         "regex": "/.*pod=\"([^\"]+)/",
-        "skipUrlSync": false,
-        "sort": 0,
         "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
-  "timezone": "",
+  "timezone": "browser",
   "title": "Cardano Kupo",
-  "version": 32,
-  "weekStart": ""
+  "uid": "b0d911a7-d917-41ad-a7f7-bfe4ede0e042",
+  "version": 7
 }
