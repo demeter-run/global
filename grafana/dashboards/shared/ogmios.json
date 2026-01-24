@@ -88,7 +88,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -96,7 +96,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "ogmios_tip_block{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
+          "expr": "ogmios_tip_block{namespace=\"$namespace\", pod=~\".*(cardano-)?$network-.*\"}",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -186,7 +186,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -194,7 +194,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(ogmios_total_messages{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}[$__rate_interval])",
+          "expr": "rate(ogmios_total_messages{namespace=\"$namespace\", pod=~\".*(cardano-)?$network-.*\"}[$__rate_interval])",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -254,7 +254,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -262,7 +262,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "ogmios_active_connections{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
+          "expr": "ogmios_active_connections{namespace=\"$namespace\", pod=~\".*(cardano-)?$network-.*\"}",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -322,7 +322,7 @@
         "textMode": "auto",
         "wideLayout": true
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -331,7 +331,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(ogmios_active_connections{namespace=\"$namespace\", pod=~\".*$network-$version.*\"})",
+          "expr": "sum(ogmios_active_connections{namespace=\"$namespace\", pod=~\".*(cardano-)?$network-.*\"})",
           "instant": true,
           "legendFormat": "Total",
           "range": false,
@@ -423,7 +423,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -431,7 +431,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "ogmios_current_heap_size{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
+          "expr": "ogmios_current_heap_size{namespace=\"$namespace\", pod=~\".*(cardano-)?$network-.*\"}",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -528,7 +528,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -536,7 +536,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container=\"main\", pod=~\".*$network-$version.*\"}[4m])*1000) by (pod) / sum(container_spec_cpu_shares{namespace=\"$namespace\", container=\"main\", pod=~\".*$network-$version.*\"}) by (pod)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container=\"main\", pod=~\".*(cardano-)?$network-.*\"}[4m])*1000) by (pod) / sum(container_spec_cpu_shares{namespace=\"$namespace\", container=\"main\", pod=~\".*(cardano-)?$network-.*\"}) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -634,7 +634,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -642,7 +642,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", container!=\"socat\", pod=~\".*$network-$version.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=\"$namespace\", container!=\"socat\", pod=~\".*$network-$version.*\"}) by (pod)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", container!=\"socat\", pod=~\".*(cardano-)?$network-.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=\"$namespace\", container!=\"socat\", pod=~\".*(cardano-)?$network-.*\"}) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -713,7 +713,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -721,7 +721,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "ogmios_connected{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
+          "expr": "ogmios_connected{namespace=\"$namespace\", pod=~\".*(cardano-)?$network-.*\"}",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -812,7 +812,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -820,7 +820,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "ogmios_active_connections{namespace=\"$namespace\", pod=~\".*$network-$version.*\"}",
+          "expr": "ogmios_active_connections{namespace=\"$namespace\", pod=~\".*(cardano-)?$network-.*\"}",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -917,7 +917,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -1023,7 +1023,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -1131,7 +1131,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.3.0-18356121373.patch4",
+          "pluginVersion": "12.4.0-21024277089.patch2",
           "targets": [
             {
               "datasource": {
@@ -1139,7 +1139,7 @@
                 "uid": "$datasource"
               },
               "editorMode": "code",
-              "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{ exported_instance=~\"ogmios-(cardano-)?$network.*\", job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-blue\"}[5m])) > 0",
+              "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*blue.*\"}[5m])) > 0",
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
@@ -1229,7 +1229,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.3.0-18356121373.patch4",
+          "pluginVersion": "12.4.0-21024277089.patch2",
           "targets": [
             {
               "datasource": {
@@ -1237,7 +1237,7 @@
                 "uid": "$datasource"
               },
               "editorMode": "code",
-              "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-$network.*\", job=\"ext-ogmios-m1/proxy\"}) > 0",
+              "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*$network.*\"}) > 0",
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
@@ -1327,7 +1327,7 @@
               "sort": "none"
             }
           },
-          "pluginVersion": "12.3.0-18356121373.patch4",
+          "pluginVersion": "12.4.0-21024277089.patch2",
           "targets": [
             {
               "datasource": {
@@ -1335,7 +1335,7 @@
                 "uid": "$datasource"
               },
               "editorMode": "code",
-              "expr": "sum(rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*$network.*\",job=\"ext-ogmios-m1/proxy\" }[5m]) > 0) by (status_code, consumer)",
+              "expr": "sum by (status_code, consumer) (rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*\"}[5m])) > 0",
               "legendFormat": "{{status_code}}.{{consumer}}",
               "range": true,
               "refId": "A"
@@ -1442,7 +1442,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -1450,7 +1450,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{ exported_instance=~\"ogmios-(cardano-)?$network.*\", job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-green\"}[5m])) > 0",
+          "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*green.*\"}[5m])) > 0",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1540,7 +1540,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -1548,7 +1548,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network.*\", job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-green\"}) > 0",
+          "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*green.*\"}) > 0",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1638,7 +1638,7 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "12.3.0-18356121373.patch4",
+      "pluginVersion": "12.4.0-21024277089.patch2",
       "targets": [
         {
           "datasource": {
@@ -1646,7 +1646,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*$network.*\",job=~\"ext-ogmios-m1/proxy-(cardano-)?$network-green\" }[5m]) > 0) by (status_code, consumer)",
+          "expr": "sum by (status_code, consumer) (rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*green.*\"}[5m])) > 0",
           "legendFormat": "{{status_code}}.{{consumer}}",
           "range": true,
           "refId": "A"
