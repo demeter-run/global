@@ -20,10 +20,6 @@ locals {
   demeter_providers = [
     {
       name = "blinklabs-us"
-      cardano_node = {
-        enabled = true
-        address = "blinklabs-us-cardano-node.blinklabs.io"
-      }
       kupo = {
         enabled = true
         networks = {
@@ -47,10 +43,6 @@ locals {
     },
     {
       name = "txpipe-m2"
-      cardano_node = {
-        enabled = true
-        address = "cnode-m1.demeter.run"
-      }
       kupo = {
         enabled = true
         networks = {
@@ -93,15 +85,6 @@ resource "cloudflare_certificate_pack" "this" {
   hosts = [
     "*.dmtr.host",
 
-    // Cardano node
-    "*.cnode-m1.dmtr.host",
-    "*.cardano-mainnet.cnode-m1.dmtr.host",
-    "*.cardano-preprod.cnode-m1.dmtr.host",
-    "*.cardano-preview.cnode-m1.dmtr.host",
-    "*.vector-mainnet.cnode-m1.dmtr.host",
-    "*.vector-testnet.cnode-m1.dmtr.host",
-    "*.prime-testnet.cnode-m1.dmtr.host",
-
     // Ogmios
     "*.ogmios-m1.dmtr.host",
     "*.cardano-mainnet-v6.ogmios-m1.dmtr.host",
@@ -143,48 +126,6 @@ resource "cloudflare_certificate_pack" "this" {
   type              = "advanced"
   validation_method = "txt"
   validity_days     = 90
-}
-
-# Cardano Node
-
-resource "cloudflare_load_balancer_pool" "cardano_node_m1" {
-  name = "CardanoNodeM1"
-
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.cardano_node_m1_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.cardano_node.address != "" ? p.cardano_node.address : "${p.name}.${var.cloudflare_zone_name}"
-    } if p.cardano_node.enabled
-  ]
-}
-
-resource "cloudflare_load_balancer" "cardano_node_m1" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cnode-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.cardano_node_m1.id]
-  fallback_pool   = cloudflare_load_balancer_pool.cardano_node_m1.id
-  proxied         = false
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "cardano_node_m1_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "http"
-  description    = "Health check for cardano_node_m1"
-  path           = "/healthcheck"
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-
-  header = {
-    "Host" = ["cnode-m1.dmtr.host"]
-  }
 }
 
 # Kupo
