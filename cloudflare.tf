@@ -21,8 +21,9 @@ locals {
     {
       name = "blinklabs-us"
       blockfrost = {
-        enabled = true
-        port    = 3001
+        enabled           = true
+        port              = 3001
+        health_check_port = 9188
         networks = {
           cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
           cardano_preprod = "preprod.dolos.blinklabs.cloud"
@@ -50,8 +51,9 @@ locals {
         address = "tx-submit-api.blinklabs.cloud"
       }
       utxorpc = {
-        enabled = true
-        port    = 3001
+        enabled           = true
+        port              = 50051
+        health_check_port = 9187
         networks = {
           cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
           cardano_preprod = "preprod.dolos.blinklabs.cloud"
@@ -62,8 +64,9 @@ locals {
     {
       name = "txpipe-m2"
       blockfrost = {
-        enabled = false
-        port    = 0
+        enabled           = false
+        port              = 0
+        health_check_port = 0
         networks = {
           cardano_mainnet = ""
           cardano_preprod = ""
@@ -91,8 +94,9 @@ locals {
         address = "submitapi-m1.demeter.run"
       }
       utxorpc = {
-        enabled = false
-        port    = 0
+        enabled           = false
+        port              = 0
+        health_check_port = 0
         networks = {
           cardano_mainnet = ""
           cardano_preprod = ""
@@ -509,7 +513,7 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_preview_monitor" {
   type           = "https"
   description    = "Health check for BlockfrostPreview"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.blockfrost.port if p.blockfrost.enabled && p.blockfrost.port != 0])[0], null)
+  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -556,7 +560,7 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_preprod_monitor" {
   type           = "https"
   description    = "Health check for BlockfrostPreprod"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.blockfrost.port if p.blockfrost.enabled && p.blockfrost.port != 0])[0], null)
+  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -603,7 +607,7 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_mainnet_monitor" {
   type           = "https"
   description    = "Health check for BlockfrostMainnet"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.blockfrost.port if p.blockfrost.enabled && p.blockfrost.port != 0])[0], null)
+  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -651,7 +655,7 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_preview_monitor" {
   type           = "https"
   description    = "Health check for UtxorpcPreview"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
+  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -698,7 +702,7 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_preprod_monitor" {
   type           = "https"
   description    = "Health check for UtxorpcPreprod"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
+  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -745,7 +749,7 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_mainnet_monitor" {
   type           = "https"
   description    = "Health check for UtxorpcMainnet"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
+  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
