@@ -20,48 +20,88 @@ locals {
   demeter_providers = [
     {
       name = "blinklabs-us"
+      blockfrost = {
+        enabled           = true
+        port              = 3001
+        health_check_port = 9188
+        networks = {
+          cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
+          cardano_preprod = "preprod.dolos.blinklabs.cloud"
+          cardano_preview = "preview.dolos.blinklabs.cloud"
+        }
+      }
       kupo = {
         enabled = true
         networks = {
-          cardano_preview = "preview.kupo.blinklabs.cloud"
-          cardano_preprod = "preprod.kupo.blinklabs.cloud"
           cardano_mainnet = "kupo.blinklabs.cloud"
+          cardano_preprod = "preprod.kupo.blinklabs.cloud"
+          cardano_preview = "preview.kupo.blinklabs.cloud"
         }
       }
       ogmios = {
         enabled = true
         networks = {
-          cardano_preview = "preview.ogmios.blinklabs.cloud"
-          cardano_preprod = "preprod.ogmios.blinklabs.cloud"
           cardano_mainnet = "ogmios.blinklabs.cloud"
+          cardano_preprod = "preprod.ogmios.blinklabs.cloud"
+          cardano_preview = "preview.ogmios.blinklabs.cloud"
         }
       }
       tx_submit_api = {
         enabled = true
         address = "tx-submit-api.blinklabs.cloud"
       }
+      utxorpc = {
+        enabled           = true
+        port              = 50051
+        health_check_port = 9187
+        networks = {
+          cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
+          cardano_preprod = "preprod.dolos.blinklabs.cloud"
+          cardano_preview = "preview.dolos.blinklabs.cloud"
+        }
+      }
     },
     {
       name = "txpipe-m2"
+      blockfrost = {
+        enabled           = false
+        port              = 0
+        health_check_port = 0
+        networks = {
+          cardano_mainnet = ""
+          cardano_preprod = ""
+          cardano_preview = ""
+        }
+      }
       kupo = {
         enabled = true
         networks = {
-          cardano_preview = "preview-v2.kupo-m1.demeter.run"
-          cardano_preprod = "preprod-v2.kupo-m1.demeter.run"
           cardano_mainnet = "mainnet-v2.kupo-m1.demeter.run"
+          cardano_preprod = "preprod-v2.kupo-m1.demeter.run"
+          cardano_preview = "preview-v2.kupo-m1.demeter.run"
         }
       }
       ogmios = {
         enabled = true
         networks = {
-          cardano_preview = "preview-v6.ogmios-m1.demeter.run"
-          cardano_preprod = "preprod-v6.ogmios-m1.demeter.run"
           cardano_mainnet = "mainnet-v6.ogmios-m1.demeter.run"
+          cardano_preprod = "preprod-v6.ogmios-m1.demeter.run"
+          cardano_preview = "preview-v6.ogmios-m1.demeter.run"
         }
       }
       tx_submit_api = {
         enabled = false
         address = "submitapi-m1.demeter.run"
+      }
+      utxorpc = {
+        enabled           = false
+        port              = 0
+        health_check_port = 0
+        networks = {
+          cardano_mainnet = ""
+          cardano_preprod = ""
+          cardano_preview = ""
+        }
       }
     },
   ]
@@ -432,4 +472,288 @@ resource "cloudflare_load_balancer" "tx_submit_api_m1" {
   fallback_pool   = cloudflare_load_balancer_pool.tx_submit_api_m1.id
   proxied         = true
   steering_policy = "off"
+}
+
+# Blockfrost
+resource "cloudflare_load_balancer_pool" "blockfrost_preview" {
+  name = "BlockfrostPreview"
+
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.blockfrost_preview_monitor.id
+
+  origins = [
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.blockfrost.networks.cardano_preview != "" ? p.blockfrost.networks.cardano_preview : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
+    } if p.blockfrost.enabled
+  ]
+}
+
+resource "cloudflare_load_balancer" "blockfrost_preview" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "cardano-preview.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preview.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preview.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer" "blockfrost_preview_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.cardano-preview.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preview.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preview.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "blockfrost_preview_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for BlockfrostPreview"
+  path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
+}
+
+resource "cloudflare_load_balancer_pool" "blockfrost_preprod" {
+  name = "BlockfrostPreprod"
+
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.blockfrost_preprod_monitor.id
+
+  origins = [
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.blockfrost.networks.cardano_preprod != "" ? p.blockfrost.networks.cardano_preprod : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
+    } if p.blockfrost.enabled
+  ]
+}
+
+resource "cloudflare_load_balancer" "blockfrost_preprod" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "cardano-preprod.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preprod.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preprod.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer" "blockfrost_preprod_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.cardano-preprod.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preprod.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preprod.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "blockfrost_preprod_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for BlockfrostPreprod"
+  path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
+}
+
+resource "cloudflare_load_balancer_pool" "blockfrost_mainnet" {
+  name = "BlockfrostMainnet"
+
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.blockfrost_mainnet_monitor.id
+
+  origins = [
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.blockfrost.networks.cardano_mainnet != "" ? p.blockfrost.networks.cardano_mainnet : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
+    } if p.blockfrost.enabled
+  ]
+}
+
+resource "cloudflare_load_balancer" "blockfrost_mainnet" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "cardano-mainnet.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_mainnet.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_mainnet.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer" "blockfrost_mainnet_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.cardano-mainnet.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_mainnet.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_mainnet.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "blockfrost_mainnet_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for BlockfrostMainnet"
+  path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
+}
+
+# UTxORPC
+resource "cloudflare_load_balancer_pool" "utxorpc_preview" {
+  name = "UtxorpcPreview"
+
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.utxorpc_preview_monitor.id
+
+  origins = [
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.utxorpc.networks.cardano_preview != "" ? p.utxorpc.networks.cardano_preview : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
+    } if p.utxorpc.enabled
+  ]
+}
+
+resource "cloudflare_load_balancer" "utxorpc_preview" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "cardano-preview-v1.utxorpc-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preview.id]
+  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preview.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer" "utxorpc_preview_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.cardano-preview-v1.utxorpc-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preview.id]
+  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preview.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "utxorpc_preview_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for UtxorpcPreview"
+  path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
+}
+
+resource "cloudflare_load_balancer_pool" "utxorpc_preprod" {
+  name = "UtxorpcPreprod"
+
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.utxorpc_preprod_monitor.id
+
+  origins = [
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.utxorpc.networks.cardano_preprod != "" ? p.utxorpc.networks.cardano_preprod : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
+    } if p.utxorpc.enabled
+  ]
+}
+
+resource "cloudflare_load_balancer" "utxorpc_preprod" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "cardano-preprod-v1.utxorpc-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preprod.id]
+  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preprod.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer" "utxorpc_preprod_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.cardano-preprod-v1.utxorpc-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preprod.id]
+  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preprod.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "utxorpc_preprod_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for UtxorpcPreprod"
+  path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
+}
+
+resource "cloudflare_load_balancer_pool" "utxorpc_mainnet" {
+  name = "UtxorpcMainnet"
+
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.utxorpc_mainnet_monitor.id
+
+  origins = [
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.utxorpc.networks.cardano_mainnet != "" ? p.utxorpc.networks.cardano_mainnet : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
+    } if p.utxorpc.enabled
+  ]
+}
+
+resource "cloudflare_load_balancer" "utxorpc_mainnet" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "cardano-mainnet-v1.utxorpc-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.utxorpc_mainnet.id]
+  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_mainnet.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer" "utxorpc_mainnet_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.cardano-mainnet-v1.utxorpc-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.utxorpc_mainnet.id]
+  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_mainnet.id
+  proxied         = true
+  steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer_monitor" "utxorpc_mainnet_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for UtxorpcMainnet"
+  path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
 }
