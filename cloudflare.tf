@@ -22,6 +22,7 @@ locals {
       name = "blinklabs-us"
       blockfrost = {
         enabled = true
+        port    = 3001
         networks = {
           cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
           cardano_preprod = "preprod.dolos.blinklabs.cloud"
@@ -50,6 +51,7 @@ locals {
       }
       utxorpc = {
         enabled = true
+        port    = 3001
         networks = {
           cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
           cardano_preprod = "preprod.dolos.blinklabs.cloud"
@@ -61,6 +63,7 @@ locals {
       name = "txpipe-m2"
       blockfrost = {
         enabled = false
+        port    = 0
         networks = {
           cardano_mainnet = ""
           cardano_preprod = ""
@@ -89,6 +92,7 @@ locals {
       }
       utxorpc = {
         enabled = false
+        port    = 0
         networks = {
           cardano_mainnet = ""
           cardano_preprod = ""
@@ -477,6 +481,7 @@ resource "cloudflare_load_balancer_pool" "blockfrost_preview" {
     for p in local.demeter_providers : {
       name    = p.name
       address = p.blockfrost.networks.cardano_preview != "" ? p.blockfrost.networks.cardano_preview : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
     } if p.blockfrost.enabled
   ]
 }
@@ -504,6 +509,7 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_preview_monitor" {
   type           = "https"
   description    = "Health check for BlockfrostPreview"
   path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.blockfrost.port if p.blockfrost.enabled && p.blockfrost.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -522,6 +528,7 @@ resource "cloudflare_load_balancer_pool" "blockfrost_preprod" {
     for p in local.demeter_providers : {
       name    = p.name
       address = p.blockfrost.networks.cardano_preprod != "" ? p.blockfrost.networks.cardano_preprod : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
     } if p.blockfrost.enabled
   ]
 }
@@ -549,6 +556,7 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_preprod_monitor" {
   type           = "https"
   description    = "Health check for BlockfrostPreprod"
   path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.blockfrost.port if p.blockfrost.enabled && p.blockfrost.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -567,6 +575,7 @@ resource "cloudflare_load_balancer_pool" "blockfrost_mainnet" {
     for p in local.demeter_providers : {
       name    = p.name
       address = p.blockfrost.networks.cardano_mainnet != "" ? p.blockfrost.networks.cardano_mainnet : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
     } if p.blockfrost.enabled
   ]
 }
@@ -594,6 +603,7 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_mainnet_monitor" {
   type           = "https"
   description    = "Health check for BlockfrostMainnet"
   path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.blockfrost.port if p.blockfrost.enabled && p.blockfrost.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -613,6 +623,7 @@ resource "cloudflare_load_balancer_pool" "utxorpc_preview" {
     for p in local.demeter_providers : {
       name    = p.name
       address = p.utxorpc.networks.cardano_preview != "" ? p.utxorpc.networks.cardano_preview : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
     } if p.utxorpc.enabled
   ]
 }
@@ -640,6 +651,7 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_preview_monitor" {
   type           = "https"
   description    = "Health check for UtxorpcPreview"
   path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -658,6 +670,7 @@ resource "cloudflare_load_balancer_pool" "utxorpc_preprod" {
     for p in local.demeter_providers : {
       name    = p.name
       address = p.utxorpc.networks.cardano_preprod != "" ? p.utxorpc.networks.cardano_preprod : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
     } if p.utxorpc.enabled
   ]
 }
@@ -685,6 +698,7 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_preprod_monitor" {
   type           = "https"
   description    = "Health check for UtxorpcPreprod"
   path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -703,6 +717,7 @@ resource "cloudflare_load_balancer_pool" "utxorpc_mainnet" {
     for p in local.demeter_providers : {
       name    = p.name
       address = p.utxorpc.networks.cardano_mainnet != "" ? p.utxorpc.networks.cardano_mainnet : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
     } if p.utxorpc.enabled
   ]
 }
@@ -730,6 +745,7 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_mainnet_monitor" {
   type           = "https"
   description    = "Health check for UtxorpcMainnet"
   path           = "/dmtr_health"
+  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
