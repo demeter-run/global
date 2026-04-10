@@ -23,25 +23,25 @@ locals {
       blockfrost = {
         enabled = true
         networks = {
-          cardano_preview = "preview.dolos.blinklabs.cloud"
-          cardano_preprod = "preprod.dolos.blinklabs.cloud"
           cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
+          cardano_preprod = "preprod.dolos.blinklabs.cloud"
+          cardano_preview = "preview.dolos.blinklabs.cloud"
         }
       }
       kupo = {
         enabled = true
         networks = {
-          cardano_preview = "preview.kupo.blinklabs.cloud"
-          cardano_preprod = "preprod.kupo.blinklabs.cloud"
           cardano_mainnet = "kupo.blinklabs.cloud"
+          cardano_preprod = "preprod.kupo.blinklabs.cloud"
+          cardano_preview = "preview.kupo.blinklabs.cloud"
         }
       }
       ogmios = {
         enabled = true
         networks = {
-          cardano_preview = "preview.ogmios.blinklabs.cloud"
-          cardano_preprod = "preprod.ogmios.blinklabs.cloud"
           cardano_mainnet = "ogmios.blinklabs.cloud"
+          cardano_preprod = "preprod.ogmios.blinklabs.cloud"
+          cardano_preview = "preview.ogmios.blinklabs.cloud"
         }
       }
       tx_submit_api = {
@@ -51,9 +51,9 @@ locals {
       utxorpc = {
         enabled = true
         networks = {
-          cardano_preview = "preview.dolos.blinklabs.cloud"
-          cardano_preprod = "preprod.dolos.blinklabs.cloud"
           cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
+          cardano_preprod = "preprod.dolos.blinklabs.cloud"
+          cardano_preview = "preview.dolos.blinklabs.cloud"
         }
       }
     },
@@ -62,25 +62,25 @@ locals {
       blockfrost = {
         enabled = false
         networks = {
-          cardano_preview = ""
-          cardano_preprod = ""
           cardano_mainnet = ""
+          cardano_preprod = ""
+          cardano_preview = ""
         }
       }
       kupo = {
         enabled = true
         networks = {
-          cardano_preview = "preview-v2.kupo-m1.demeter.run"
-          cardano_preprod = "preprod-v2.kupo-m1.demeter.run"
           cardano_mainnet = "mainnet-v2.kupo-m1.demeter.run"
+          cardano_preprod = "preprod-v2.kupo-m1.demeter.run"
+          cardano_preview = "preview-v2.kupo-m1.demeter.run"
         }
       }
       ogmios = {
         enabled = true
         networks = {
-          cardano_preview = "preview-v6.ogmios-m1.demeter.run"
-          cardano_preprod = "preprod-v6.ogmios-m1.demeter.run"
           cardano_mainnet = "mainnet-v6.ogmios-m1.demeter.run"
+          cardano_preprod = "preprod-v6.ogmios-m1.demeter.run"
+          cardano_preview = "preview-v6.ogmios-m1.demeter.run"
         }
       }
       tx_submit_api = {
@@ -90,9 +90,9 @@ locals {
       utxorpc = {
         enabled = false
         networks = {
-          cardano_preview = ""
-          cardano_preprod = ""
           cardano_mainnet = ""
+          cardano_preprod = ""
+          cardano_preview = ""
         }
       }
     },
