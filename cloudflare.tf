@@ -23,10 +23,10 @@ locals {
       blockfrost = {
         enabled           = true
         port              = 3001
-        health_check_port = 9188
+        health_check_port = 3001
         networks = {
-          cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
-          cardano_preprod = "preprod.dolos.blinklabs.cloud"
+          cardano_mainnet = "preview.dolos.blinklabs.cloud"
+          cardano_preprod = "preview.dolos.blinklabs.cloud"
           cardano_preview = "preview.dolos.blinklabs.cloud"
         }
       }
@@ -602,6 +602,17 @@ resource "cloudflare_load_balancer" "blockfrost_mainnet_splat" {
   fallback_pool   = cloudflare_load_balancer_pool.blockfrost_mainnet.id
   proxied         = true
   steering_policy = "off"
+}
+
+resource "cloudflare_load_balancer" "blockfrost_m1_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.blockfrost-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preview.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preview.id
+  proxied         = true
+  steering_policy = "off"
+
+  rules = []
 }
 
 resource "cloudflare_load_balancer_monitor" "blockfrost_mainnet_monitor" {
