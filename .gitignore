@@ -3,3 +3,4 @@
 terraform.tfstate*
 env.auto.tfvars
 .env
+keys.txt

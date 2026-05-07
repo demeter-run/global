@@ -1,6 +1,7 @@
 variable "datasource_uids" {
   type        = map(string)
   description = "Map of data source names to their respective UIDs."
+  default = {}
 }
 
 variable "grafana_title" {

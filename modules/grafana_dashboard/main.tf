@@ -5,7 +5,11 @@ resource "grafana_folder" "this" {
 resource "grafana_dashboard" "this" {
   for_each = {
     for file in fileset("${path.root}/${var.local_directory}", "*.json") :
-    file => jsondecode(templatefile("${path.root}/${var.local_directory}/${file}", var.datasource_uids))
+    # Shared folders doesn't have datasource_uids attached.
+    file => try(
+      jsondecode(templatefile("${path.root}/${var.local_directory}/${file}", var.datasource_uids)),
+      jsondecode(file("${path.root}/${var.local_directory}/${file}"))
+    )
   }
 
   config_json = jsonencode(each.value)

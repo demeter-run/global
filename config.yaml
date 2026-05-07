@@ -1,18 +1,31 @@
 grafana:
     cloud:
         url: https://dmtrglobal.grafana.net
-        auth: ENC[AES256_GCM,data:7Wbq1IRDNeIXPA3X8EwMABCZePLKKMClf0OD7W3TxzqwH27m7B5EyqSVE5/8hw==,iv:Hj7Ppns3XYnU4cxEvNW5MvhcHBmYv800j+BPXGeC3t4=,tag:E/MBlYplPHjPUoH0E0bVeQ==,type:str]
+        auth: ENC[AES256_GCM,data:FCKFkPXxLl+h7oRNiZ4rbZksC9XciuLsTOLrgCiBWKvoL7MPs6j/5GZlkHwfdg==,iv:PmWLbOrOuC1mFvZDt5fvZ+lx4BQYONc3V2y0JPKMuD8=,tag:Ggn5t7uQsoLq3GC806zu2g==,type:str]
+        sm_url: https://synthetic-monitoring-api-sa-east-1.grafana.net
+        sm_access_token: ENC[AES256_GCM,data:M2lf4kypuYVB1e50KorAadGr9udSJ7SvDad4/D7qCFcoJlQ/15QFSI9wXdlJTH7TNhXvBpIBFzj/8yYESqCbD9Aog9o8xXhfviUO1xOh6DEzaDcaPUPzVa1Nco5P/klHr1AkdFLJWG/uWTIXYWVkJMBCPII=,iv:kpMFZq5S+CoOzHurfDRmeczBxFkKdEX/mZAgU+oI3zc=,tag:xLM8oJiUcm3xHJqvWTv99w==,type:str]
     folders:
-        - local_directory: grafana/dashboards/demeter
+        - local_directory: grafana/dashboards/blinklabs
           grafana_title: Demeter Blink Labs
           datasource_uids:
             datasource_uid: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
+        - local_directory: grafana/dashboards/txpipe
+          grafana_title: Demeter TxPipe
+          datasource_uids:
+            datasource_uid: aws_txpipe-demeter_us-west-2_m2-prometheus
+        - local_directory: grafana/dashboards/shared
+          grafana_title: Demeter Shared
     data_sources:
         gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus:
             type: prometheus
             name: gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus
             url: http://prometheus-operated.dmtr-system.svc.cluster.local:9090
             pdc: 46f68690-716c-47ff-91d0-26359c834aae
+        aws_txpipe-demeter_us-west-2_m2-prometheus:
+            type: prometheus
+            name: aws_txpipe-demeter_us-west-2_m2-prometheus
+            url: http://prometheus-operated.demeter-system.svc.cluster.local:9090
+            pdc: 46f28c91-2d0f-401b-ac87-5afd0a75f667
     alerts:
         - local_directory: grafana/alerts/blinklabs
           grafana_title: Blink Labs
@@ -20,18 +33,61 @@ grafana:
         - local_directory: grafana/alerts/demeter
           grafana_title: Demeter
           folder_uid: de9p56uby56v4a
+    synthetics_checks:
+        - job_name: queryNetworkTip
+          target: blinklabs-ogmios-cardano-preview
+          frequency: 600000
+          timeout: 15000
+          url: wss://preview.ogmios.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:tedUWN6OcL2e2FCRZa2K8RcOT7HC+raraA0=,iv:r35+qZbxa83q84sB6FPXahhDFBjclK2EdLvK+d4Y3bk=,tag:HsTS03+vpjhzub7PpgwEwg==,type:str]
+          script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
+        - job_name: queryNetworkTip
+          target: blinklabs-ogmios-cardano-preprod
+          frequency: 600000
+          timeout: 15000
+          url: wss://preprod.ogmios.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:A95mNLZEvGERcuUyOpm4yaiLJktAz2lrv+8=,iv:9iTPzpkW57ruggVZzk9amU+4rgmxpLWYsTvV5siExD4=,tag:UnR+J2fNQeyMwAP1bMiI7A==,type:str]
+          script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
+        - job_name: queryNetworkTip
+          target: blinklabs-ogmios-cardano-mainnet
+          frequency: 600000
+          timeout: 15000
+          url: wss://ogmios.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:9qVefn0peiGSFCbNSivwPFpsPFWe+5N3KaM=,iv:l12VTwJkepFLSXYWGKSQ24nrCv6PhwC/HlXdBQPuz4M=,tag:VpvLp7khT4m2fQgci7Fsqw==,type:str]
+          script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
+        - job_name: dmtr_healthcheck
+          target: blinklabs-kupo-cardano-mainnet
+          frequency: 600000
+          timeout: 15000
+          url: https://kupo.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:65Hi+NoSaeqVjS+0bQfSaOMWDzCTyrnw,iv:mQWmKVAOdWjMEluyznVxvqkn7/sejMkD/CtcxBd981E=,tag:xCaD033fsdbo23JCt8sLJw==,type:str]
+          script_path: grafana/synthetics/shared/dmtrHealth.js
+        - job_name: dmtr_healthcheck
+          target: blinklabs-kupo-cardano-preprod
+          frequency: 600000
+          timeout: 15000
+          url: https://preprod.kupo.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:cex7Kd8zxpq0FSD1E9a5+QsSH193Ab2q,iv:5+gqtPW5jqMhZg1r+Jrmg7/E842K8pd0Km3sBiwwtoQ=,tag:1feG8scabz8xOHjHX7Nalw==,type:str]
+          script_path: grafana/synthetics/shared/dmtrHealth.js
+        - job_name: dmtr_healthcheck
+          target: blinklabs-kupo-cardano-preview
+          frequency: 600000
+          timeout: 15000
+          url: https://preview.kupo.blinklabs.cloud
+          api_key: ENC[AES256_GCM,data:IrbpzR/IzvSYYxlFRl8T6WhJsYtlSniP,iv:aRIO376AWii3pjiwF0weWINEbf0ZgcGPRg+8+E+xC8g=,tag:JDguEGp9sfq5dHgpC9E8dQ==,type:str]
+          script_path: grafana/synthetics/shared/dmtrHealth.js
 sops:
     age:
         - recipient: age1klj2c5sj490j2g6ptlf3uh5cwehr4jfdt6c2e638a939sf7pfcdqjm54hq
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBWNHhFVkh6eGc0QTVUNTZk
-            OHgxcllnOHNWODVpUUZMZUlCWng1ZjhZWlhnCmkyZWNxbFlZMEN1YUo0akJWdkdW
-            OXNKR1cvQVhEMVJMRk56WXg3YTB2ZlEKLS0tIFQ1bGRrYXErQ2RwOUJSekQwUzAw
-            UEtmcVpPQlMzWXNaeS93bndHTmdMYWMKr5pcKioeQQJ2QH43yhfRb2T/mTRCDnfg
-            SDF1sbPenrnDJRA8Gi9CphX9bPz3XtkjRTsFYxD/hW1doSTiflkVJw==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBZYk13TFJJa09CbGtjUkdC
+            L0JGZkg0SUI2bFgyaE1tTnpuS2J4UURQUmdZCmIwNXM5bFh5QnVRcmNYUkdvNTYv
+            ajY4NUpyRGlVZDY2VXpHWGNNM1RqNHMKLS0tIHpKbEJpTjBxOW1DT0xzZUxkVE9J
+            UXRHaS9aaDZmT0dCbXE4OGJVWmZrdTQKRF+KB857hWanvdDelvTu4S8iw9/FEVvs
+            rwaTGEB/XG5wmIsf69m+HrEs0SiN7k1DxaGb2sKq4YWbIBwv7Ig8hA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-09-29T14:24:04Z"
-    mac: ENC[AES256_GCM,data:/D+CbQWHWLmICi5vPzcs4no8GyEeaP3693F2tBOaD331CNC8SnCcAC+ruOyFi/0AHdbpFwYJSOsLjvKDVwnXYvosKaSLqLz4Lh13Kji/pptXEi5vAXKMmwLBiN62F51wn5Ud9+yhGU2e1fyaqkNWqW+7Bzjxz4uNjlGAeLxXU7k=,iv:dQOMdSE43SXatM9nnAl7iKxMPQUQgcjkUWqc68ijAtw=,tag:tWPX0+ajH/gXl+xzEo/zqw==,type:str]
-    encrypted_regex: ^(auth)$
+    lastmodified: "2025-11-11T00:23:14Z"
+    mac: ENC[AES256_GCM,data:y+oKL6UqaXnA5W/In6uY32XoLad7BQb3OmDu/v/hQ28Nads0756IW1xqQKphEG+6tJ5RRs8mAG1OjhG7sp22ZVa6AqYEark5fe5/iwIql+hZSKbhuwYoQqq7Kjh2oX6hFGKZ7WULVwt8YP2Q+ttZ1v9jLUZ6Wqf786ZZh1cdOlQ=,iv:9eZQ3ptjMGu+E40lrmiLzAwZDjkQ6DCi6QRxlX8A7Uo=,tag:ovrn9S5NS3Y3oO9RfXvjSQ==,type:str]
+    encrypted_regex: ^(auth|sm_access_token|api_key)$
     version: 3.10.2
