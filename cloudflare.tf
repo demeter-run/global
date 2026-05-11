@@ -57,15 +57,15 @@ locals {
     {
       name = "txpipe-m2"
       blockfrost_m1 = {
-        enabled           = false
-        address           = ""
-        port              = 0
-        health_check_port = 0
+        enabled           = true
+        address           = "all.blockfrost-m1.demeter.run"
+        port              = 443
+        health_check_port = 443
       }
       kupo_m1 = {
-        enabled = false
-        address = ""
-        port    = 0
+        enabled = true
+        address = "all.kupo-m1.demeter.run"
+        port    = 443
       }
       ogmios = {
         enabled = true
