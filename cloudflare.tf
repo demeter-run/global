@@ -21,10 +21,9 @@ locals {
     {
       name = "blinklabs-us"
       blockfrost_m1 = {
-        enabled           = true
-        address           = "demeter.blinklabs.cloud"
-        port              = 3001
-        health_check_port = 3001
+        enabled = true
+        address = "demeter.blinklabs.cloud"
+        port    = 3001
       }
       kupo_m1 = {
         enabled = true
@@ -57,10 +56,9 @@ locals {
     {
       name = "txpipe-m2"
       blockfrost_m1 = {
-        enabled           = true
-        address           = "all.blockfrost-m1.demeter.run"
-        port              = 443
-        health_check_port = 443
+        enabled = true
+        address = "all.blockfrost-m1.demeter.run"
+        port    = 443
       }
       kupo_m1 = {
         enabled = true
@@ -165,20 +163,20 @@ resource "cloudflare_certificate_pack" "this" {
 
 # Kupo
 resource "cloudflare_load_balancer_monitor" "kupo_m1_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for KupoM1"
-  path           = "/dmtr_health"
+  account_id  = var.cloudflare_account_id
+  type        = "https"
+  description = "Health Check for Kupo"
+  path        = "/dmtr_health"
+  # port omitted so each origin is health-checked on its own port (blinklabs-us: 4442, txpipe-m2: 443)
   interval       = 60
   timeout        = 5
   retries        = 2
   method         = "GET"
   expected_codes = "200"
-  allow_insecure = true
 }
 
 resource "cloudflare_load_balancer_pool" "kupo_m1" {
-  name       = "KupoM1"
+  name       = "Kupo"
   account_id = var.cloudflare_account_id
   monitor    = cloudflare_load_balancer_monitor.kupo_m1_monitor.id
 
@@ -374,21 +372,20 @@ resource "cloudflare_load_balancer" "tx_submit_api_m1" {
 
 # Blockfrost
 resource "cloudflare_load_balancer_monitor" "blockfrost_m1_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for BlockfrostM1"
-  path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.blockfrost_m1.health_check_port if p.blockfrost_m1.enabled && p.blockfrost_m1.health_check_port != 0])[0], null)
+  account_id  = var.cloudflare_account_id
+  type        = "https"
+  description = "Health check for BlockfrostM1"
+  path        = "/dmtr_health"
+  # port omitted so each origin is health-checked on its own port (blinklabs-us: 3001, txpipe-m2: 443)
   interval       = 60
   timeout        = 5
   retries        = 2
   method         = "GET"
   expected_codes = "200"
-  allow_insecure = true
 }
 
 resource "cloudflare_load_balancer_pool" "blockfrost_m1" {
-  name       = "BlockfrostM1"
+  name       = "Blockfrost"
   account_id = var.cloudflare_account_id
   monitor    = cloudflare_load_balancer_monitor.blockfrost_m1_monitor.id
 
