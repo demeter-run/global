@@ -109,15 +109,6 @@ resource "cloudflare_certificate_pack" "this" {
   hosts = [
     "*.dmtr.host",
 
-    // CNode
-    "*.cnode-m1.dmtr.host",
-    "*.cardano-mainnet.cnode-m1.dmtr.host",
-    "*.cardano-preprod.cnode-m1.dmtr.host",
-    "*.cardano-preview.cnode-m1.dmtr.host",
-    "*.vector-mainnet.cnode-m1.dmtr.host",
-    "*.vector-testnet.cnode-m1.dmtr.host",
-    "*.prime-testnet.cnode-m1.dmtr.host",
-
     // Ogmios
     "*.ogmios-m1.dmtr.host",
     "*.cardano-mainnet-v6.ogmios-m1.dmtr.host",
