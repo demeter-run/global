@@ -59,21 +59,21 @@ grafana:
           target: blinklabs-kupo-cardano-mainnet
           frequency: 600000
           timeout: 15000
-          url: https://kupo.blinklabs.cloud
+          url: https://demeter.blinklabs.cloud:4442
           api_key: ENC[AES256_GCM,data:65Hi+NoSaeqVjS+0bQfSaOMWDzCTyrnw,iv:mQWmKVAOdWjMEluyznVxvqkn7/sejMkD/CtcxBd981E=,tag:xCaD033fsdbo23JCt8sLJw==,type:str]
           script_path: grafana/synthetics/shared/dmtrHealth.js
         - job_name: dmtr_healthcheck
           target: blinklabs-kupo-cardano-preprod
           frequency: 600000
           timeout: 15000
-          url: https://preprod.kupo.blinklabs.cloud
+          url: https://demeter.blinklabs.cloud:4442
           api_key: ENC[AES256_GCM,data:cex7Kd8zxpq0FSD1E9a5+QsSH193Ab2q,iv:5+gqtPW5jqMhZg1r+Jrmg7/E842K8pd0Km3sBiwwtoQ=,tag:1feG8scabz8xOHjHX7Nalw==,type:str]
           script_path: grafana/synthetics/shared/dmtrHealth.js
         - job_name: dmtr_healthcheck
           target: blinklabs-kupo-cardano-preview
           frequency: 600000
           timeout: 15000
-          url: https://preview.kupo.blinklabs.cloud
+          url: https://demeter.blinklabs.cloud:4442
           api_key: ENC[AES256_GCM,data:IrbpzR/IzvSYYxlFRl8T6WhJsYtlSniP,iv:aRIO376AWii3pjiwF0weWINEbf0ZgcGPRg+8+E+xC8g=,tag:JDguEGp9sfq5dHgpC9E8dQ==,type:str]
           script_path: grafana/synthetics/shared/dmtrHealth.js
 sops:
@@ -87,7 +87,7 @@ sops:
             UXRHaS9aaDZmT0dCbXE4OGJVWmZrdTQKRF+KB857hWanvdDelvTu4S8iw9/FEVvs
             rwaTGEB/XG5wmIsf69m+HrEs0SiN7k1DxaGb2sKq4YWbIBwv7Ig8hA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-11-11T00:23:14Z"
-    mac: ENC[AES256_GCM,data:y+oKL6UqaXnA5W/In6uY32XoLad7BQb3OmDu/v/hQ28Nads0756IW1xqQKphEG+6tJ5RRs8mAG1OjhG7sp22ZVa6AqYEark5fe5/iwIql+hZSKbhuwYoQqq7Kjh2oX6hFGKZ7WULVwt8YP2Q+ttZ1v9jLUZ6Wqf786ZZh1cdOlQ=,iv:9eZQ3ptjMGu+E40lrmiLzAwZDjkQ6DCi6QRxlX8A7Uo=,tag:ovrn9S5NS3Y3oO9RfXvjSQ==,type:str]
+    lastmodified: "2026-05-09T23:27:34Z"
+    mac: ENC[AES256_GCM,data:omAq530GVHO8v3i2VBNsmNQ3/XVJ96RlcW49Z4cl6sFyx6/At6omWlq2KyngEP4IdUwFPpZEa1PV4S5qzQ34CyddCqfTrkHOHyw6kBTEhk77Liusa68gz3wjwvNnPwMqkYeWptLhAWDmYy1Skj67gDCUL7y347Thir8z2P/SUwQ=,iv:pbMFBjzltoh+I37jzGLQA0+X2gc/leP2QSf3ExUiunQ=,tag:SsHG5XvwvpvD2pHl9Rb1gw==,type:str]
     encrypted_regex: ^(auth|sm_access_token|api_key)$
-    version: 3.10.2
+    version: 3.11.0

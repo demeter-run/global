@@ -24,7 +24,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 60,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -36,7 +35,6 @@
         "x": 0,
         "y": 0
       },
-      "id": 27,
       "panels": [],
       "title": "Instance",
       "type": "row"
@@ -70,7 +68,6 @@
         "x": 0,
         "y": 1
       },
-      "id": 6,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -172,7 +169,6 @@
         "x": 9,
         "y": 1
       },
-      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
@@ -236,7 +232,6 @@
         "x": 0,
         "y": 7
       },
-      "id": 2,
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -304,7 +299,6 @@
         "x": 7,
         "y": 7
       },
-      "id": 34,
       "options": {
         "colorMode": "none",
         "graphMode": "area",
@@ -409,7 +403,6 @@
         "x": 9,
         "y": 7
       },
-      "id": 10,
       "options": {
         "legend": {
           "calcs": [],
@@ -514,7 +507,6 @@
         "x": 0,
         "y": 14
       },
-      "id": 12,
       "options": {
         "legend": {
           "calcs": [],
@@ -620,7 +612,6 @@
         "x": 9,
         "y": 14
       },
-      "id": 14,
       "options": {
         "legend": {
           "calcs": [],
@@ -696,7 +687,6 @@
         "x": 0,
         "y": 20
       },
-      "id": 8,
       "options": {
         "alignValue": "left",
         "legend": {
@@ -798,7 +788,6 @@
         "x": 0,
         "y": 27
       },
-      "id": 16,
       "options": {
         "legend": {
           "calcs": [],
@@ -903,7 +892,6 @@
         "x": 0,
         "y": 35
       },
-      "id": 20,
       "options": {
         "legend": {
           "calcs": [],
@@ -1009,7 +997,6 @@
         "x": 9,
         "y": 35
       },
-      "id": 21,
       "options": {
         "legend": {
           "calcs": [],
@@ -1048,7 +1035,6 @@
         "x": 0,
         "y": 41
       },
-      "id": 29,
       "panels": [
         {
           "datasource": {
@@ -1139,7 +1125,7 @@
                 "uid": "$datasource"
               },
               "editorMode": "code",
-              "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*blue.*\"}[5m])) > 0",
+              "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*(blue.*$network|$network.*blue).*\"}[5m])) > 0",
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
@@ -1237,7 +1223,7 @@
                 "uid": "$datasource"
               },
               "editorMode": "code",
-              "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*$network.*\"}) > 0",
+              "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*(blue.*$network|$network.*blue).*\"}) > 0",
               "legendFormat": "__auto",
               "range": true,
               "refId": "A"
@@ -1335,7 +1321,7 @@
                 "uid": "$datasource"
               },
               "editorMode": "code",
-              "expr": "sum by (status_code, consumer) (rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*\"}[5m])) > 0",
+              "expr": "sum by (status_code, consumer) (rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*(blue.*$network|$network.*blue).*\"}[5m])) > 0",
               "legendFormat": "{{status_code}}.{{consumer}}",
               "range": true,
               "refId": "A"
@@ -1356,7 +1342,6 @@
         "x": 0,
         "y": 42
       },
-      "id": 31,
       "panels": [],
       "title": "Proxy Green",
       "type": "row"
@@ -1428,7 +1413,6 @@
         "x": 0,
         "y": 43
       },
-      "id": 32,
       "options": {
         "legend": {
           "calcs": [],
@@ -1450,7 +1434,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*green.*\"}[5m])) > 0",
+          "expr": "sum by (consumer) (rate(ogmios_proxy_ws_total_frame{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*(green.*$network|$network.*green).*\"}[5m])) > 0",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1526,7 +1510,6 @@
         "x": 0,
         "y": 53
       },
-      "id": 19,
       "options": {
         "legend": {
           "calcs": [],
@@ -1548,7 +1531,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*green.*\"}) > 0",
+          "expr": "sum by (consumer) (ogmios_proxy_total_connections{exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*(green.*$network|$network.*green).*\"}) > 0",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1624,7 +1607,6 @@
         "x": 0,
         "y": 61
       },
-      "id": 25,
       "options": {
         "legend": {
           "calcs": [],
@@ -1646,7 +1628,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (status_code, consumer) (rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\".*(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*$network.*green.*\"}[5m])) > 0",
+          "expr": "sum by (status_code, consumer) (rate(ogmios_proxy_http_total_request{namespace=~\"ext-ogmios-m1\", exported_instance=~\"ogmios-(cardano-)?$network-.*\", job=~\"ext-ogmios-m1/.*proxy.*(green.*$network|$network.*green).*\"}[5m])) > 0",
           "legendFormat": "{{status_code}}.{{consumer}}",
           "range": true,
           "refId": "A"
@@ -1741,6 +1723,5 @@
   "timepicker": {},
   "timezone": "",
   "title": "Cardano Ogmios",
-  "version": 31,
   "weekStart": ""
 }

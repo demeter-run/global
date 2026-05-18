@@ -20,23 +20,15 @@ locals {
   demeter_providers = [
     {
       name = "blinklabs-us"
-      blockfrost = {
-        enabled           = true
-        port              = 3001
-        health_check_port = 3001
-        networks = {
-          cardano_mainnet = "preview.dolos.blinklabs.cloud"
-          cardano_preprod = "preview.dolos.blinklabs.cloud"
-          cardano_preview = "preview.dolos.blinklabs.cloud"
-        }
-      }
-      kupo = {
+      blockfrost_m1 = {
         enabled = true
-        networks = {
-          cardano_mainnet = "kupo.blinklabs.cloud"
-          cardano_preprod = "preprod.kupo.blinklabs.cloud"
-          cardano_preview = "preview.kupo.blinklabs.cloud"
-        }
+        address = "demeter.blinklabs.cloud"
+        port    = 3001
+      }
+      kupo_m1 = {
+        enabled = true
+        address = "demeter.blinklabs.cloud"
+        port    = 4442
       }
       ogmios = {
         enabled = true
@@ -63,23 +55,15 @@ locals {
     },
     {
       name = "txpipe-m2"
-      blockfrost = {
-        enabled           = false
-        port              = 0
-        health_check_port = 0
-        networks = {
-          cardano_mainnet = ""
-          cardano_preprod = ""
-          cardano_preview = ""
-        }
-      }
-      kupo = {
+      blockfrost_m1 = {
         enabled = true
-        networks = {
-          cardano_mainnet = "mainnet-v2.kupo-m1.demeter.run"
-          cardano_preprod = "preprod-v2.kupo-m1.demeter.run"
-          cardano_preview = "preview-v2.kupo-m1.demeter.run"
-        }
+        address = "all.blockfrost-m1.demeter.run"
+        port    = 443
+      }
+      kupo_m1 = {
+        enabled = true
+        address = "all.kupo-m1.demeter.run"
+        port    = 443
       }
       ogmios = {
         enabled = true
@@ -169,139 +153,40 @@ resource "cloudflare_certificate_pack" "this" {
 }
 
 # Kupo
-resource "cloudflare_load_balancer_pool" "kupo_preview" {
-  name = "KupoPreview"
-
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.kupo_preview_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.kupo.networks.cardano_preview != "" ? p.kupo.networks.cardano_preview : "${p.name}.${var.cloudflare_zone_name}"
-    } if p.kupo.enabled
-  ]
-}
-
-resource "cloudflare_load_balancer" "kupo_preview" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preview-v2.kupo-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.kupo_preview.id]
-  fallback_pool   = cloudflare_load_balancer_pool.kupo_preview.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "kupo_preview_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preview-v2.kupo-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.kupo_preview.id]
-  fallback_pool   = cloudflare_load_balancer_pool.kupo_preview.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "kupo_preview_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for KupoPreview"
-  path           = "/dmtr_health"
+resource "cloudflare_load_balancer_monitor" "kupo_m1_monitor" {
+  account_id  = var.cloudflare_account_id
+  type        = "https"
+  description = "Health Check for Kupo"
+  path        = "/dmtr_health"
+  # port omitted so each origin is health-checked on its own port (blinklabs-us: 4442, txpipe-m2: 443)
   interval       = 60
   timeout        = 5
   retries        = 2
   method         = "GET"
   expected_codes = "200"
-  allow_insecure = true
 }
 
-resource "cloudflare_load_balancer_pool" "kupo_preprod" {
-  name = "KupoPreprod"
-
+resource "cloudflare_load_balancer_pool" "kupo_m1" {
+  name       = "Kupo"
   account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.kupo_preprod_monitor.id
+  monitor    = cloudflare_load_balancer_monitor.kupo_m1_monitor.id
 
   origins = [
     for p in local.demeter_providers : {
       name    = p.name
-      address = p.kupo.networks.cardano_preprod != "" ? p.kupo.networks.cardano_preprod : "${p.name}.${var.cloudflare_zone_name}"
-    } if p.kupo.enabled
+      address = p.kupo_m1.address != "" ? p.kupo_m1.address : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.kupo_m1.port != 0 ? p.kupo_m1.port : null
+    } if p.kupo_m1.enabled
   ]
 }
 
-resource "cloudflare_load_balancer" "kupo_preprod" {
+resource "cloudflare_load_balancer" "kupo_m1_splat" {
   zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.kupo_preprod.id]
-  fallback_pool   = cloudflare_load_balancer_pool.kupo_preprod.id
+  name            = "*.kupo-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.kupo_m1.id]
+  fallback_pool   = cloudflare_load_balancer_pool.kupo_m1.id
   proxied         = true
   steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "kupo_preprod_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preprod-v2.kupo-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.kupo_preprod.id]
-  fallback_pool   = cloudflare_load_balancer_pool.kupo_preprod.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "kupo_preprod_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for KupoPreprod"
-  path           = "/dmtr_health"
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-}
-
-resource "cloudflare_load_balancer_pool" "kupo_mainnet" {
-  name = "KupoMainnet"
-
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.kupo_mainnet_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.kupo.networks.cardano_mainnet != "" ? p.kupo.networks.cardano_mainnet : "${p.name}.${var.cloudflare_zone_name}"
-    } if p.kupo.enabled
-  ]
-}
-
-resource "cloudflare_load_balancer" "kupo_mainnet" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.kupo_mainnet.id]
-  fallback_pool   = cloudflare_load_balancer_pool.kupo_mainnet.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "kupo_mainnet_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-mainnet-v2.kupo-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.kupo_mainnet.id]
-  fallback_pool   = cloudflare_load_balancer_pool.kupo_mainnet.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "kupo_mainnet_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for KupoMainnet"
-  path           = "/dmtr_health"
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
 }
 
 # Ogmios
@@ -477,156 +362,40 @@ resource "cloudflare_load_balancer" "tx_submit_api_m1" {
 }
 
 # Blockfrost
-resource "cloudflare_load_balancer_pool" "blockfrost_preview" {
-  name = "BlockfrostPreview"
-
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.blockfrost_preview_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.blockfrost.networks.cardano_preview != "" ? p.blockfrost.networks.cardano_preview : "${p.name}.${var.cloudflare_zone_name}"
-      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
-    } if p.blockfrost.enabled
-  ]
-}
-
-resource "cloudflare_load_balancer" "blockfrost_preview" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preview.blockfrost-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preview.id]
-  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preview.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "blockfrost_preview_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preview.blockfrost-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preview.id]
-  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preview.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "blockfrost_preview_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for BlockfrostPreview"
-  path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
+resource "cloudflare_load_balancer_monitor" "blockfrost_m1_monitor" {
+  account_id  = var.cloudflare_account_id
+  type        = "https"
+  description = "Health check for BlockfrostM1"
+  path        = "/dmtr_health"
+  # port omitted so each origin is health-checked on its own port (blinklabs-us: 3001, txpipe-m2: 443)
   interval       = 60
   timeout        = 5
   retries        = 2
   method         = "GET"
   expected_codes = "200"
-  allow_insecure = true
 }
 
-resource "cloudflare_load_balancer_pool" "blockfrost_preprod" {
-  name = "BlockfrostPreprod"
-
+resource "cloudflare_load_balancer_pool" "blockfrost_m1" {
+  name       = "Blockfrost"
   account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.blockfrost_preprod_monitor.id
+  monitor    = cloudflare_load_balancer_monitor.blockfrost_m1_monitor.id
 
   origins = [
     for p in local.demeter_providers : {
       name    = p.name
-      address = p.blockfrost.networks.cardano_preprod != "" ? p.blockfrost.networks.cardano_preprod : "${p.name}.${var.cloudflare_zone_name}"
-      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
-    } if p.blockfrost.enabled
+      address = p.blockfrost_m1.address != "" ? p.blockfrost_m1.address : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.blockfrost_m1.port != 0 ? p.blockfrost_m1.port : null
+    } if p.blockfrost_m1.enabled
   ]
-}
-
-resource "cloudflare_load_balancer" "blockfrost_preprod" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preprod.blockfrost-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preprod.id]
-  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preprod.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "blockfrost_preprod_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preprod.blockfrost-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preprod.id]
-  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preprod.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "blockfrost_preprod_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for BlockfrostPreprod"
-  path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-}
-
-resource "cloudflare_load_balancer_pool" "blockfrost_mainnet" {
-  name = "BlockfrostMainnet"
-
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.blockfrost_mainnet_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.blockfrost.networks.cardano_mainnet != "" ? p.blockfrost.networks.cardano_mainnet : "${p.name}.${var.cloudflare_zone_name}"
-      port    = p.blockfrost.port != 0 ? p.blockfrost.port : null
-    } if p.blockfrost.enabled
-  ]
-}
-
-resource "cloudflare_load_balancer" "blockfrost_mainnet" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-mainnet.blockfrost-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.blockfrost_mainnet.id]
-  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_mainnet.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "blockfrost_mainnet_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-mainnet.blockfrost-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.blockfrost_mainnet.id]
-  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_mainnet.id
-  proxied         = true
-  steering_policy = "off"
 }
 
 resource "cloudflare_load_balancer" "blockfrost_m1_splat" {
   zone_id         = var.cloudflare_zone_id
   name            = "*.blockfrost-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.blockfrost_preview.id]
-  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_preview.id
+  default_pools   = [cloudflare_load_balancer_pool.blockfrost_m1.id]
+  fallback_pool   = cloudflare_load_balancer_pool.blockfrost_m1.id
   proxied         = true
   steering_policy = "off"
-
-  rules = []
-}
-
-resource "cloudflare_load_balancer_monitor" "blockfrost_mainnet_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for BlockfrostMainnet"
-  path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.blockfrost.health_check_port if p.blockfrost.enabled && p.blockfrost.health_check_port != 0])[0], null)
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
 }
 
 # UTxORPC
