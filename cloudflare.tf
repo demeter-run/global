@@ -30,6 +30,11 @@ locals {
         address = "demeter.blinklabs.cloud"
         port    = 4442
       }
+      ogmios_m1 = {
+        enabled = true
+        address = "demeter.blinklabs.cloud"
+        port    = 3032
+      }
       ogmios = {
         enabled = true
         networks = {
@@ -64,6 +69,11 @@ locals {
         enabled = true
         address = "all.kupo-m1.demeter.run"
         port    = 443
+      }
+      ogmios_m1 = {
+        enabled = false
+        address = ""
+        port    = 0
       }
       ogmios = {
         enabled = true
@@ -355,11 +365,11 @@ resource "cloudflare_load_balancer_pool" "ogmios_m1" {
   monitor    = cloudflare_load_balancer_monitor.ogmios_m1_monitor.id
 
   origins = [
-    {
-      name    = "blinklabs-us"
-      address = "demeter.blinklabs.cloud"
-      port    = 3032
-    },
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.ogmios_m1.address != "" ? p.ogmios_m1.address : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.ogmios_m1.port != 0 ? p.ogmios_m1.port : null
+    } if p.ogmios_m1.enabled
   ]
 }
 
