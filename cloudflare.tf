@@ -334,6 +334,44 @@ resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
   }
 }
 
+# Ogmios M1 (top-level splat)
+resource "cloudflare_load_balancer_monitor" "ogmios_m1_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for OgmiosM1"
+  path           = "/healthz"
+  port           = 3032
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
+}
+
+resource "cloudflare_load_balancer_pool" "ogmios_m1" {
+  name       = "OgmiosM1"
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.ogmios_m1_monitor.id
+
+  origins = [
+    {
+      name    = "blinklabs-us"
+      address = "demeter.blinklabs.cloud"
+      port    = 3032
+    },
+  ]
+}
+
+resource "cloudflare_load_balancer" "ogmios_m1_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.ogmios-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
+  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
+  proxied         = true
+  steering_policy = "off"
+}
+
 # Tx-Submit-API
 resource "cloudflare_load_balancer_pool" "tx_submit_api_m1" {
   count = anytrue([for p in local.demeter_providers : p.tx_submit_api.enabled]) ? 1 : 0
