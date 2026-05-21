@@ -340,7 +340,7 @@ resource "cloudflare_load_balancer_monitor" "ogmios_m1_monitor" {
   type           = "https"
   description    = "Health check for OgmiosM1"
   path           = "/healthz"
-  port           = 3032
+  # port omitted so each origin is health-checked on its own port
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -350,7 +350,7 @@ resource "cloudflare_load_balancer_monitor" "ogmios_m1_monitor" {
 }
 
 resource "cloudflare_load_balancer_pool" "ogmios_m1" {
-  name       = "OgmiosM1"
+  name       = "Ogmios"
   account_id = var.cloudflare_account_id
   monitor    = cloudflare_load_balancer_monitor.ogmios_m1_monitor.id
 
