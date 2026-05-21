@@ -30,6 +30,11 @@ locals {
         address = "demeter.blinklabs.cloud"
         port    = 4442
       }
+      ogmios_m1 = {
+        enabled = true
+        address = "demeter.blinklabs.cloud"
+        port    = 3032
+      }
       ogmios = {
         enabled = true
         networks = {
@@ -64,6 +69,11 @@ locals {
         enabled = true
         address = "all.kupo-m1.demeter.run"
         port    = 443
+      }
+      ogmios_m1 = {
+        enabled = false
+        address = ""
+        port    = 0
       }
       ogmios = {
         enabled = true
@@ -332,6 +342,44 @@ resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
   header = {
     "Host" = ["health.mainnet-v6.ogmios-m1.dmtr.host"]
   }
+}
+
+# Ogmios M1 (top-level splat)
+resource "cloudflare_load_balancer_monitor" "ogmios_m1_monitor" {
+  account_id     = var.cloudflare_account_id
+  type           = "https"
+  description    = "Health check for OgmiosM1"
+  path           = "/healthz"
+  # port omitted so each origin is health-checked on its own port
+  interval       = 60
+  timeout        = 5
+  retries        = 2
+  method         = "GET"
+  expected_codes = "200"
+  allow_insecure = true
+}
+
+resource "cloudflare_load_balancer_pool" "ogmios_m1" {
+  name       = "Ogmios"
+  account_id = var.cloudflare_account_id
+  monitor    = cloudflare_load_balancer_monitor.ogmios_m1_monitor.id
+
+  origins = [
+    for p in local.demeter_providers : {
+      name    = p.name
+      address = p.ogmios_m1.address != "" ? p.ogmios_m1.address : "${p.name}.${var.cloudflare_zone_name}"
+      port    = p.ogmios_m1.port != 0 ? p.ogmios_m1.port : null
+    } if p.ogmios_m1.enabled
+  ]
+}
+
+resource "cloudflare_load_balancer" "ogmios_m1_splat" {
+  zone_id         = var.cloudflare_zone_id
+  name            = "*.ogmios-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
+  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
+  proxied         = true
+  steering_policy = "off"
 }
 
 # Tx-Submit-API
