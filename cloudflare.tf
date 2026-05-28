@@ -71,9 +71,9 @@ locals {
         port    = 443
       }
       ogmios_m1 = {
-        enabled = false
-        address = ""
-        port    = 0
+        enabled = true
+        address = "all.ogmios-m1.demeter.run"
+        port    = 443
       }
       ogmios = {
         enabled = true
@@ -346,10 +346,10 @@ resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
 
 # Ogmios M1 (top-level splat)
 resource "cloudflare_load_balancer_monitor" "ogmios_m1_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for OgmiosM1"
-  path           = "/healthz"
+  account_id  = var.cloudflare_account_id
+  type        = "https"
+  description = "Health check for OgmiosM1"
+  path        = "/healthz"
   # port omitted so each origin is health-checked on its own port
   interval       = 60
   timeout        = 5
