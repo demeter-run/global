@@ -184,121 +184,31 @@ resource "cloudflare_load_balancer" "kupo_m1_splat" {
 }
 
 # Ogmios
-resource "cloudflare_load_balancer_pool" "ogmios_preview" {
-  name       = "OgmiosPreview"
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.ogmios_preview_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.ogmios.networks.cardano_preview
-    } if p.ogmios.enabled
-  ]
-}
-
 resource "cloudflare_load_balancer" "ogmios_preview_splat" {
   zone_id         = var.cloudflare_zone_id
   name            = "*.cardano-preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_preview.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_preview.id
+  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
+  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
   proxied         = true
   steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "ogmios_preview_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for OgmiosPreview"
-  path           = "/healthz"
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-
-  header = {
-    "Host" = ["health.preview-v6.ogmios-m1.dmtr.host"]
-  }
-}
-
-resource "cloudflare_load_balancer_pool" "ogmios_preprod" {
-  name       = "OgmiosPreprod"
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.ogmios_preprod_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.ogmios.networks.cardano_preprod
-    } if p.ogmios.enabled
-  ]
 }
 
 resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
   zone_id         = var.cloudflare_zone_id
   name            = "*.cardano-preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_preprod.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_preprod.id
+  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
+  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
   proxied         = true
   steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "ogmios_preprod_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for OgmiosPreprod"
-  path           = "/healthz"
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-
-  header = {
-    "Host" = ["health.preprod-v6.ogmios-m1.dmtr.host"]
-  }
-}
-
-resource "cloudflare_load_balancer_pool" "ogmios_mainnet" {
-  name       = "OgmiosMainnet"
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.ogmios_mainnet_monitor.id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.ogmios.networks.cardano_mainnet
-    } if p.ogmios.enabled
-  ]
 }
 
 resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
   zone_id         = var.cloudflare_zone_id
   name            = "*.cardano-mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_mainnet.id
+  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
+  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
   proxied         = true
   steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "ogmios_mainnet_monitor" {
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for OgmiosMainnet"
-  path           = "/healthz"
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-
-  header = {
-    "Host" = ["health.mainnet-v6.ogmios-m1.dmtr.host"]
-  }
 }
 
 # Ogmios M1 (top-level splat)
