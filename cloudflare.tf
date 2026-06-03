@@ -213,15 +213,6 @@ resource "cloudflare_load_balancer_pool" "ogmios_preview" {
   ]
 }
 
-resource "cloudflare_load_balancer" "ogmios_preview" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_preview.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_preview.id
-  proxied         = true
-  steering_policy = "off"
-}
-
 resource "cloudflare_load_balancer" "ogmios_preview_splat" {
   zone_id         = var.cloudflare_zone_id
   name            = "*.cardano-preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
@@ -261,15 +252,6 @@ resource "cloudflare_load_balancer_pool" "ogmios_preprod" {
   ]
 }
 
-resource "cloudflare_load_balancer" "ogmios_preprod" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_preprod.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_preprod.id
-  proxied         = true
-  steering_policy = "off"
-}
-
 resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
   zone_id         = var.cloudflare_zone_id
   name            = "*.cardano-preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
@@ -307,15 +289,6 @@ resource "cloudflare_load_balancer_pool" "ogmios_mainnet" {
       address = p.ogmios.networks.cardano_mainnet
     } if p.ogmios.enabled
   ]
-}
-
-resource "cloudflare_load_balancer" "ogmios_mainnet" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_mainnet.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_mainnet.id
-  proxied         = true
-  steering_policy = "off"
 }
 
 resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
