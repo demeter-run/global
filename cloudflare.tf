@@ -35,14 +35,6 @@ locals {
         address = "demeter.blinklabs.cloud"
         port    = 3032
       }
-      ogmios = {
-        enabled = true
-        networks = {
-          cardano_mainnet = "ogmios.blinklabs.cloud"
-          cardano_preprod = "preprod.ogmios.blinklabs.cloud"
-          cardano_preview = "preview.ogmios.blinklabs.cloud"
-        }
-      }
       tx_submit_api = {
         enabled = false
         address = "tx-submit-api.blinklabs.cloud"
@@ -74,14 +66,6 @@ locals {
         enabled = true
         address = "all.ogmios-m1.demeter.run"
         port    = 443
-      }
-      ogmios = {
-        enabled = true
-        networks = {
-          cardano_mainnet = "mainnet-v6.ogmios-m1.demeter.run"
-          cardano_preprod = "preprod-v6.ogmios-m1.demeter.run"
-          cardano_preview = "preview-v6.ogmios-m1.demeter.run"
-        }
       }
       tx_submit_api = {
         enabled = false
