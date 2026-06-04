@@ -183,34 +183,6 @@ resource "cloudflare_load_balancer" "kupo_m1_splat" {
   steering_policy = "off"
 }
 
-# Ogmios
-resource "cloudflare_load_balancer" "ogmios_preview_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preview-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "ogmios_preprod_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preprod-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "ogmios_mainnet_splat" {
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-mainnet-v6.ogmios-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.ogmios_m1.id]
-  fallback_pool   = cloudflare_load_balancer_pool.ogmios_m1.id
-  proxied         = true
-  steering_policy = "off"
-}
-
 # Ogmios M1 (top-level splat)
 resource "cloudflare_load_balancer_monitor" "ogmios_m1_monitor" {
   account_id  = var.cloudflare_account_id
