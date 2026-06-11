@@ -460,6 +460,170 @@
                     "notification_settings": {
                         "receiver": "#infra-alerts"
                     }
+                },
+                {
+                    "uid": "kupo-dolos-disconnected",
+                    "title": "Kupo Disconnected from Dolos",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": { "from": 300, "to": 0 },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "min(kupo_connection_status) by (pod)",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": { "from": 0, "to": 0 },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": { "params": [0, 0], "type": "gt" },
+                                        "operator": { "type": "and" },
+                                        "query": { "params": [] },
+                                        "reducer": { "params": [], "type": "avg" },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": { "name": "Expression", "type": "__expr__", "uid": "__expr__" },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": { "from": 0, "to": 0 },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": { "params": [1, 0], "type": "lt" },
+                                        "operator": { "type": "and" },
+                                        "query": { "params": [] },
+                                        "reducer": { "params": [], "type": "avg" },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": { "name": "Expression", "type": "__expr__", "uid": "__expr__" },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "OK",
+                    "execErrState": "KeepLast",
+                    "for": "2m",
+                    "annotations": {
+                        "description": "Kupo has lost its connection to the Dolos backend node.",
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nPod: {{ $v.Labels.pod }} is disconnected from Dolos.\n{{ end }}\n{{ end }}"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                },
+                {
+                    "uid": "kupo-dolos-high-lag",
+                    "title": "Kupo High Indexing Lag (Dolos)",
+                    "condition": "C",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": { "from": 600, "to": 0 },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "max(dolos_tip_slot) by (pod) - max(kupo_most_recent_point_slot_no) by (pod)",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": { "from": 0, "to": 0 },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": { "params": [0, 0], "type": "gt" },
+                                        "operator": { "type": "and" },
+                                        "query": { "params": [] },
+                                        "reducer": { "params": [], "type": "avg" },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": { "name": "Expression", "type": "__expr__", "uid": "__expr__" },
+                                "expression": "A",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": { "from": 0, "to": 0 },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": { "params": [10000, 0], "type": "gt" },
+                                        "operator": { "type": "and" },
+                                        "query": { "params": [] },
+                                        "reducer": { "params": [], "type": "avg" },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": { "name": "Expression", "type": "__expr__", "uid": "__expr__" },
+                                "expression": "B",
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "NoData",
+                    "execErrState": "KeepLast",
+                    "for": "5m",
+                    "annotations": {
+                        "description": "Kupo indexing lag vs Dolos chain tip has exceeded 10,000 slots for more than 5 minutes.",
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nPod: {{ $v.Labels.pod }}\nLag: {{ humanize $v.Value }} slots\n{{ end }}\n{{ end }}"
+                    },
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
                 }
             ]
         }
