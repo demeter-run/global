@@ -882,7 +882,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_status_restarts_total{pod=~\".*$network.*\", container=\"kupo\"}) by (pod)",
+          "expr": "sum(kube_pod_container_status_restarts_total{pod=~\".*kupo.*$network.*\", container=\"kupo\"}) by (pod)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -1506,7 +1506,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod) (kube_pod_container_status_restarts_total{pod=~\".*$network.*\", container=\"kupo\"})",
+          "expr": "sum by (pod) (kube_pod_container_status_restarts_total{pod=~\".*kupo.*$network.*\", container=\"kupo\"})",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -1623,7 +1623,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod, container) (container_memory_working_set_bytes{pod=~\".*$network.*\", container!=\"\"}) / sum by (pod, container) (container_spec_memory_limit_bytes{pod=~\".*$network.*\", container!=\"\"})",
+          "expr": "sum by (pod, container) (container_memory_working_set_bytes{pod=~\".*kupo.*$network.*\", container!=\"\"}) / sum by (pod, container) (container_spec_memory_limit_bytes{pod=~\".*kupo.*$network.*\", container!=\"\"})",
           "legendFormat": "{{container}} \u2014 {{pod}}",
           "range": true,
           "refId": "A"
@@ -1718,7 +1718,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod, container) (rate(container_cpu_usage_seconds_total{pod=~\".*$network.*\", container!=\"\"}[$__rate_interval]))",
+          "expr": "sum by (pod, container) (rate(container_cpu_usage_seconds_total{pod=~\".*kupo.*$network.*\", container!=\"\"}[$__rate_interval]))",
           "legendFormat": "{{container}} \u2014 {{pod}}",
           "range": true,
           "refId": "A"
