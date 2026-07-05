@@ -558,7 +558,7 @@
                                     "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
                                 },
                                 "editorMode": "code",
-                                "expr": "max(dolos_tip_slot) by (pod) - max(kupo_most_recent_point_slot_no) by (pod)",
+                                "expr": "clamp_min(max(dolos_slot) by (pod) - max(kupo_most_recent_checkpoint) by (pod), 0)",
                                 "instant": false,
                                 "intervalMs": 1000,
                                 "legendFormat": "__auto",

@@ -174,7 +174,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(kupo_most_recent_point_slot_no{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "max(kupo_most_recent_checkpoint{pod=~\".*$network.*\"}) by (pod)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -236,7 +236,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(dolos_tip_slot{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "max(dolos_slot{pod=~\".*$network.*\"}) by (pod)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -306,7 +306,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(dolos_tip_slot{pod=~\".*$network.*\"}) by (pod) - max(kupo_most_recent_point_slot_no{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "clamp_min(max(dolos_slot{pod=~\".*$network.*\"}) by (pod) - max(kupo_most_recent_checkpoint{pod=~\".*$network.*\"}) by (pod), 0)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -385,7 +385,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(dolos_sync_progress{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "max(dolos_slot{pod=~\".*$network.*\"}) by (pod) / scalar(max(cardano_node_metrics_slotNum_int{network=\"$network\"}))",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -495,7 +495,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(kupo_most_recent_point_slot_no{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "max(kupo_most_recent_checkpoint{pod=~\".*$network.*\"}) by (pod)",
           "legendFormat": "kupo indexed \u2014 {{pod}}",
           "range": true,
           "refId": "A"
@@ -506,7 +506,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(dolos_tip_slot{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "max(dolos_slot{pod=~\".*$network.*\"}) by (pod)",
           "legendFormat": "dolos tip \u2014 {{pod}}",
           "range": true,
           "refId": "B"
@@ -613,7 +613,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(dolos_tip_slot{pod=~\".*$network.*\"}) by (pod) - max(kupo_most_recent_point_slot_no{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "clamp_min(max(dolos_slot{pod=~\".*$network.*\"}) by (pod) - max(kupo_most_recent_checkpoint{pod=~\".*$network.*\"}) by (pod), 0)",
           "legendFormat": "lag \u2014 {{pod}}",
           "range": true,
           "refId": "A"
@@ -792,7 +792,7 @@
       "id": 10,
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -812,7 +812,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "max(kupo_database_size_bytes{pod=~\".*$network.*\"}) by (pod)",
+          "expr": "max(label_replace(kubelet_volume_stats_used_bytes{persistentvolumeclaim=~\"data-dolos-.*$network.*\"}, \"pod\", \"$1\", \"persistentvolumeclaim\", \"data-(.*)\")) by (pod)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -882,7 +882,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(kube_pod_container_status_restarts_total{pod=~\".*kupo.*$network.*\", container=\"kupo\"}) by (pod)",
+          "expr": "sum(kube_pod_container_status_restarts_total{pod=~\".*dolos.*$network.*\", container=\"dolos\"}) by (pod) or sum(label_replace(kube_pod_container_status_restarts_total{exported_pod=~\".*dolos.*$network.*\", exported_container=\"dolos\"}, \"pod\", \"$1\", \"exported_pod\", \"(.*)\")) by (pod)",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -1091,7 +1091,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(dolos_chain_sync_events_total{pod=~\".*$network.*\"}[$__rate_interval])",
+          "expr": "rate(dolos_block_number{pod=~\".*$network.*\"}[$__rate_interval])",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -1506,7 +1506,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod) (kube_pod_container_status_restarts_total{pod=~\".*kupo.*$network.*\", container=\"kupo\"})",
+          "expr": "sum by (pod) (kube_pod_container_status_restarts_total{pod=~\".*dolos.*$network.*\", container=\"dolos\"}) or sum by (pod) (label_replace(kube_pod_container_status_restarts_total{exported_pod=~\".*dolos.*$network.*\", exported_container=\"dolos\"}, \"pod\", \"$1\", \"exported_pod\", \"(.*)\"))",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -1623,7 +1623,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod, container) (container_memory_working_set_bytes{pod=~\".*kupo.*$network.*\", container!=\"\"}) / sum by (pod, container) (container_spec_memory_limit_bytes{pod=~\".*kupo.*$network.*\", container!=\"\"})",
+          "expr": "sum by (pod, container) (container_memory_working_set_bytes{pod=~\".*dolos.*$network.*\", container!=\"socat-ntc\", container!=\"\"}) / sum by (pod, container) (container_spec_memory_limit_bytes{pod=~\".*dolos.*$network.*\", container!=\"socat-ntc\", container!=\"\"})",
           "legendFormat": "{{container}} \u2014 {{pod}}",
           "range": true,
           "refId": "A"
@@ -1718,7 +1718,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod, container) (rate(container_cpu_usage_seconds_total{pod=~\".*kupo.*$network.*\", container!=\"\"}[$__rate_interval]))",
+          "expr": "sum by (pod, container) (rate(container_cpu_usage_seconds_total{pod=~\".*dolos.*$network.*\", container!=\"socat-ntc\", container!=\"\"}[$__rate_interval]))",
           "legendFormat": "{{container}} \u2014 {{pod}}",
           "range": true,
           "refId": "A"
