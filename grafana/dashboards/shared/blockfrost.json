@@ -999,7 +999,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(container_memory_working_set_bytes{namespace=\"ftr-dolos-m1\", container!=\"\", pod=~\"cardano-$network-.*\"}) by (pod)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"ext-utxorpc-m1\", container!=\"\", pod=~\"cardano-$network-.*\"}) by (pod)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
@@ -1463,10 +1463,7 @@
     "list": [
       {
         "allowCustomValue": true,
-        "current": {
-          "text": "",
-          "value": ""
-        },
+        "current": {},
         "hide": 0,
         "includeAll": false,
         "multi": false,

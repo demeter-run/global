@@ -413,7 +413,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "\nsum(rate( grpc_server_handled_total{grpc_service=~\"utxorpc.*\"} [$__rate_interval])) by (grpc_method)\n",
+          "expr": "sum(rate( utxorpc_proxy_total_requests{network=~\".*$network.*\"} [$__rate_interval])) by (status_code)",
           "interval": "",
           "key": "Q-ad132e3e-b05b-405d-b2e8-e791bff8b3cc-0",
           "legendFormat": "__auto",
@@ -532,6 +532,7 @@
   "templating": {
     "list": [
       {
+        "current": {},
         "includeAll": false,
         "name": "datasource",
         "options": [],
