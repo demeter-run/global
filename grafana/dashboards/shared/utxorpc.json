@@ -316,7 +316,7 @@
           "hide": false,
           "instant": false,
           "key": "Q-afae6dc0-819b-4ec4-b2e1-a3e6105c38fd-0",
-          "legendFormat": "{{persistenvolumeclaim}}",
+          "legendFormat": "{{persistentvolumeclaim}}",
           "range": true,
           "refId": "A"
         }
