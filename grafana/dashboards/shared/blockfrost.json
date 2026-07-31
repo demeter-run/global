@@ -323,7 +323,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.90, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=\"$network\", proxied=\"true\", resolved_by=\"blockfrost\"}[10m])))",
+          "expr": "histogram_quantile(0.90, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=~\".*$network\", proxied=\"true\", resolved_by=\"blockfrost\"}[10m])))",
           "legendFormat": "90",
           "range": true,
           "refId": "B"
@@ -334,7 +334,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=\"$network\", proxied=\"true\", resolved_by=\"blockfrost\"}[10m])))",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=~\".*$network\", proxied=\"true\", resolved_by=\"blockfrost\"}[10m])))",
           "legendFormat": "50",
           "range": true,
           "refId": "C"
@@ -345,7 +345,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(1, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=\"$network\", proxied=\"true\", resolved_by=\"blockfrost\"}[10m])))",
+          "expr": "histogram_quantile(1, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=~\".*$network\", proxied=\"true\", resolved_by=\"blockfrost\"}[10m])))",
           "legendFormat": "p100",
           "range": true,
           "refId": "D"
@@ -484,7 +484,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.90, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=\"$network\",resolved_by=\"dolos\"}[10m])))",
+          "expr": "histogram_quantile(0.90, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=~\".*$network\", resolved_by=\"dolos\"}[10m])))",
           "legendFormat": "90",
           "range": true,
           "refId": "B"
@@ -495,7 +495,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=\"$network\", resolved_by=\"dolos\"}[10m])))",
+          "expr": "histogram_quantile(0.50, sum by (le) (rate(blockfrost_proxy_http_request_duration_seconds_bucket{network=~\".*$network\", resolved_by=\"dolos\"}[10m])))",
           "legendFormat": "50",
           "range": true,
           "refId": "C"
@@ -793,7 +793,7 @@
           },
           "editorMode": "code",
           "expr": "sum by (status_code) (rate(blockfrost_proxy_http_total_request{network=~\".*$network\"}[1m]))",
-          "legendFormat": "{{exported_endpoint}}",
+          "legendFormat": "{{status_code}}",
           "range": true,
           "refId": "A"
         }
@@ -900,7 +900,7 @@
           },
           "editorMode": "code",
           "expr": "sum by (consumer) (rate(blockfrost_proxy_http_total_request{network=~\".*$network\"}[1m]))",
-          "legendFormat": "{{status_code}}.{{consumer}}",
+          "legendFormat": "{{consumer}}",
           "range": true,
           "refId": "A"
         }
@@ -911,7 +911,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "af0jrqwy4uhhce"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -995,18 +995,18 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "af0jrqwy4uhhce"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(container_memory_working_set_bytes{namespace=\"ftr-dolos-m1\", container!=\"\", pod=~\"cardano-mainnet-.*\"}) by (pod)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=\"ftr-dolos-m1\", container!=\"\", pod=~\"cardano-$network-.*\"}) by (pod)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "New Panel",
+      "title": "Dolos Memory Usage",
       "type": "timeseries"
     },
     {
