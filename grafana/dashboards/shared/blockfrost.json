@@ -999,14 +999,14 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(container_memory_working_set_bytes{namespace=\"ftr-dolos-m1\", container!=\"\", pod=~\"cardano-$network-.*\"}) by (pod)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=~\"dolos|ext-blockfrost-m1\", container!=\"\", pod=~\"dolos-blockfrost-proxy-.*|proxy-.*\"}) by (pod)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Dolos Memory Usage",
+      "title": "Blockfrost Proxy Memory Usage",
       "type": "timeseries"
     },
     {
@@ -1463,10 +1463,7 @@
     "list": [
       {
         "allowCustomValue": true,
-        "current": {
-          "text": "",
-          "value": ""
-        },
+        "current": {},
         "hide": 0,
         "includeAll": false,
         "multi": false,
@@ -1493,9 +1490,14 @@
             "selected": true,
             "text": "ext-blockfrost-m1",
             "value": "ext-blockfrost-m1"
+          },
+          {
+            "selected": false,
+            "text": "dolos",
+            "value": "dolos"
           }
         ],
-        "query": "ext-blockfrost-m1",
+        "query": "ext-blockfrost-m1,dolos",
         "skipUrlSync": false,
         "type": "custom",
         "valuesFormat": "csv"
