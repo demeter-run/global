@@ -40,13 +40,13 @@ locals {
         address = "tx-submit-api.blinklabs.cloud"
       }
       utxorpc = {
-        enabled           = false
-        port              = 50051
-        health_check_port = 9187
+        enabled           = true
+        port              = 3050
+        health_check_port = 3050
         networks = {
-          cardano_mainnet = "mainnet.dolos.blinklabs.cloud"
-          cardano_preprod = "preprod.dolos.blinklabs.cloud"
-          cardano_preview = "preview.dolos.blinklabs.cloud"
+          cardano_mainnet = "demeter.blinklabs.cloud"
+          cardano_preprod = "demeter.blinklabs.cloud"
+          cardano_preview = "demeter.blinklabs.cloud"
         }
       }
     },
@@ -132,6 +132,9 @@ resource "cloudflare_certificate_pack" "this" {
 
     // U5C
     "*.utxorpc-m1.dmtr.host",
+    "*.cardano-mainnet-v1.utxorpc-m1.dmtr.host",
+    "*.cardano-preprod-v1.utxorpc-m1.dmtr.host",
+    "*.cardano-preview-v1.utxorpc-m1.dmtr.host",
 
     // Balius
 
