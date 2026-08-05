@@ -40,14 +40,9 @@ locals {
         address = "tx-submit-api.blinklabs.cloud"
       }
       utxorpc = {
-        enabled           = true
-        port              = 3050
-        health_check_port = 3050
-        networks = {
-          cardano_mainnet = "demeter.blinklabs.cloud"
-          cardano_preprod = "demeter.blinklabs.cloud"
-          cardano_preview = "demeter.blinklabs.cloud"
-        }
+        enabled = true
+        address = "demeter.blinklabs.cloud"
+        port    = 3050
       }
     },
     {
@@ -72,14 +67,9 @@ locals {
         address = "submitapi-m1.demeter.run"
       }
       utxorpc = {
-        enabled           = false
-        port              = 0
-        health_check_port = 0
-        networks = {
-          cardano_mainnet = ""
-          cardano_preprod = ""
-          cardano_preview = ""
-        }
+        enabled = false
+        address = ""
+        port    = 0
       }
     },
   ]
@@ -289,13 +279,13 @@ resource "cloudflare_load_balancer" "blockfrost_m1_splat" {
 }
 
 # UTxORPC
-resource "cloudflare_load_balancer_monitor" "utxorpc_preview_monitor" {
+resource "cloudflare_load_balancer_monitor" "utxorpc_m1_monitor" {
   count          = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
   account_id     = var.cloudflare_account_id
   type           = "https"
-  description    = "Health check for UtxorpcPreview"
+  description    = "Health check for UtxorpcM1"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
+  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
@@ -304,137 +294,27 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_preview_monitor" {
   allow_insecure = true
 }
 
-resource "cloudflare_load_balancer_pool" "utxorpc_preview" {
+resource "cloudflare_load_balancer_pool" "utxorpc_m1" {
   count      = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  name       = "UtxorpcPreview"
+  name       = "Utxorpc"
   account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.utxorpc_preview_monitor[0].id
+  monitor    = cloudflare_load_balancer_monitor.utxorpc_m1_monitor[0].id
 
   origins = [
     for p in local.demeter_providers : {
       name    = p.name
-      address = p.utxorpc.networks.cardano_preview != "" ? p.utxorpc.networks.cardano_preview : "${p.name}.${var.cloudflare_zone_name}"
+      address = p.utxorpc.address != "" ? p.utxorpc.address : "${p.name}.${var.cloudflare_zone_name}"
       port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
     } if p.utxorpc.enabled
   ]
 }
 
-resource "cloudflare_load_balancer" "utxorpc_preview" {
+resource "cloudflare_load_balancer" "utxorpc_m1_splat" {
   count           = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
   zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preview-v1.utxorpc-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preview[0].id]
-  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preview[0].id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "utxorpc_preview_splat" {
-  count           = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preview-v1.utxorpc-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preview[0].id]
-  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preview[0].id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "utxorpc_preprod_monitor" {
-  count          = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for UtxorpcPreprod"
-  path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-}
-
-resource "cloudflare_load_balancer_pool" "utxorpc_preprod" {
-  count      = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  name       = "UtxorpcPreprod"
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.utxorpc_preprod_monitor[0].id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.utxorpc.networks.cardano_preprod != "" ? p.utxorpc.networks.cardano_preprod : "${p.name}.${var.cloudflare_zone_name}"
-      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
-    } if p.utxorpc.enabled
-  ]
-}
-
-resource "cloudflare_load_balancer" "utxorpc_preprod" {
-  count           = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-preprod-v1.utxorpc-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preprod[0].id]
-  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preprod[0].id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "utxorpc_preprod_splat" {
-  count           = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-preprod-v1.utxorpc-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.utxorpc_preprod[0].id]
-  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_preprod[0].id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer_monitor" "utxorpc_mainnet_monitor" {
-  count          = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  account_id     = var.cloudflare_account_id
-  type           = "https"
-  description    = "Health check for UtxorpcMainnet"
-  path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.utxorpc.health_check_port if p.utxorpc.enabled && p.utxorpc.health_check_port != 0])[0], null)
-  interval       = 60
-  timeout        = 5
-  retries        = 2
-  method         = "GET"
-  expected_codes = "200"
-  allow_insecure = true
-}
-
-resource "cloudflare_load_balancer_pool" "utxorpc_mainnet" {
-  count      = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  name       = "UtxorpcMainnet"
-  account_id = var.cloudflare_account_id
-  monitor    = cloudflare_load_balancer_monitor.utxorpc_mainnet_monitor[0].id
-
-  origins = [
-    for p in local.demeter_providers : {
-      name    = p.name
-      address = p.utxorpc.networks.cardano_mainnet != "" ? p.utxorpc.networks.cardano_mainnet : "${p.name}.${var.cloudflare_zone_name}"
-      port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
-    } if p.utxorpc.enabled
-  ]
-}
-
-resource "cloudflare_load_balancer" "utxorpc_mainnet" {
-  count           = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  zone_id         = var.cloudflare_zone_id
-  name            = "cardano-mainnet-v1.utxorpc-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.utxorpc_mainnet[0].id]
-  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_mainnet[0].id
-  proxied         = true
-  steering_policy = "off"
-}
-
-resource "cloudflare_load_balancer" "utxorpc_mainnet_splat" {
-  count           = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
-  zone_id         = var.cloudflare_zone_id
-  name            = "*.cardano-mainnet-v1.utxorpc-m1.${var.cloudflare_zone_name}"
-  default_pools   = [cloudflare_load_balancer_pool.utxorpc_mainnet[0].id]
-  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_mainnet[0].id
+  name            = "*.utxorpc-m1.${var.cloudflare_zone_name}"
+  default_pools   = [cloudflare_load_balancer_pool.utxorpc_m1[0].id]
+  fallback_pool   = cloudflare_load_balancer_pool.utxorpc_m1[0].id
   proxied         = true
   steering_policy = "off"
 }
