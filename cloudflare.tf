@@ -122,9 +122,9 @@ resource "cloudflare_certificate_pack" "this" {
 
     // U5C
     "*.utxorpc-m1.dmtr.host",
-    "*.cardano-mainnet-v1.utxorpc-m1.dmtr.host",
-    "*.cardano-preprod-v1.utxorpc-m1.dmtr.host",
-    "*.cardano-preview-v1.utxorpc-m1.dmtr.host",
+    "*.cardano-mainnet.utxorpc-m1.dmtr.host",
+    "*.cardano-preprod.utxorpc-m1.dmtr.host",
+    "*.cardano-preview.utxorpc-m1.dmtr.host",
 
     // Balius
 
