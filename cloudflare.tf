@@ -139,6 +139,33 @@ resource "cloudflare_certificate_pack" "this" {
   validity_days     = 90
 }
 
+# Ogmios v7 hostnames, issued by fabric as
+# {key}.cardano-{network}-v7.ogmios-m1.dmtr.host.
+#
+# A separate pack rather than three more entries above, because the Cloudflare
+# API only orders and deletes certificate packs — it cannot update the host
+# list of one. Editing hosts on the pack above therefore destroys the live
+# certificate and orders a replacement, and that certificate is what serves
+# every customer hostname for Ogmios v6, Kupo, Blockfrost and UTxO RPC. This
+# way the worst case is a rejected order rather than an uncovered zone.
+#
+# The unauthenticated endpoint cardano-{network}-v7.ogmios-m1.dmtr.host needs
+# no entry: *.ogmios-m1.dmtr.host above already covers it.
+resource "cloudflare_certificate_pack" "ogmios_v7" {
+  zone_id               = cloudflare_zone.this[var.cloudflare_zone_name].id
+  certificate_authority = "google"
+
+  // At most 50.
+  hosts = [
+    "*.cardano-mainnet-v7.ogmios-m1.dmtr.host",
+    "*.cardano-preprod-v7.ogmios-m1.dmtr.host",
+    "*.cardano-preview-v7.ogmios-m1.dmtr.host",
+  ]
+  type              = "advanced"
+  validation_method = "txt"
+  validity_days     = 90
+}
+
 # Kupo
 resource "cloudflare_load_balancer_monitor" "kupo_m1_monitor" {
   account_id  = var.cloudflare_account_id
