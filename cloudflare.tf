@@ -101,6 +101,9 @@ resource "cloudflare_certificate_pack" "this" {
     "*.vector-mainnet-v6.ogmios-m1.dmtr.host",
     "*.vector-testnet-v6.ogmios-m1.dmtr.host",
     "*.prime-testnet-v6.ogmios-m1.dmtr.host",
+    "*.cardano-mainnet-v7.ogmios-m1.dmtr.host",
+    "*.cardano-preprod-v7.ogmios-m1.dmtr.host",
+    "*.cardano-preview-v7.ogmios-m1.dmtr.host",
 
     // Kupo
     "*.kupo-m1.dmtr.host",
