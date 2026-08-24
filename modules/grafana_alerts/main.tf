@@ -5,8 +5,8 @@ resource "grafana_folder" "this" {
 
 resource "grafana_rule_group" "this" {
   for_each = {
-    for file in fileset("${path.root}/../${var.local_directory}", "*.json") :
-    file => jsondecode(templatefile("${path.root}/../${var.local_directory}/${file}", {
+    for file in fileset("${path.root}/${var.local_directory}", "*.json") :
+    file => jsondecode(templatefile("${path.root}/${var.local_directory}/${file}", {
       datasource_uid_map = var.datasource_uids
     }))
   }
