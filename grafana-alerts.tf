@@ -8,4 +8,7 @@ module "grafana_alerts" {
   folder_title    = each.value.grafana_title
   folder_uid      = each.value.folder_uid
   datasource_uids = module.grafana_data_sources.uids
+
+  # Rule groups reference the "#infra-alerts" receiver, which must exist first.
+  depends_on = [grafana_contact_point.infra_alerts]
 }
