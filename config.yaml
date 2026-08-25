@@ -1,9 +1,10 @@
 grafana:
     cloud:
         url: https://dmtrglobal.grafana.net
-        auth: ENC[AES256_GCM,data:FCKFkPXxLl+h7oRNiZ4rbZksC9XciuLsTOLrgCiBWKvoL7MPs6j/5GZlkHwfdg==,iv:PmWLbOrOuC1mFvZDt5fvZ+lx4BQYONc3V2y0JPKMuD8=,tag:Ggn5t7uQsoLq3GC806zu2g==,type:str]
+        auth: ENC[AES256_GCM,data:IoP4qtSZCJvCrdLWnrbpSFCopr7aYL25PYWlRp19+1g31P7cpLdpCb8en1b4qg==,iv:XKiKfS+ESZrHv8Y6nDs6YBIBzKDZal0KV2uZZaWAfio=,tag:FNv7IyoeafukzUZiRuDX/g==,type:str]
         sm_url: https://synthetic-monitoring-api-sa-east-1.grafana.net
-        sm_access_token: ENC[AES256_GCM,data:M2lf4kypuYVB1e50KorAadGr9udSJ7SvDad4/D7qCFcoJlQ/15QFSI9wXdlJTH7TNhXvBpIBFzj/8yYESqCbD9Aog9o8xXhfviUO1xOh6DEzaDcaPUPzVa1Nco5P/klHr1AkdFLJWG/uWTIXYWVkJMBCPII=,iv:kpMFZq5S+CoOzHurfDRmeczBxFkKdEX/mZAgU+oI3zc=,tag:xLM8oJiUcm3xHJqvWTv99w==,type:str]
+        sm_access_token: ENC[AES256_GCM,data:JElNGphWYBLP5f5tT0K1WkUK4XeVdC6A2p3BbmfI9yRVBwqDK4cC1pFNF0DEWgGnzd0nWEFCj+3jjdiM/waTqm6TEij9GNoER7YMIIBKcUYnAAq0go5OGKoN4vE/FP7lGLlmHzJ9GCQgqAb6oMj797Hj2UM=,iv:vLunu9AvZb3AQGiyYliVy6H0wGK4Qo1l4BSojhwTNjA=,tag:6eFJ+/LBzsP0mKlD1ha1+A==,type:str]
+        discord_webhook_url: ENC[AES256_GCM,data:PkpmmXqwvP0B9gsTZzR9KShXDKbj5N69NLYbsC0gtdJc5b598ddqDn8DNad0dVXQB3o1Spp0xKAIOOa/uJh2USW3sqHXfw37tct/NSbc/qT+MsbnIrucoHYi6JUW8z1JKVkp45lyihXUo82Wa94JL7LXtxwq41DTqQ==,iv:2nOjUB2hjJNW1oiJ8tJvCqFLVb/fsf3wrpCMEoSYzLc=,tag:D9lNyAQx/C0hcSUAln26ow==,type:str]
     folders:
         - local_directory: grafana/dashboards/blinklabs
           grafana_title: Demeter Blink Labs
@@ -39,55 +40,55 @@ grafana:
           frequency: 600000
           timeout: 15000
           url: wss://preview.ogmios.blinklabs.cloud
-          api_key: ENC[AES256_GCM,data:tedUWN6OcL2e2FCRZa2K8RcOT7HC+raraA0=,iv:r35+qZbxa83q84sB6FPXahhDFBjclK2EdLvK+d4Y3bk=,tag:HsTS03+vpjhzub7PpgwEwg==,type:str]
+          api_key: ENC[AES256_GCM,data:dgBulpVYVqNE/FSZ2HEUe2mXlfkQYW2Yc0I=,iv:o/xqGGpe4YcmedZtUut7+1SiyN7ZB85LeG0rRW4xnVE=,tag:MTPmwV4dwQFAGXbLlQJs5w==,type:str]
           script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
         - job_name: queryNetworkTip
           target: blinklabs-ogmios-cardano-preprod
           frequency: 600000
           timeout: 15000
           url: wss://preprod.ogmios.blinklabs.cloud
-          api_key: ENC[AES256_GCM,data:A95mNLZEvGERcuUyOpm4yaiLJktAz2lrv+8=,iv:9iTPzpkW57ruggVZzk9amU+4rgmxpLWYsTvV5siExD4=,tag:UnR+J2fNQeyMwAP1bMiI7A==,type:str]
+          api_key: ENC[AES256_GCM,data:sui1AfI03kkI77yGWUoxI2j0OdQbkNSHsAY=,iv:lj0yVH2mzhc9XcoR+MlZDKxW4lAtTkn88XMECDWVPpc=,tag:FaxtanGlmHrDnLwa5hpCxA==,type:str]
           script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
         - job_name: queryNetworkTip
           target: blinklabs-ogmios-cardano-mainnet
           frequency: 600000
           timeout: 15000
           url: wss://ogmios.blinklabs.cloud
-          api_key: ENC[AES256_GCM,data:9qVefn0peiGSFCbNSivwPFpsPFWe+5N3KaM=,iv:l12VTwJkepFLSXYWGKSQ24nrCv6PhwC/HlXdBQPuz4M=,tag:VpvLp7khT4m2fQgci7Fsqw==,type:str]
+          api_key: ENC[AES256_GCM,data:o6pDpCCO+kflseHV7MXHoTBBWaRzJaMUGPM=,iv:n+wUtpSX7EbFWMMONVeoq2Fl3e0xgGpfmZV12Oej5vY=,tag:Dy8/Gh5zBsPfSK8LHHG7IQ==,type:str]
           script_path: grafana/synthetics/shared/ogmiosQueryNetworkTip.js
         - job_name: dmtr_healthcheck
           target: blinklabs-kupo-cardano-mainnet
           frequency: 600000
           timeout: 15000
           url: https://demeter.blinklabs.cloud:4442
-          api_key: ENC[AES256_GCM,data:65Hi+NoSaeqVjS+0bQfSaOMWDzCTyrnw,iv:mQWmKVAOdWjMEluyznVxvqkn7/sejMkD/CtcxBd981E=,tag:xCaD033fsdbo23JCt8sLJw==,type:str]
+          api_key: ENC[AES256_GCM,data:S8qsUAtKr74BnX0nl6ldsIe+iqpVfmem,iv:brwUIwVxnsg1NFJlb5YI7kajt7YHKWXBGKSUrYOeLUg=,tag:RXd9dUEk5BjwskoBMibtHQ==,type:str]
           script_path: grafana/synthetics/shared/dmtrHealth.js
         - job_name: dmtr_healthcheck
           target: blinklabs-kupo-cardano-preprod
           frequency: 600000
           timeout: 15000
           url: https://demeter.blinklabs.cloud:4442
-          api_key: ENC[AES256_GCM,data:cex7Kd8zxpq0FSD1E9a5+QsSH193Ab2q,iv:5+gqtPW5jqMhZg1r+Jrmg7/E842K8pd0Km3sBiwwtoQ=,tag:1feG8scabz8xOHjHX7Nalw==,type:str]
+          api_key: ENC[AES256_GCM,data:EzAzBlSU04LNsWgVvti9x3EoR3L8MdxQ,iv:z0jZEnj9BnzkbwrHKQvRHsjEPKHA99FIl/nyUsGXthk=,tag:KVAxhNswiMMCbaXSORgglg==,type:str]
           script_path: grafana/synthetics/shared/dmtrHealth.js
         - job_name: dmtr_healthcheck
           target: blinklabs-kupo-cardano-preview
           frequency: 600000
           timeout: 15000
           url: https://demeter.blinklabs.cloud:4442
-          api_key: ENC[AES256_GCM,data:IrbpzR/IzvSYYxlFRl8T6WhJsYtlSniP,iv:aRIO376AWii3pjiwF0weWINEbf0ZgcGPRg+8+E+xC8g=,tag:JDguEGp9sfq5dHgpC9E8dQ==,type:str]
+          api_key: ENC[AES256_GCM,data:zTej24J2N42P5+EY+r6evG+QGCvmNSA2,iv:d64E3gSHe3Y/XnREZjKC5Z/YL58lUiRq3SQZie8Oy8k=,tag:KJs7JjOaiPaa/nDzuywecQ==,type:str]
           script_path: grafana/synthetics/shared/dmtrHealth.js
 sops:
     age:
         - recipient: age1klj2c5sj490j2g6ptlf3uh5cwehr4jfdt6c2e638a939sf7pfcdqjm54hq
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBZYk13TFJJa09CbGtjUkdC
-            L0JGZkg0SUI2bFgyaE1tTnpuS2J4UURQUmdZCmIwNXM5bFh5QnVRcmNYUkdvNTYv
-            ajY4NUpyRGlVZDY2VXpHWGNNM1RqNHMKLS0tIHpKbEJpTjBxOW1DT0xzZUxkVE9J
-            UXRHaS9aaDZmT0dCbXE4OGJVWmZrdTQKRF+KB857hWanvdDelvTu4S8iw9/FEVvs
-            rwaTGEB/XG5wmIsf69m+HrEs0SiN7k1DxaGb2sKq4YWbIBwv7Ig8hA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBjZ2UwTlk5T2c1bkxSR1Rq
+            bGpVbjh2QXV3QlRrWVZiTi8rV0Q3Z1JVUnhnCmY0aHo0b2RLWWR6R0pjbHdnVzQw
+            MjdBdjBPaEtYdHp1R3hjd0dnZ1d3VXcKLS0tIElGVG1ESE4zYVJBWG42MVJHQXVY
+            UkJmSzN5TElJaHlGTU5BUWJmMDhIa2sKOYr4ZjQfOAngysJNBnhbY7tolAvVQkTt
+            Qg2K4CsC5ni3cadqUDJgalpGjgE4t5G30LddsYnSyMF7kXf552ndxw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-05-09T23:27:34Z"
-    mac: ENC[AES256_GCM,data:omAq530GVHO8v3i2VBNsmNQ3/XVJ96RlcW49Z4cl6sFyx6/At6omWlq2KyngEP4IdUwFPpZEa1PV4S5qzQ34CyddCqfTrkHOHyw6kBTEhk77Liusa68gz3wjwvNnPwMqkYeWptLhAWDmYy1Skj67gDCUL7y347Thir8z2P/SUwQ=,iv:pbMFBjzltoh+I37jzGLQA0+X2gc/leP2QSf3ExUiunQ=,tag:SsHG5XvwvpvD2pHl9Rb1gw==,type:str]
-    encrypted_regex: ^(auth|sm_access_token|api_key)$
-    version: 3.11.0
+    lastmodified: "2026-08-25T17:18:06Z"
+    mac: ENC[AES256_GCM,data:i2tI3aLiQS3/gnVqTHt5hzUHrabQK+CHwmID1Po8/6MPbl7gYEdKYc+rOwvD9/AL74A8GdWAjsAsLM+GUPl3M6Ybx+DcYl5Lfvz689dn5y8HB6QyrTzBtdwwsoM/tgNsW8jqFitG6GlKz1M2SaTbrB9VYK22ABmOVFP12m6WMiw=,iv:X8DxUcXQjQuTtaY510ru9MYcD4fdJZHBg5wd+YB9Dgg=,tag:TShSDQBBWbxK/D9YmEjmBQ==,type:str]
+    encrypted_regex: ^(auth|sm_access_token|api_key|discord_webhook_url)$
+    version: 3.12.1
