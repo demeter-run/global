@@ -1,0 +1,137 @@
+{
+    "apiVersion": 1,
+    "groups": [
+        {
+            "orgId": 1,
+            "name": "Submit API",
+            "folder": "Demeter",
+            "interval": "1m",
+            "rules": [
+                {
+                    "uid": "bkl0saptipstale",
+                    "title": "Submit API backing node is stale",
+                    "condition": "C",
+                    "for": "10m",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 900,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "changes(cardano_node_metrics_blockNum_int{namespace=\"ext-nodes-m1\", pod=~\"node-.*\"}[15m])",
+                                "instant": true,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": false,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "last"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "hide": false,
+                                "reducer": "last",
+                                "refId": "B",
+                                "type": "reduce"
+                            }
+                        },
+                        {
+                            "refId": "C",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                1,
+                                                0
+                                            ],
+                                            "type": "lt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "B",
+                                "hide": false,
+                                "refId": "C",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "OK",
+                    "execErrState": "KeepLast",
+                    "annotations": {
+                        "description": "The cardano-node backing the Submit API is up but its block height (cardano_node_metrics_blockNum_int) has not advanced for at least 15 minutes. Transactions accepted by the Submit API are being forwarded to a node whose chain tip is frozen, so submissions will not be relayed against a current tip. This usually indicates a wedged node that a pod restart will clear.",
+                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nPod: {{ $v.Labels.pod }} block height is not advancing\n{{ end }}\n{{ end }}"
+                    },
+                    "labels": {},
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
+                }
+            ]
+        }
+    ]
+}

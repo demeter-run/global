@@ -1,18 +1,28 @@
+locals {
+  alert_files = fileset("${path.root}/${var.local_directory}", "*.json")
+}
+
+# Create the folder that the alert rule groups live in. Grafana requires the
+# folder to exist before rule groups can be provisioned into it, so we manage it
+# here with the UID defined in config.yaml (mirroring the grafana_dashboard
+# module, which also creates its own folder). Only created when the directory
+# actually contains alert definitions, so an empty/missing directory is a no-op.
 resource "grafana_folder" "this" {
-  for_each = { for folder in var.folders : folder.title => folder if folder.uid == "" }
-  title    = each.key
+  count = length(local.alert_files) > 0 ? 1 : 0
+  title = var.folder_title
+  uid   = var.folder_uid
 }
 
 resource "grafana_rule_group" "this" {
   for_each = {
-    for file in fileset("${path.root}/${var.local_directory}", "*.json") :
+    for file in local.alert_files :
     file => jsondecode(templatefile("${path.root}/${var.local_directory}/${file}", {
       datasource_uid_map = var.datasource_uids
     }))
   }
 
   name             = each.value["groups"][0]["name"]
-  folder_uid       = var.folder_uid
+  folder_uid       = grafana_folder.this[0].uid
   interval_seconds = var.default_interval_seconds
 
   dynamic "rule" {

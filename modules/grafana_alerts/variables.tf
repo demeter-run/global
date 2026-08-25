@@ -3,14 +3,6 @@ variable "local_directory" {
   description = "Local directory containing alert JSON files."
 }
 
-variable "folders" {
-  type = list(object({
-    title = string
-    uid   = optional(string, "")
-  }))
-  description = "List of folders to create in Grafana."
-}
-
 variable "folder_title" {
   type        = string
   description = "The title of the Grafana folder to associate with alerts."
