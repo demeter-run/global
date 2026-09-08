@@ -130,6 +130,90 @@
                     "notification_settings": {
                         "receiver": "#infra-alerts"
                     }
+                },
+                {
+                    "uid": "bkl0kupomisscreds",
+                    "title": "Kupo proxy unauthenticated 401 surge (fabric creds not syncing)",
+                    "condition": "B",
+                    "for": "15m",
+                    "data": [
+                        {
+                            "refId": "A",
+                            "relativeTimeRange": {
+                                "from": 600,
+                                "to": 0
+                            },
+                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
+                            "model": {
+                                "datasource": {
+                                    "type": "prometheus",
+                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
+                                },
+                                "editorMode": "code",
+                                "expr": "sum(rate(kupo_proxy_http_total_request{consumer=\".\", status_code=\"401\"}[10m]))",
+                                "instant": false,
+                                "intervalMs": 1000,
+                                "legendFormat": "__auto",
+                                "maxDataPoints": 43200,
+                                "range": true,
+                                "refId": "A"
+                            }
+                        },
+                        {
+                            "refId": "B",
+                            "relativeTimeRange": {
+                                "from": 0,
+                                "to": 0
+                            },
+                            "datasourceUid": "__expr__",
+                            "model": {
+                                "conditions": [
+                                    {
+                                        "evaluator": {
+                                            "params": [
+                                                0.1,
+                                                0
+                                            ],
+                                            "type": "gt"
+                                        },
+                                        "operator": {
+                                            "type": "and"
+                                        },
+                                        "query": {
+                                            "params": []
+                                        },
+                                        "reducer": {
+                                            "params": [],
+                                            "type": "avg"
+                                        },
+                                        "type": "query"
+                                    }
+                                ],
+                                "datasource": {
+                                    "name": "Expression",
+                                    "type": "__expr__",
+                                    "uid": "__expr__"
+                                },
+                                "expression": "A",
+                                "hide": false,
+                                "intervalMs": 1000,
+                                "maxDataPoints": 43200,
+                                "refId": "B",
+                                "type": "threshold"
+                            }
+                        }
+                    ],
+                    "noDataState": "OK",
+                    "execErrState": "KeepLast",
+                    "annotations": {
+                        "description": "The Kupo (Dolos) proxy is rejecting a sustained volume of requests with HTTP 401 and consumer=\".\" (no valid Demeter credential presented). Kupo/Dolos itself is healthy; this pattern means newly issued or rotated customer credentials are not reaching the proxy. The usual root cause is the demeter-fabric daemon (fabric-daemon-0, ns dmtr-system) silently losing its Kafka/Redpanda consumer connection so it stops syncing credentials into the cluster while its readiness probe still reports healthy. Check fabric-daemon-0 logs for rdkafka BrokerTransportFailure and 'kubectl rollout restart statefulset/fabric-daemon -n dmtr-system' to resync.",
+                        "summary": "Kupo proxy is returning a sustained rate of unauthenticated (consumer=\".\") 401s ({{ humanize $values.A.Value }}/s over 10m) \u2014 likely demeter-fabric not syncing credentials (Kafka disconnect)."
+                    },
+                    "labels": {},
+                    "isPaused": false,
+                    "notification_settings": {
+                        "receiver": "#infra-alerts"
+                    }
                 }
             ]
         }
