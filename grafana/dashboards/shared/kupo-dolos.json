@@ -1199,7 +1199,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.99, sum by (le, pod) (rate(kupo_proxy_http_request_duration_seconds_bucket{pod=~\".*$network.*\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by (le, pod) (rate(kupo_proxy_http_request_duration_seconds_bucket{network=~\".*$network.*\"}[$__rate_interval])))",
           "legendFormat": "p99 \u2014 {{pod}}",
           "range": true,
           "refId": "A"
@@ -1210,7 +1210,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.90, sum by (le, pod) (rate(kupo_proxy_http_request_duration_seconds_bucket{pod=~\".*$network.*\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.90, sum by (le, pod) (rate(kupo_proxy_http_request_duration_seconds_bucket{network=~\".*$network.*\"}[$__rate_interval])))",
           "legendFormat": "p90 \u2014 {{pod}}",
           "range": true,
           "refId": "B"
@@ -1221,7 +1221,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "histogram_quantile(0.50, sum by (le, pod) (rate(kupo_proxy_http_request_duration_seconds_bucket{pod=~\".*$network.*\"}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.50, sum by (le, pod) (rate(kupo_proxy_http_request_duration_seconds_bucket{network=~\".*$network.*\"}[$__rate_interval])))",
           "legendFormat": "p50 \u2014 {{pod}}",
           "range": true,
           "refId": "C"
@@ -1316,7 +1316,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (pod) (rate(kupo_proxy_http_total_request{pod=~\".*$network.*\"}[$__rate_interval]))",
+          "expr": "sum by (pod) (rate(kupo_proxy_http_total_request{exported_instance=~\".*$network.*\"}[$__rate_interval]))",
           "legendFormat": "{{pod}}",
           "range": true,
           "refId": "A"
@@ -1424,7 +1424,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum by (status_code) (rate(kupo_proxy_http_total_request{pod=~\".*$network.*\", status_code=~\"4..|5..\"}[$__rate_interval]))",
+          "expr": "sum by (status_code) (rate(kupo_proxy_http_total_request{exported_instance=~\".*$network.*\", status_code=~\"4..|5..\"}[$__rate_interval]))",
           "legendFormat": "HTTP {{status_code}}",
           "range": true,
           "refId": "A"
