@@ -62,6 +62,20 @@ SEVERITY_KEYWORDS = (
 # customers (kube-state-metrics restarts churn a lot but users see nothing).
 EXCLUDE_SERVICES = frozenset({"kube-state-metrics"})
 
+# Demeter product families, matched against the alertname (which names the
+# product, e.g. "Cardano Node Instance is down") because the pod/app labels are
+# inconsistent or absent: some alerts carry no app label, and Kupo/UTxO RPC run
+# on Dolos pods, so the instance name alone would mislabel them as `dolos`.
+# Ordered most-specific first; the first substring match wins, so `kupo` and
+# `utxo-rpc` are checked before `dolos` (their backing engine).
+KNOWN_SERVICES = (
+    ("cardano-node", ("cardano node", "cardano-node")),
+    ("utxo-rpc", ("utxo rpc", "utxorpc", "utxo-rpc")),
+    ("kupo", ("kupo",)),
+    ("ogmios", ("ogmios",)),
+    ("dolos", ("dolos",)),
+)
+
 
 def eprint(*args: object) -> None:
     print(*args, file=sys.stderr)
@@ -245,6 +259,13 @@ def severity_of(alertname: str, labels: dict[str, str]) -> str:
 
 
 def service_of(alertname: str, labels: dict[str, str]) -> str:
+    # The alertname names the product, so it's the most reliable signal: pod/app
+    # labels are absent on some rules and point at the backing engine (Dolos)
+    # for Kupo/UTxO RPC. Fall back to labels, then the first alertname word.
+    name = (alertname or "").lower()
+    for canonical, needles in KNOWN_SERVICES:
+        if any(n in name for n in needles):
+            return canonical
     for key in ("app", "service", "job"):
         if labels.get(key):
             return labels[key]
