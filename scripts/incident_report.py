@@ -16,7 +16,12 @@ ad-hoc for a one-off report or on a schedule to keep the channel current.
 
 Each incident is classified as customer-visible or AZ-redundant: workloads run
 across az1/az2, so a single AZ down while its peer stays up is invisible to
-users. Cluster-plumbing services (kube-state-metrics) are excluded entirely.
+users. Buckets are split per network (mainnet/preprod/preview) so a testnet
+outage doesn't read as a whole-service outage, and a network-agnostic proxy
+counts against every network. Degraded time is reported as wall-clock (union of
+overlapping pod/AZ intervals) rather than a sum of per-pod alerts, which would
+overstate a network-wide event severalfold. Cluster-plumbing services
+(kube-state-metrics) are excluded entirely.
 """
 
 from __future__ import annotations
@@ -265,10 +270,39 @@ def series_key(alertname: str, labels: dict[str, str]) -> str:
 # `ogmios-v7-preprod-az1-857b...`. The AZ suffix marks the redundant peer.
 _AZ_RE = re.compile(r"-az(\d+)\b")
 
+# The three Cardano networks Demeter serves, used to bucket incidents so a
+# testnet outage doesn't read as a whole-service outage.
+NETWORKS = ("mainnet", "preprod", "preview")
+_NET_RE = re.compile(r"-(" + "|".join(NETWORKS) + r")-")
+
+# Network-agnostic services (proxies/gateways) front every network at once, so
+# an outage there is attributed to all of them rather than a single bucket.
+ALL_NETWORKS = "all"
+
 
 def az_of(instance: str) -> str:
     m = _AZ_RE.search(instance)
     return m.group(1) if m else ""
+
+
+def network_of(instance: str) -> str:
+    """The Cardano network an instance serves, or `all` for a proxy.
+
+    Network-specific workloads embed the network in their name
+    (`ogmios-v7-preprod-az1-...`). A proxy that fronts every network carries no
+    such token, so its incidents count against all networks at once.
+    """
+    m = _NET_RE.search(instance)
+    return m.group(1) if m else ALL_NETWORKS
+
+
+def normalize_service(name: str) -> str:
+    """Fold service-name casing so one workload isn't split across rows.
+
+    The same service is labelled inconsistently by different alerts (the app
+    label `ogmios` vs the alertname-derived `Ogmios`); lowercasing merges them.
+    """
+    return name.strip().lower()
 
 
 def workload_of(instance: str) -> str:
@@ -413,11 +447,13 @@ def _incident(ann_id, alertname, labels, start_ms, end_ms, ongoing_to=None) -> d
     stable = ann_id if ann_id is not None else hashlib.sha1(
         f"{alertname}|{sorted(labels.items())}|{start_ms}".encode()
     ).hexdigest()[:12]
+    instance = instance_of(labels)
     return {
         "incident_id": str(stable),
-        "service": service_of(alertname, labels),
+        "service": normalize_service(service_of(alertname, labels)),
         "alert": alertname,
-        "instance": instance_of(labels),
+        "instance": instance,
+        "network": network_of(instance),
         "severity": severity_of(alertname, labels),
         "start_ms": start_ms,
         "start_utc": iso(start_ms),
@@ -446,7 +482,7 @@ def humanize(seconds: int) -> str:
     return " ".join(p for p in parts if p) or "0s"
 
 
-CSV_FIELDS = ["incident_id", "service", "alert", "instance", "severity",
+CSV_FIELDS = ["incident_id", "service", "alert", "instance", "network", "severity",
               "start_utc", "end_utc", "duration", "duration_s", "status", "impact", "start_ms"]
 
 
@@ -470,38 +506,85 @@ def merge_csv(path: str, incidents: list[dict]) -> list[dict]:
     return merged
 
 
-def summarize_window(rows: list[dict], frm_ms: int) -> tuple[list[dict], dict[str, dict]]:
-    """Filter rows to the report window and tally incidents/downtime per service."""
+def union_seconds(intervals: list[tuple[int, int]]) -> int:
+    """Total wall-clock seconds covered by [start_ms, end_ms) intervals.
+
+    Overlapping intervals are merged, so two AZs (or several pods) degraded at
+    the same time count once. This is why the report can't just sum per-row
+    durations: a single network-wide event fires on every pod in every AZ, and
+    summing them inflates the figure several-fold.
+    """
+    spans = sorted(iv for iv in intervals if iv[1] > iv[0])
+    if not spans:
+        return 0
+    total = 0
+    cur_s, cur_e = spans[0]
+    for s, e in spans[1:]:
+        if s <= cur_e:
+            cur_e = max(cur_e, e)
+        else:
+            total += cur_e - cur_s
+            cur_s, cur_e = s, e
+    total += cur_e - cur_s
+    return total // 1000
+
+
+def summarize_window(rows: list[dict], frm_ms: int) -> tuple[list[dict], dict[tuple[str, str], dict]]:
+    """Filter rows to the window and tally each (service, network) bucket.
+
+    Downtime is the union wall-clock time of the bucket's incidents, not a sum
+    of overlapping per-pod rows. Proxy incidents (network `all`) are counted
+    against every network, since a proxy outage hits them all at once.
+    """
     window = [r for r in rows if int(r.get("start_ms") or 0) >= frm_ms]
-    by_service: dict[str, dict] = {}
+    acc: dict[tuple[str, str], dict] = {}
     for r in window:
-        s = by_service.setdefault(r["service"], {"count": 0, "downtime_s": 0, "visible": 0, "visible_s": 0})
-        s["count"] += 1
-        s["downtime_s"] += int(r.get("duration_s") or 0)
-        if r.get("impact") == "Customer-visible":
-            s["visible"] += 1
-            s["visible_s"] += int(r.get("duration_s") or 0)
-    return window, by_service
+        net = r.get("network") or network_of(r.get("instance", ""))
+        start = int(r.get("start_ms") or 0)
+        span = (start, start + int(r.get("duration_s") or 0) * 1000)
+        visible = r.get("impact") == "Customer-visible"
+        for n in (NETWORKS if net == ALL_NETWORKS else (net,)):
+            g = acc.setdefault((r["service"], n),
+                               {"count": 0, "visible": 0, "all_iv": [], "vis_iv": []})
+            g["count"] += 1
+            g["all_iv"].append(span)
+            if visible:
+                g["visible"] += 1
+                g["vis_iv"].append(span)
+    by_group = {
+        key: {
+            "count": g["count"],
+            "visible": g["visible"],
+            "downtime_s": union_seconds(g["all_iv"]),
+            "visible_s": union_seconds(g["vis_iv"]),
+        }
+        for key, g in acc.items()
+    }
+    return window, by_group
 
 
-def build_discord_summary(window: list[dict], by_service: dict[str, dict],
+def build_discord_summary(window: list[dict], by_group: dict[tuple[str, str], dict],
                           frm_ms: int, to_ms: int, source_label: str) -> str:
     visible = sum(1 for r in window if r.get("impact") == "Customer-visible")
-    # Rank by customer-visible incidents first so the channel sees real impact.
-    top = sorted(by_service, key=lambda k: (by_service[k]["visible"], by_service[k]["count"]), reverse=True)[:10]
+    # Rank by customer-visible downtime so the channel sees the worst-hit
+    # service/network buckets first.
+    top = sorted(by_group, key=lambda k: (by_group[k]["visible_s"], by_group[k]["visible"]),
+                 reverse=True)[:10]
     lines = [
         f"**Window:** {iso(frm_ms)} \u2192 {iso(to_ms)}",
         f"**Source:** Grafana {source_label}",
         f"**Total incidents:** {len(window)}",
         f"**Customer-visible:** {visible}  \u00b7  **AZ-redundant:** {len(window) - visible}",
         "",
-        "**Top services** (customer-visible / total)",
+        "**Top service/network** (customer-visible / total)",
     ]
-    for svc in top:
-        s = by_service[svc]
-        lines.append(f"- {svc}: {s['visible']}/{s['count']} incidents, {humanize(s['visible_s'])} visible downtime")
+    for svc, net in top:
+        g = by_group[(svc, net)]
+        lines.append(f"- {svc} ({net}): {g['visible']}/{g['count']} incidents, "
+                     f"{humanize(g['visible_s'])} visible downtime")
     lines.append("")
-    lines.append("Customer-visible = all AZs of a workload down at once. Full report and CSV attached as a zip.")
+    lines.append("Customer-visible = all AZs of a workload down at once; downtime is wall-clock "
+                 "(overlapping pods/AZs merged). Full report and CSV attached as a zip.")
     # Discord caps embed descriptions at 4096 characters.
     return "\n".join(lines)[:4096]
 
@@ -552,7 +635,7 @@ def post_discord(webhook_url: str, title: str, description: str,
 
 
 def render_markdown(rows: list[dict], frm_ms: int, to_ms: int, source_label: str) -> str:
-    window, by_service = summarize_window(rows, frm_ms)
+    window, by_group = summarize_window(rows, frm_ms)
     total = len(window)
     visible = sum(1 for r in window if r.get("impact") == "Customer-visible")
 
@@ -570,35 +653,44 @@ def render_markdown(rows: list[dict], frm_ms: int, to_ms: int, source_label: str
         "> Each workload runs across az1/az2. An incident is **customer-visible**",
         "> only when all AZs of a workload were down at once; a single AZ failing",
         "> while its peer stayed up is **AZ-redundant** and invisible to users.",
+        ">",
+        "> Buckets are split per network so a testnet (preprod/preview) outage",
+        "> doesn't read as a whole-service outage; a network-agnostic proxy counts",
+        "> against every network. Degraded time is wall-clock (overlapping pods and",
+        "> AZs merged), not a sum of per-pod alerts.",
         "",
-        "## Summary by service",
+        "## Summary by service and network",
         "",
-        "| Service | Customer-visible | AZ-redundant | Visible degraded time |",
-        "| --- | ---: | ---: | ---: |",
+        "| Service | Network | Customer-visible | AZ-redundant | Visible degraded time |",
+        "| --- | --- | ---: | ---: | ---: |",
     ]
-    for svc in sorted(by_service, key=lambda k: (by_service[k]["visible"], by_service[k]["count"]), reverse=True):
-        s = by_service[svc]
-        lines.append(f"| {svc} | {s['visible']} | {s['count'] - s['visible']} | {humanize(s['visible_s'])} |")
+    for svc, net in sorted(by_group,
+                           key=lambda k: (by_group[k]["visible_s"], by_group[k]["visible"]),
+                           reverse=True):
+        g = by_group[(svc, net)]
+        lines.append(f"| {svc} | {net} | {g['visible']} | {g['count'] - g['visible']} "
+                     f"| {humanize(g['visible_s'])} |")
 
     lines += [
         "",
         "## Incidents",
         "",
-        "| Start (UTC) | End (UTC) | Duration | Service | Alert | Instance | Severity | Impact | Status |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| Start (UTC) | End (UTC) | Duration | Service | Network | Alert | Instance | Severity | Impact | Status |",
+        "| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |",
     ]
     for r in window:
         end = r.get("end_utc") or DASH
         duration = r.get("duration") or DASH
         inst = r.get("instance") or DASH
         impact = r.get("impact") or DASH
+        network = r.get("network") or network_of(r.get("instance", ""))
         lines.append(
             f"| {r['start_utc']} | {end} | {duration} "
-            f"| {r['service']} | {r['alert']} | {inst} "
+            f"| {r['service']} | {network} | {r['alert']} | {inst} "
             f"| {r['severity']} | {impact} | {r['status']} |"
         )
     if not window:
-        lines.append("| _no incidents in window_ | | | | | | | | |")
+        lines.append("| _no incidents in window_ | | | | | | | | | |")
     lines.append("")
     return "\n".join(lines)
 
@@ -670,8 +762,8 @@ def main() -> int:
         if not webhook:
             eprint("No Discord webhook resolved; skipping delivery.")
             return 0
-        window, by_service = summarize_window(merged, frm_ms)
-        description = build_discord_summary(window, by_service, frm_ms, to_ms, source_label)
+        window, by_group = summarize_window(merged, frm_ms)
+        description = build_discord_summary(window, by_group, frm_ms, to_ms, source_label)
         zip_name = f"demeter-incident-report-{now.strftime('%Y%m%d')}.zip"
         zip_bytes = zip_report(report_path, csv_path)
         files = [(zip_name, zip_bytes, "application/zip")]
