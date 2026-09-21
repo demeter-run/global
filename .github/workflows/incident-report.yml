@@ -7,16 +7,14 @@ on:
         description: "Report window in months back from now"
         required: false
         default: "6"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - scripts/incident_report.py
-      - scripts/requirements.txt
-      - .github/workflows/incident-report.yml
   schedule:
     # Weekly, Mondays 06:00 UTC.
     - cron: "0 6 * * 1"
+
+# This job decrypts private secrets and reconstructs incidents from a private
+# Grafana source, so it must not run on pull_request in this public repo: PR
+# code runs with the branch's secrets in scope and could exfiltrate them. Run
+# only on an explicit dispatch or the schedule.
 
 defaults:
   run:
@@ -43,20 +41,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r scripts/requirements.txt
       - name: Generate incident report
-        # The report is delivered to Discord and uploaded as a build artifact;
-        # it is never committed, since this repository is public. The webhook is
-        # read from the decrypted config (grafana.cloud.discord_webhook_url).
-        # TEMP: posting is enabled on PRs to validate delivery; revert to
-        # scheduled/manual-only before merge.
+        # The report is derived from a private data source, so it is delivered
+        # only to the private Discord channel (webhook read from the decrypted
+        # grafana.cloud.discord_webhook_url). It is never committed or uploaded
+        # as an artifact: on a public repo both are world-readable.
         run: python3 scripts/incident_report.py --months "${{ inputs.months || '6' }}" --out-dir report-out --discord-from-config
       - name: Discard decrypted config
         if: always()
         run: git checkout -- config.yaml
-      - name: Upload report artifact
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        with:
-          name: demeter-incident-report
-          path: |
-            report-out/report-latest.md
-            report-out/incidents.csv
-          if-no-files-found: error
