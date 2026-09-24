@@ -45,7 +45,20 @@ jobs:
         # only to the private Discord channel (webhook read from the decrypted
         # grafana.cloud.discord_webhook_url). It is never committed or uploaded
         # as an artifact: on a public repo both are world-readable.
-        run: python3 scripts/incident_report.py --months "${{ inputs.months || '6' }}" --out-dir report-out --discord-from-config
+        #
+        # The recurring schedule reports only the past week; a 6-month history
+        # each week would be noise. A manual dispatch still takes a months
+        # window (default 6) for the initial backfill.
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MONTHS_INPUT: ${{ inputs.months }}
+        run: |
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            window=(--days 7)
+          else
+            window=(--months "${MONTHS_INPUT:-6}")
+          fi
+          python3 scripts/incident_report.py "${window[@]}" --out-dir report-out --discord-from-config
       - name: Discard decrypted config
         if: always()
         run: git checkout -- config.yaml

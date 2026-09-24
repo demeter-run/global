@@ -722,6 +722,9 @@ def parse_args() -> argparse.Namespace:
                    help="Decrypted config.yaml with grafana.cloud.url/auth (default: config.yaml).")
     p.add_argument("--months", type=int, default=6,
                    help="Report window in months back from now (default: 6).")
+    p.add_argument("--days", type=int, default=None,
+                   help="Report window in days back from now; overrides --months when set "
+                        "(use for the recurring weekly run).")
     p.add_argument("--source", choices=("state-history", "annotations"), default="state-history",
                    help="Grafana history source (default: state-history, correct for managed rules).")
     p.add_argument("--discord-webhook", default=os.environ.get("DISCORD_WEBHOOK_URL", ""),
@@ -749,6 +752,9 @@ def main() -> int:
     to_ms = to_ms_from_iso(args.to) if args.to else int(now.timestamp() * 1000)
     if args.frm:
         frm_ms = to_ms_from_iso(args.frm)
+    elif args.days is not None:
+        frm = now - dt.timedelta(days=args.days)
+        frm_ms = int(frm.timestamp() * 1000)
     else:
         frm = now - dt.timedelta(days=int(args.months * 30.44))
         frm_ms = int(frm.timestamp() * 1000)
