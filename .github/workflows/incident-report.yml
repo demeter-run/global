@@ -1,0 +1,64 @@
+name: incident-report
+
+on:
+  workflow_dispatch:
+    inputs:
+      months:
+        description: "Report window in months back from now"
+        required: false
+        default: "6"
+  schedule:
+    # Weekly, Mondays 06:00 UTC.
+    - cron: "0 6 * * 1"
+
+# This job decrypts private secrets and reconstructs incidents from a private
+# Grafana source, so it must not run on pull_request in this public repo: PR
+# code runs with the branch's secrets in scope and could exfiltrate them. Run
+# only on an explicit dispatch or the schedule.
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  incident-report:
+    name: incident-report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.6.0
+      - name: Decrypt config.yaml
+        run: sops -d -i config.yaml
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+      - name: Generate incident report
+        # The report is derived from a private data source, so it is delivered
+        # only to the private Discord channel (webhook read from the decrypted
+        # grafana.cloud.discord_webhook_url). It is never committed or uploaded
+        # as an artifact: on a public repo both are world-readable.
+        #
+        # The recurring schedule reports only the past week; a 6-month history
+        # each week would be noise. A manual dispatch still takes a months
+        # window (default 6) for the initial backfill.
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          MONTHS_INPUT: ${{ inputs.months }}
+        run: |
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            window=(--days 7)
+          else
+            window=(--months "${MONTHS_INPUT:-6}")
+          fi
+          python3 scripts/incident_report.py "${window[@]}" --out-dir report-out --discord-from-config
+      - name: Discard decrypted config
+        if: always()
+        run: git checkout -- config.yaml
