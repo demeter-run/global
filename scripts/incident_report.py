@@ -62,6 +62,20 @@ SEVERITY_KEYWORDS = (
 # customers (kube-state-metrics restarts churn a lot but users see nothing).
 EXCLUDE_SERVICES = frozenset({"kube-state-metrics"})
 
+# Alerts excluded from the report regardless of service: per-consumer proxy 429s
+# are quota enforcement against a single customer's API key, not a Demeter
+# outage, so they must never count toward downtime. Matched as substrings
+# against the (lowercased) alertname, e.g. "Kupo Proxy 429 Requests".
+EXCLUDE_ALERT_KEYWORDS = ("429", "rate limit", "rate-limit")
+
+
+def is_excluded(incident: dict) -> bool:
+    """Whether an incident should be dropped before downtime is tallied."""
+    if incident["service"] in EXCLUDE_SERVICES:
+        return True
+    name = (incident.get("alert") or "").lower()
+    return any(kw in name for kw in EXCLUDE_ALERT_KEYWORDS)
+
 # Demeter product families, matched against the alertname (which names the
 # product, e.g. "Cardano Node Instance is down") because the pod/app labels are
 # inconsistent or absent: some alerts carry no app label, and Kupo/UTxO RPC run
@@ -771,7 +785,7 @@ def main() -> int:
     eprint(f"Fetched {len(events)} state events.")
 
     incidents = build_incidents(events, to_ms)
-    incidents = [i for i in incidents if i["service"] not in EXCLUDE_SERVICES]
+    incidents = [i for i in incidents if not is_excluded(i)]
     classify_impact(incidents)
     csv_path = os.path.join(args.out_dir, args.csv_name)
     merged = merge_csv(csv_path, incidents)
