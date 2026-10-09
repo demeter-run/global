@@ -120,9 +120,10 @@
                     ],
                     "noDataState": "OK",
                     "execErrState": "KeepLast",
+                    "for": "5m",
                     "annotations": {
-                        "description": "The Ogmios tip is more than 120 Cardano slots (about 2 minutes) behind the freshest Cardano node tip on the same network. Restart the identified Ogmios pod after checking its logs.",
-                        "summary": "Ogmios pod {{ $labels.pod }} on {{ $labels.network }} is over 2 minutes behind the Cardano node tip"
+                        "description": "The Ogmios tip has remained more than 120 Cardano slots (about 2 minutes) behind the freshest Cardano node tip on the same network for 5 minutes. Check the identified Ogmios pod logs and its connection to Cardano node before deciding whether to restart it.",
+                        "summary": "Ogmios pod {{ $labels.pod }} on {{ $labels.network }} has been over 2 minutes behind the Cardano node tip for 5 minutes"
                     },
                     "labels": {},
                     "isPaused": false,
