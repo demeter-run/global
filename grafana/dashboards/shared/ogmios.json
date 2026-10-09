@@ -1642,7 +1642,7 @@
         "type": "prometheus",
         "uid": "$datasource"
       },
-      "description": "Number of times each Ogmios instance's chain tip (ogmios_tip_slot) advanced in the last 15 minutes. A healthy, synced instance advances continuously; a value of 0 means the tip is frozen (wedged chain-sync) and the pod is serving a stale tip. This is the signal behind the \"Ogmios tip is stale\" alert.",
+      "description": "Number of times each Ogmios instance's chain tip (ogmios_tip_slot) advanced in the last 15 minutes. A value of 0 can help diagnose a frozen tip; the alert compares each pod's tip with the freshest Cardano node tip on its network.",
       "fieldConfig": {
         "defaults": {
           "color": {

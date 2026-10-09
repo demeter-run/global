@@ -8,133 +8,9 @@
             "interval": "1m",
             "rules": [
                 {
-                    "uid": "cec6tlsnq9z40e",
-                    "title": "Ogmios is down",
-                    "condition": "C",
-                    "data": [
-                        {
-                            "refId": "A",
-                            "relativeTimeRange": {
-                                "from": 600,
-                                "to": 0
-                            },
-                            "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
-                            "model": {
-                                "datasource": {
-                                    "type": "prometheus",
-                                    "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
-                                },
-                                "editorMode": "code",
-                                "expr": "count(avg_over_time(ogmios_connected[10m] offset 1h)) by (pod) unless count(avg_over_time(ogmios_connected[10m])) by (pod)",
-                                "instant": true,
-                                "intervalMs": 1000,
-                                "legendFormat": "__auto",
-                                "maxDataPoints": 43200,
-                                "range": false,
-                                "refId": "A"
-                            }
-                        },
-                        {
-                            "refId": "B",
-                            "relativeTimeRange": {
-                                "from": 0,
-                                "to": 0
-                            },
-                            "datasourceUid": "__expr__",
-                            "model": {
-                                "conditions": [
-                                    {
-                                        "evaluator": {
-                                            "params": [
-                                                0,
-                                                0
-                                            ],
-                                            "type": "gt"
-                                        },
-                                        "operator": {
-                                            "type": "and"
-                                        },
-                                        "query": {
-                                            "params": []
-                                        },
-                                        "reducer": {
-                                            "params": [],
-                                            "type": "avg"
-                                        },
-                                        "type": "query"
-                                    }
-                                ],
-                                "datasource": {
-                                    "name": "Expression",
-                                    "type": "__expr__",
-                                    "uid": "__expr__"
-                                },
-                                "expression": "A",
-                                "hide": false,
-                                "reducer": "count",
-                                "refId": "B",
-                                "type": "reduce"
-                            }
-                        },
-                        {
-                            "refId": "C",
-                            "relativeTimeRange": {
-                                "from": 0,
-                                "to": 0
-                            },
-                            "datasourceUid": "__expr__",
-                            "model": {
-                                "conditions": [
-                                    {
-                                        "evaluator": {
-                                            "params": [
-                                                0,
-                                                0
-                                            ],
-                                            "type": "gt"
-                                        },
-                                        "operator": {
-                                            "type": "and"
-                                        },
-                                        "query": {
-                                            "params": []
-                                        },
-                                        "reducer": {
-                                            "params": [],
-                                            "type": "avg"
-                                        },
-                                        "type": "query"
-                                    }
-                                ],
-                                "datasource": {
-                                    "name": "Expression",
-                                    "type": "__expr__",
-                                    "uid": "__expr__"
-                                },
-                                "expression": "B",
-                                "hide": false,
-                                "refId": "C",
-                                "type": "threshold"
-                            }
-                        }
-                    ],
-                    "noDataState": "OK",
-                    "execErrState": "KeepLast",
-                    "annotations": {
-                        "description": "We are not receiving metrics from a particular Ogmios instance.",
-                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nPod: {{ $v.Labels.pod }}\n{{ end }}\n{{ end }}"
-                    },
-                    "labels": {},
-                    "isPaused": false,
-                    "notification_settings": {
-                        "receiver": "#infra-alerts"
-                    }
-                },
-                {
                     "uid": "bkl0ogtipstale",
-                    "title": "Ogmios tip is stale",
+                    "title": "Ogmios is behind Cardano node",
                     "condition": "C",
-                    "for": "10m",
                     "data": [
                         {
                             "refId": "A",
@@ -149,7 +25,7 @@
                                     "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
                                 },
                                 "editorMode": "code",
-                                "expr": "changes(ogmios_tip_slot[15m]) and on (pod) (ogmios_connected == 1)",
+                                "expr": "max by (network) (cardano_node_metrics_slotNum_int{namespace=\"ext-nodes-m1\", network=~\"mainnet|preprod|preview\"}) - on (network) group_right() max by (network, pod, ogmios_version) (label_replace(ogmios_tip_slot{namespace=\"ext-ogmios-m1\", pod=~\".*(mainnet|preprod|preview).*\"}, \"network\", \"$1\", \"pod\", \".*(mainnet|preprod|preview).*\"))",
                                 "instant": true,
                                 "intervalMs": 1000,
                                 "legendFormat": "__auto",
@@ -212,10 +88,10 @@
                                     {
                                         "evaluator": {
                                             "params": [
-                                                1,
+                                                120,
                                                 0
                                             ],
-                                            "type": "lt"
+                                            "type": "gt"
                                         },
                                         "operator": {
                                             "type": "and"
@@ -245,8 +121,8 @@
                     "noDataState": "OK",
                     "execErrState": "KeepLast",
                     "annotations": {
-                        "description": "An Ogmios instance is connected to its cardano-node backend but its chain tip (ogmios_tip_slot) has not advanced for at least 15 minutes, meaning it is serving a stale tip to clients. This usually indicates a wedged chain-sync session that a pod restart will clear.",
-                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"C[0-9]+\" $k) -}}\nPod: {{ $v.Labels.pod }} tip slot is not advancing\n{{ end }}\n{{ end }}"
+                        "description": "The Ogmios tip is more than 120 Cardano slots (about 2 minutes) behind the freshest Cardano node tip on the same network. Restart the identified Ogmios pod after checking its logs.",
+                        "summary": "Ogmios pod {{ $labels.pod }} on {{ $labels.network }} is over 2 minutes behind the Cardano node tip"
                     },
                     "labels": {},
                     "isPaused": false,
