@@ -135,12 +135,12 @@
                 {
                     "uid": "dec9dejazwruof",
                     "title": "Kupo Proxy Failed Requests",
-                    "condition": "C",
+                    "condition": "B",
                     "data": [
                         {
                             "refId": "A",
                             "relativeTimeRange": {
-                                "from": 600,
+                                "from": 300,
                                 "to": 0
                             },
                             "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
@@ -150,12 +150,12 @@
                                     "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
                                 },
                                 "editorMode": "code",
-                                "expr": "sum(increase(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", status_code!~\"200|304|401|403|404\"}[1m])) by (status_code, consumer)",
-                                "instant": false,
+                                "expr": "(100 * sum by (namespace, consumer) (increase(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*|dolos\", status_code=~\"5..\"}[5m])) / sum by (namespace, consumer) (increase(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*|dolos\"}[5m]))) and (sum by (namespace, consumer) (increase(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*|dolos\"}[5m])) >= 20)",
+                                "instant": true,
                                 "intervalMs": 1000,
                                 "legendFormat": "__auto",
                                 "maxDataPoints": 43200,
-                                "range": true,
+                                "range": false,
                                 "refId": "A"
                             }
                         },
@@ -200,55 +200,14 @@
                                 "refId": "B",
                                 "type": "threshold"
                             }
-                        },
-                        {
-                            "refId": "C",
-                            "relativeTimeRange": {
-                                "from": 0,
-                                "to": 0
-                            },
-                            "datasourceUid": "__expr__",
-                            "model": {
-                                "conditions": [
-                                    {
-                                        "evaluator": {
-                                            "params": [
-                                                0,
-                                                0
-                                            ],
-                                            "type": "gt"
-                                        },
-                                        "operator": {
-                                            "type": "and"
-                                        },
-                                        "query": {
-                                            "params": []
-                                        },
-                                        "reducer": {
-                                            "params": [],
-                                            "type": "avg"
-                                        },
-                                        "type": "query"
-                                    }
-                                ],
-                                "datasource": {
-                                    "name": "Expression",
-                                    "type": "__expr__",
-                                    "uid": "__expr__"
-                                },
-                                "expression": "B",
-                                "hide": false,
-                                "reducer": "last",
-                                "refId": "C",
-                                "type": "reduce"
-                            }
                         }
                     ],
                     "noDataState": "OK",
                     "execErrState": "KeepLast",
-                    "for": "1m",
+                    "for": "5m",
                     "annotations": {
-                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"B[0-9]+\" $k) -}}\nConsumer: {{ $v.Labels.consumer }}\nCode: {{ $v.Labels.status_code }}\nCount: {{ humanize $v.Value }}\n{{ end }}\n{{ end }}"
+                        "description": "HTTP 5xx responses exceed 5% of requests over five minutes, with at least 20 requests, sustained for five minutes.",
+                        "summary": "{{ $labels.consumer }}: {{ printf \"%.2f\" $values.A.Value }}% HTTP 5xx responses in the last five minutes."
                     },
                     "isPaused": false,
                     "notification_settings": {
@@ -263,7 +222,7 @@
                         {
                             "refId": "A",
                             "relativeTimeRange": {
-                                "from": 600,
+                                "from": 300,
                                 "to": 0
                             },
                             "datasourceUid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}",
@@ -273,12 +232,12 @@
                                     "uid": "${datasource_uid_map.gke_blinklabs-demeter_us-central1_dmtr-cluster-prometheus}"
                                 },
                                 "editorMode": "code",
-                                "expr": "sum(increase(kong_http_requests_total{namespace=~\"ftr-kupo-.*\", code!~\"200|304|401|403|404\"}[1m])) by (code, consumer, route)",
-                                "instant": false,
+                                "expr": "(100 * sum by (namespace, consumer, route) (increase(kong_http_requests_total{namespace=~\"ftr-kupo-.*\", code=~\"5..\"}[5m])) / sum by (namespace, consumer, route) (increase(kong_http_requests_total{namespace=~\"ftr-kupo-.*\"}[5m]))) and (sum by (namespace, consumer, route) (increase(kong_http_requests_total{namespace=~\"ftr-kupo-.*\"}[5m])) >= 20)",
+                                "instant": true,
                                 "intervalMs": 1000,
                                 "legendFormat": "__auto",
                                 "maxDataPoints": 43200,
-                                "range": true,
+                                "range": false,
                                 "refId": "A"
                             }
                         },
@@ -327,10 +286,10 @@
                     ],
                     "noDataState": "OK",
                     "execErrState": "KeepLast",
-                    "for": "1m",
+                    "for": "5m",
                     "annotations": {
-                        "description": "Kupo Failed Requests",
-                        "summary": "{{ range $k, $v := $values -}}\n{{ if (match \"B[0-9]+\" $k) -}}\nRoute: {{ $v.Labels.route }}\nConsumer: {{ $v.Labels.consumer }}\nCode: {{ $v.Labels.code }}\nCount: {{ humanize $v.Value }}\n{{ end }}\n{{ end }}"
+                        "description": "HTTP 5xx responses exceed 5% of requests over five minutes, with at least 20 requests, sustained for five minutes.",
+                        "summary": "{{ $labels.consumer }} on route {{ $labels.route }}: {{ printf \"%.2f\" $values.A.Value }}% HTTP 5xx responses in the last five minutes."
                     },
                     "isPaused": false,
                     "notification_settings": {
