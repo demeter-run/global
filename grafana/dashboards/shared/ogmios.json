@@ -3213,7 +3213,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "thresholds": {
@@ -3222,10 +3222,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 5
               }
             ]
           },
@@ -3267,7 +3263,7 @@
       ],
       "title": "Minor GCs/s",
       "type": "timeseries",
-      "description": "Ignores $network and $version. The line is the matching TxPipe alert threshold."
+      "description": "Ignores the network, version and tier selectors. No TxPipe alert covers this signal; read it against the node's usual baseline."
     },
     {
       "datasource": {
@@ -3290,7 +3286,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "thresholds": {
@@ -3299,10 +3295,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 300
               }
             ]
           },
@@ -3344,7 +3336,7 @@
       ],
       "title": "Allocation MB/s",
       "type": "timeseries",
-      "description": "Ignores $network and $version. The line is the matching TxPipe alert threshold."
+      "description": "Ignores the network, version and tier selectors. No TxPipe alert covers this signal; read it against the node's usual baseline."
     },
     {
       "datasource": {
@@ -3421,7 +3413,7 @@
       ],
       "title": "Blocks fetched within 5 s",
       "type": "timeseries",
-      "description": "Ignores $network and $version. The line is the matching TxPipe alert threshold."
+      "description": "Ignores the network, version and tier selectors. The line is the matching TxPipe alert threshold."
     },
     {
       "datasource": {
@@ -3498,7 +3490,7 @@
       ],
       "title": "Blocks behind fleet",
       "type": "timeseries",
-      "description": "Ignores $network and $version. The line is the matching TxPipe alert threshold."
+      "description": "Ignores the network, version and tier selectors. The line is the matching TxPipe alert threshold."
     },
     {
       "datasource": {
@@ -3575,7 +3567,7 @@
       ],
       "title": "Node-to-client hot connections",
       "type": "timeseries",
-      "description": "Ignores $network and $version. The line is the matching TxPipe alert threshold."
+      "description": "Ignores the network, version and tier selectors. The line is the matching TxPipe alert threshold."
     }
   ],
   "refresh": "5s",
