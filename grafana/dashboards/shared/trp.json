@@ -110,7 +110,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(trp_proxy_http_total_request{namespace=\"ext-trp-m1\", job=~\"ext-trp-m1/proxy-(cardano-)?$network\" }[5m]) > 0) by (status_code)",
+          "expr": "sum(rate(trp_proxy_http_total_request{namespace=\"ext-trp-m1\", job=~\"ext-trp-m1/(proxy-.*|port-proxy)\", network=~\"(cardano-)?$network\" }[5m]) > 0) by (status_code)",
           "legendFormat": "{{status_code}}",
           "range": true,
           "refId": "A"
@@ -208,7 +208,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer)(rate(trp_proxy_http_total_request{namespace=\"ext-trp-m1\", job=~\"ext-trp-m1/proxy-(cardano-)?$network\"}[5m])) > 0",
+          "expr": "sum by (consumer)(rate(trp_proxy_http_total_request{namespace=\"ext-trp-m1\", job=~\"ext-trp-m1/(proxy-.*|port-proxy)\", network=~\"(cardano-)?$network\"}[5m])) > 0",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
