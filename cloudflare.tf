@@ -17,13 +17,16 @@ locals {
 }
 
 locals {
+  # Each API entry may set `weight` (0-1), its relative share of that API's
+  # traffic in the pool; entries without one default to 1, so equal weights.
   demeter_providers = [
     {
       name = "blinklabs-us"
       blockfrost_m1 = {
-        enabled = true
+        enabled = false
         address = "demeter.blinklabs.cloud"
         port    = 3001
+        weight  = 1
       }
       kupo_m1 = {
         enabled = true
@@ -51,6 +54,7 @@ locals {
         enabled = true
         address = "all.blockfrost-m1.demeter.run"
         port    = 443
+        weight  = 1
       }
       kupo_m1 = {
         enabled = true
@@ -166,6 +170,7 @@ resource "cloudflare_load_balancer_pool" "kupo_m1" {
       name    = p.name
       address = p.kupo_m1.address != "" ? p.kupo_m1.address : "${p.name}.${var.cloudflare_zone_name}"
       port    = p.kupo_m1.port != 0 ? p.kupo_m1.port : null
+      weight  = try(p.kupo_m1.weight, 1)
     } if p.kupo_m1.enabled
   ]
 }
@@ -204,6 +209,7 @@ resource "cloudflare_load_balancer_pool" "ogmios_m1" {
       name    = p.name
       address = p.ogmios_m1.address != "" ? p.ogmios_m1.address : "${p.name}.${var.cloudflare_zone_name}"
       port    = p.ogmios_m1.port != 0 ? p.ogmios_m1.port : null
+      weight  = try(p.ogmios_m1.weight, 1)
     } if p.ogmios_m1.enabled
   ]
 }
@@ -230,6 +236,7 @@ resource "cloudflare_load_balancer_pool" "tx_submit_api_m1" {
     for p in local.demeter_providers : {
       name    = p.name
       address = p.tx_submit_api.address != "" ? p.tx_submit_api.address : "${p.name}.${var.cloudflare_zone_name}"
+      weight  = try(p.tx_submit_api.weight, 1)
     } if p.tx_submit_api.enabled
   ]
 }
@@ -268,6 +275,7 @@ resource "cloudflare_load_balancer_pool" "blockfrost_m1" {
       name    = p.name
       address = p.blockfrost_m1.address != "" ? p.blockfrost_m1.address : "${p.name}.${var.cloudflare_zone_name}"
       port    = p.blockfrost_m1.port != 0 ? p.blockfrost_m1.port : null
+      weight  = try(p.blockfrost_m1.weight, 1)
     } if p.blockfrost_m1.enabled
   ]
 }
@@ -308,6 +316,7 @@ resource "cloudflare_load_balancer_pool" "utxorpc_m1" {
       name    = p.name
       address = p.utxorpc.address != "" ? p.utxorpc.address : "${p.name}.${var.cloudflare_zone_name}"
       port    = p.utxorpc.port != 0 ? p.utxorpc.port : null
+      weight  = try(p.utxorpc.weight, 1)
     } if p.utxorpc.enabled
   ]
 }
