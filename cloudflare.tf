@@ -154,6 +154,7 @@ resource "cloudflare_load_balancer_monitor" "kupo_m1_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 
   header = {
     "Host" = ["all.kupo-m1.demeter.run"]
@@ -264,6 +265,7 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_m1_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+  allow_insecure = true
 
   header = {
     "Host" = ["all.blockfrost-m1.demeter.run"]
