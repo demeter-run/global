@@ -15,3 +15,13 @@ variables for terraform.
 - `cloudflare_account_id`: Cloudflare account for dmtr.host
 - `cloudflare_zone_id`: zone ID for dmtr.host
 - `cloudflare_zone_name`: this is `dmtr.host`
+
+## Routing
+
+Each API has one Cloudflare load balancer pool, built from
+`local.demeter_providers` in `cloudflare.tf`. A provider joins an API's pool
+when that API's entry has `enabled = true`.
+
+An entry may also set `weight`, a value from 0 to 1 that is its relative share
+of the pool's traffic among the healthy origins. Entries without a `weight`
+default to 1, so by default every enabled provider takes an equal share.
