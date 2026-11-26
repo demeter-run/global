@@ -49,12 +49,12 @@ locals {
       name = "txpipe-m2"
       blockfrost_m1 = {
         enabled = true
-        address = "port-proxy-m1.demeter.run"
+        address = "demeter-m2-us1.txpipe.cloud"
         port    = 443
       }
       kupo_m1 = {
         enabled = true
-        address = "port-proxy-m1.demeter.run"
+        address = "demeter-m2-us1.txpipe.cloud"
         port    = 443
       }
       ogmios_m1 = {
