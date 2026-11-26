@@ -49,12 +49,12 @@ locals {
       name = "txpipe-m2"
       blockfrost_m1 = {
         enabled = true
-        address = "all.blockfrost-m1.demeter.run"
+        address = "port-proxy-m1.demeter.run"
         port    = 443
       }
       kupo_m1 = {
         enabled = true
-        address = "all.kupo-m1.demeter.run"
+        address = "port-proxy-m1.demeter.run"
         port    = 443
       }
       ogmios_m1 = {
@@ -154,6 +154,10 @@ resource "cloudflare_load_balancer_monitor" "kupo_m1_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+
+  header = {
+    "Host" = ["all.kupo-m1.demeter.run"]
+  }
 }
 
 resource "cloudflare_load_balancer_pool" "kupo_m1" {
@@ -192,6 +196,10 @@ resource "cloudflare_load_balancer_monitor" "ogmios_m1_monitor" {
   method         = "GET"
   expected_codes = "200"
   allow_insecure = true
+
+  header = {
+    "Host" = ["all.ogmios-m1.demeter.run"]
+  }
 }
 
 resource "cloudflare_load_balancer_pool" "ogmios_m1" {
@@ -256,6 +264,10 @@ resource "cloudflare_load_balancer_monitor" "blockfrost_m1_monitor" {
   retries        = 2
   method         = "GET"
   expected_codes = "200"
+
+  header = {
+    "Host" = ["all.blockfrost-m1.demeter.run"]
+  }
 }
 
 resource "cloudflare_load_balancer_pool" "blockfrost_m1" {
@@ -295,6 +307,10 @@ resource "cloudflare_load_balancer_monitor" "utxorpc_m1_monitor" {
   method         = "GET"
   expected_codes = "200"
   allow_insecure = true
+
+  header = {
+    "Host" = ["cardano-mainnet.utxorpc-m1.demeter.run"]
+  }
 }
 
 resource "cloudflare_load_balancer_pool" "utxorpc_m1" {
