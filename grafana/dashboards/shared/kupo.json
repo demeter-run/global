@@ -253,7 +253,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/proxy-green\"}[1m]) > 0)",
+          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/(proxy-green|port-proxy)|demeter-data/port-proxy-(blue|green)\"}[1m]) > 0)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -352,7 +352,7 @@
             "uid": "af0jrqwy4uhhce"
           },
           "editorMode": "code",
-          "expr": "sum(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/.*green\" }[1m]) > 0) by (status_code)",
+          "expr": "sum(rate(kupo_proxy_http_total_request{namespace=~\"ftr-kupo-.*\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/(.*green|port-proxy)|demeter-data/port-proxy-(blue|green)\" }[1m]) > 0) by (status_code)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
