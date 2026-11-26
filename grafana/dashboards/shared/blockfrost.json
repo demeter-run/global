@@ -999,7 +999,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "sum(container_memory_working_set_bytes{namespace=~\"dolos|ext-blockfrost-m1\", container!=\"\", pod=~\"dolos-blockfrost-proxy-.*|(port-)?proxy-.*\"}) by (pod)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=~\"dolos|ext-blockfrost-m1|demeter-data\", container!=\"\", pod=~\"dolos-blockfrost-proxy-.*|(port-)?proxy-.*\"}) by (pod)",
           "interval": "",
           "legendFormat": "__auto",
           "range": true,
@@ -1117,7 +1117,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"$namespace\", container=\"main\", pod=~\"(port-)?proxy-.*\"}[5m])*1000) by (pod)",
+          "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=~\"$namespace|demeter-data\", container=\"main\", pod=~\"(port-)?proxy-.*\"}[5m])*1000) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -1223,7 +1223,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "sum(container_memory_working_set_bytes{namespace=\"$namespace\", container!=\"\", pod=~\"(port-)?proxy-.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=\"$namespace\", container!=\"\", pod=~\"(port-)?proxy-.*\"}) by (pod)",
+          "expr": "sum(container_memory_working_set_bytes{namespace=~\"$namespace|demeter-data\", container!=\"\", pod=~\"(port-)?proxy-.*\"}) by (pod) / sum(container_spec_memory_limit_bytes{namespace=~\"$namespace|demeter-data\", container!=\"\", pod=~\"(port-)?proxy-.*\"}) by (pod)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"

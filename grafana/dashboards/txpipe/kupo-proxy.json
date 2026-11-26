@@ -318,7 +318,7 @@
             "uid": "${datasource_uid}"
           },
           "editorMode": "code",
-          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=\"ftr-kupo-v1\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/(proxy-green-(cardano-)?$network|port-proxy)\"}[5m]) > 0)",
+          "expr": "sum by (consumer)(rate(kupo_proxy_http_total_request{namespace=\"ftr-kupo-v1\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/(proxy-green-(cardano-)?$network|port-proxy)|demeter-data/port-proxy-(blue|green)\"}[5m]) > 0)",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -441,7 +441,7 @@
             "uid": "${datasource_uid}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(kupo_proxy_http_total_request{namespace=\"ftr-kupo-v1\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/(proxy-green-(cardano-)?$network|port-proxy)\" }[5m]) > 0) by (status_code)",
+          "expr": "sum(rate(kupo_proxy_http_total_request{namespace=\"ftr-kupo-v1\", exported_instance=~\".*$network.*\", job=~\"ftr-kupo-v1/(proxy-green-(cardano-)?$network|port-proxy)|demeter-data/port-proxy-(blue|green)\" }[5m]) > 0) by (status_code)",
           "legendFormat": "{{status_code}}.{{consumer}}",
           "range": true,
           "refId": "A"
