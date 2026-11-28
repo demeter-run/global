@@ -72,8 +72,8 @@ locals {
       }
       utxorpc = {
         enabled = false
-        address = ""
-        port    = 0
+        address = "demeter-m2-us1.txpipe.cloud"
+        port    = 443
       }
     },
   ]
@@ -304,13 +304,13 @@ resource "cloudflare_load_balancer" "blockfrost_m1_splat" {
 }
 
 # UTxORPC
+# port omitted so each origin is health-checked on its own port (blinklabs-us: 3050, txpipe-m2: 443)
 resource "cloudflare_load_balancer_monitor" "utxorpc_m1_monitor" {
   count          = anytrue([for p in local.demeter_providers : p.utxorpc.enabled]) ? 1 : 0
   account_id     = var.cloudflare_account_id
   type           = "https"
   description    = "Health check for UtxorpcM1"
   path           = "/dmtr_health"
-  port           = try(([for p in local.demeter_providers : p.utxorpc.port if p.utxorpc.enabled && p.utxorpc.port != 0])[0], null)
   interval       = 60
   timeout        = 5
   retries        = 2
